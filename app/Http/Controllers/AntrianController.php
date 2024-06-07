@@ -205,7 +205,7 @@ class AntrianController extends Controller
                                     ->get();
             }else{
                 $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
-                                    ->where('departemen',auth()->user()->departemen)
+                                    ->where('dept_tujuan',auth()->user()->departemen)
                                     ->get();
             }
             return DataTables::of($data)
