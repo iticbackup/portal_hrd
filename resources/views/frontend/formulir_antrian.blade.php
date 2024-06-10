@@ -241,7 +241,9 @@
                                     text: result.message_content
                                 });
                                 this.reset();
-                                window.location.href="{{ route('frontend') }}";
+                                setTimeout(() => {
+                                    window.location.href="{{ route('frontend') }}";
+                                }, 3000);
                             } else {
                                 Swal.fire({
                                     icon: 'error',

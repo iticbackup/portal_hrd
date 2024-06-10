@@ -44,7 +44,7 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label>Keperluan</label>
-                        <p id="detail_keperluan"></p>
+                        <p id="detail_keperluan" style="word-break: break-all"></p>
                     </div> 
                 </div>
                 <div class="mb-3">

@@ -143,8 +143,19 @@ class AntrianController extends Controller
                                 $input['dept_tujuan'],
                                 $input['keperluan']
                             ));
+                        $sisa_antrian_hari_ini = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
+                                                                ->whereIn('status',['Waiting'])
+                                                                ->count();
+                        event(new \App\Events\FrontendNotification(
+                            $input['no_urut'],
+                            $sisa_antrian_hari_ini
+                        ));
+                        event(new \App\Events\BackendAntrianNotification(
+                            $input['no_urut'],
+                        ));
+                        // event(new \App\Events\BackendAntrianNotification('1'));
                         $message_title="Berhasil !";
-                        $message_content="Antrian Anda Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala";
+                        $message_content="Antrian Anda Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala.";
                         $message_type="success";
                         $message_succes = true;
                     }
@@ -198,88 +209,104 @@ class AntrianController extends Controller
 
     public function b_index(Request $request)
     {
-        if ($request->ajax()) {
-            $live_date = Carbon::now()->addDay($this->addDay);
-            if (auth()->user()->departemen == null) {
-                $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
-                                    ->get();
-            }else{
+        if (auth()->user()->departemen == null) {
+            if ($request->ajax()) {
+                $live_date = Carbon::now()->addDay($this->addDay);
+                if (auth()->user()->departemen == null) {
+                    $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
+                                        ->get();
+                    return DataTables::of($data)
+                                    ->addIndexColumn()
+                                    ->addColumn('no_urut', function($row){
+                                        if ($row->no_urut <= 9) {
+                                            return '0'.$row->no_urut;
+                                        }else{
+                                            return $row->no_urut;
+                                        }
+                                    })
+                                    ->addColumn('status', function($row){
+                                        switch ($row->status) {
+                                            case 'Waiting':
+                                                return '<span class="badge badge-warning mb-2 me-4">Sedang Menunggu</span>';
+                                                break;
+                                            case 'Terpanggil':
+                                                return '<span class="badge badge-warning mb-2 me-4">Terpanggil</span>';
+                                                break;
+                                            case 'Proses':
+                                                return '<span class="badge badge-info mb-2 me-4">Proses</span>';
+                                                break;
+                                            case 'Selesai':
+                                                return '<span class="badge badge-success mb-2 me-4">Selesai</span>';
+                                                break;
+                                            case 'Tolak':
+                                                return '<span class="badge badge-danger mb-2 me-4">Tolak</span>';
+                                                break;
+                                            case 'Cancel':
+                                                return '<span class="badge badge-danger mb-2 me-4">Cancel</span>';
+                                                break;
+                                            default:
+                                                # code...
+                                                break;
+                                        }
+                                    })
+                                    ->addColumn('panggil', function($row){
+                                        $btn = "<div>";
+                                        $btn = $btn."<button type='button' class='btn btn-secondary mb-2 me-2' onclick='panggilan(`".$row->id."`)'>
+                                                        <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                        <path fill='currentColor' d='M12 12V7.65c0-.11.025-.22.072-.316c.152-.314.5-.428.775-.253l6.86 4.349c.093.059.17.147.221.253c.153.314.054.71-.221.885l-6.86 4.35a.516.516 0 0 1-.277.081c-.315 0-.57-.291-.57-.651zc0 .23-.106.451-.293.57l-6.86 4.35a.516.516 0 0 1-.277.08c-.315 0-.57-.291-.57-.651V7.651c0-.11.025-.22.072-.316c.152-.314.5-.428.775-.253l6.86 4.349c.093.059.17.147.221.253c.049.1.072.209.072.315' />
+                                                    </svg></button>";
+                                        $btn = $btn."</div>";
+                                        return $btn;
+                                    })
+                                    ->addColumn('action', function($row){
+                                        $btn = "<div>";
+                                        // $btn = $btn."<a href=".route('roles.edit',['id' => $row->id])." type='button' class='btn btn-warning mb-2 me-2'>
+                                        //             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
+                                        //                 <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
+                                        //             </svg> Edit
+                                        //             </a>";
+                                        // $btn = $btn."<form action=".route('roles.destroy',['id' => $row->id])." method='GET'>";
+                                        // $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
+                                        //             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
+                                        //                 <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
+                                        //             </svg> Delete</button>";
+                                        // $btn = $btn."<form>";
+                                        $btn = $btn."<button type='button' class='btn btn-info mb-2 me-2' onclick='resend_mail(`".$row->id."`)'>
+                                                        <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                        <path fill='currentColor' d='m13.761 12.01l-10.76-1.084L3 4.074a1.074 1.074 0 0 1 1.554-.96l15.852 7.926a1.074 1.074 0 0 1 0 1.92l-15.85 7.926a1.074 1.074 0 0 1-1.554-.96v-6.852z' />
+                                                    </svg> Resending Email</button>";
+                                        $btn = $btn."<button type='button' class='btn btn-primary mb-2 me-2' onclick='detail(`".$row->id."`)'>
+                                                        <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                        <path fill='currentColor' fill-rule='evenodd' d='M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6' />
+                                                    </svg> Detail</button>";
+                                        $btn = $btn."</div>";
+    
+                                        return $btn;
+                                    })
+                                    ->rawColumns(['status','panggil','action'])
+                                    ->make(true);
+                }
+                // else{
+                //     $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
+                //                         ->where('dept_tujuan',auth()->user()->departemen)
+                //                         ->get();
+                // }
+                
+            }
+            return view('backend.antrian.index');
+        }else{
+            if ($request->ajax()) {
+                $live_date = Carbon::now()->addDay($this->addDay);
                 $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
                                     ->where('dept_tujuan',auth()->user()->departemen)
+                                    ->orderBy('tgl_input','desc')
                                     ->get();
+                return response()->json([
+                    'data' => $data
+                ]);
             }
-            return DataTables::of($data)
-                            ->addIndexColumn()
-                            ->addColumn('no_urut', function($row){
-                                if ($row->no_urut <= 9) {
-                                    return '0'.$row->no_urut;
-                                }else{
-                                    return $row->no_urut;
-                                }
-                            })
-                            ->addColumn('status', function($row){
-                                switch ($row->status) {
-                                    case 'Waiting':
-                                        return '<span class="badge badge-warning mb-2 me-4">Sedang Menunggu</span>';
-                                        break;
-                                    case 'Terpanggil':
-                                        return '<span class="badge badge-warning mb-2 me-4">Terpanggil</span>';
-                                        break;
-                                    case 'Proses':
-                                        return '<span class="badge badge-info mb-2 me-4">Proses</span>';
-                                        break;
-                                    case 'Selesai':
-                                        return '<span class="badge badge-success mb-2 me-4">Selesai</span>';
-                                        break;
-                                    case 'Tolak':
-                                        return '<span class="badge badge-danger mb-2 me-4">Tolak</span>';
-                                        break;
-                                    case 'Cancel':
-                                        return '<span class="badge badge-danger mb-2 me-4">Cancel</span>';
-                                        break;
-                                    default:
-                                        # code...
-                                        break;
-                                }
-                            })
-                            ->addColumn('panggil', function($row){
-                                $btn = "<div>";
-                                $btn = $btn."<button type='button' class='btn btn-secondary mb-2 me-2' onclick='panggilan(`".$row->id."`)'>
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                <path fill='currentColor' d='M12 12V7.65c0-.11.025-.22.072-.316c.152-.314.5-.428.775-.253l6.86 4.349c.093.059.17.147.221.253c.153.314.054.71-.221.885l-6.86 4.35a.516.516 0 0 1-.277.081c-.315 0-.57-.291-.57-.651zc0 .23-.106.451-.293.57l-6.86 4.35a.516.516 0 0 1-.277.08c-.315 0-.57-.291-.57-.651V7.651c0-.11.025-.22.072-.316c.152-.314.5-.428.775-.253l6.86 4.349c.093.059.17.147.221.253c.049.1.072.209.072.315' />
-                                            </svg></button>";
-                                $btn = $btn."</div>";
-                                return $btn;
-                            })
-                            ->addColumn('action', function($row){
-                                $btn = "<div>";
-                                // $btn = $btn."<a href=".route('roles.edit',['id' => $row->id])." type='button' class='btn btn-warning mb-2 me-2'>
-                                //             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
-                                //                 <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
-                                //             </svg> Edit
-                                //             </a>";
-                                // $btn = $btn."<form action=".route('roles.destroy',['id' => $row->id])." method='GET'>";
-                                // $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
-                                //             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
-                                //                 <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
-                                //             </svg> Delete</button>";
-                                // $btn = $btn."<form>";
-                                $btn = $btn."<button type='button' class='btn btn-info mb-2 me-2' onclick='resend_mail(`".$row->id."`)'>
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                <path fill='currentColor' d='m13.761 12.01l-10.76-1.084L3 4.074a1.074 1.074 0 0 1 1.554-.96l15.852 7.926a1.074 1.074 0 0 1 0 1.92l-15.85 7.926a1.074 1.074 0 0 1-1.554-.96v-6.852z' />
-                                            </svg> Resending Email</button>";
-                                $btn = $btn."<button type='button' class='btn btn-primary mb-2 me-2' onclick='detail(`".$row->id."`)'>
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                <path fill='currentColor' fill-rule='evenodd' d='M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6' />
-                                            </svg> Detail</button>";
-                                $btn = $btn."</div>";
-
-                                return $btn;
-                            })
-                            ->rawColumns(['status','panggil','action'])
-                            ->make(true);
+            return view('backend.antrian.hrd.index');
         }
-        return view('backend.antrian.index');
     }
     
     public function b_detail($id)

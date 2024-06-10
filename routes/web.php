@@ -34,7 +34,8 @@ Route::prefix('formulir_antrian')->group(function () {
 });
 
 Route::get('testing', function(){
-    return view('testing');
+    // return view('testing');
+    event(new \App\Events\BackendAntrianNotification('1'));
 });
 
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {

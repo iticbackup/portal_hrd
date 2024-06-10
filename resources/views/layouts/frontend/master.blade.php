@@ -216,7 +216,7 @@
         channel.bind('App\\Events\\FrontendNotification', function(data) {
             // alert(JSON.stringify(data));
             // alert('OK');
-            document.getElementById('no_antrian').innerHTML = data.message;
+            // document.getElementById('no_antrian').innerHTML = data.message;
             document.getElementById('sisa_antrian_hari_ini').innerHTML = data.sisa_antrian_hari_ini;
             Swal.fire({
                 position: "center-middle",
