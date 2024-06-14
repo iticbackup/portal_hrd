@@ -92,13 +92,13 @@
                             <div class="col-md-12 mb-3 text-center">
                                 
                                 <h2>Login Portal Antrian</h2>
-                                <p>Enter your username and password to login</p>
+                                <p>Enter your nik and password to login</p>
                                 
                             </div>
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label class="form-label">Username</label>
-                                    <input type="text" name="username" class="form-control" placeholder="Username" required>
+                                    <label class="form-label">NIK</label>
+                                    <input type="text" name="nik" class="form-control" placeholder="NIK" required>
                                 </div>
                             </div>
                             <div class="col-12">

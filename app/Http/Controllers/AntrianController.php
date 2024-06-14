@@ -11,7 +11,9 @@ use \Carbon\Carbon;
 use App\Mail\AntrianNotifikasiMail;
 use App\Mail\AntrianPanggilanMail;
 use App\Mail\AntrianStatusMail;
+use App\Models\IjinKeluarMasuk;
 
+use Auth;
 use DB;
 use Validator;
 use DataTables;
@@ -21,10 +23,12 @@ class AntrianController extends Controller
 {
     function __construct(
         Antrian $antrian,
-        BiodataKaryawan $biodata_karyawan
+        BiodataKaryawan $biodata_karyawan,
+        IjinKeluarMasuk $ijin_keluar_masuk
     )
     {
         $this->antrian = $antrian;
+        $this->ijin_keluar_masuk = $ijin_keluar_masuk;
         $this->biodata_karyawan = $biodata_karyawan;
         $this->addDay = 0;
     }
@@ -46,6 +50,12 @@ class AntrianController extends Controller
         $data['sisa_antrian_hari_ini'] = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
                                                 ->whereIn('status',['Waiting'])
                                                 ->count();
+        if (Auth::check()) {
+            $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk->where('nik',auth()->user()->nik)
+                                                    ->where('created_at','like','%'.$live_date->format('Y-m').'%')
+                                                    ->orderBy('created_at','desc')
+                                                    ->get();
+        }
         return view('frontend.index',$data);
     }
 
@@ -155,7 +165,7 @@ class AntrianController extends Controller
                         ));
                         // event(new \App\Events\BackendAntrianNotification('1'));
                         $message_title="Berhasil !";
-                        $message_content="Antrian Anda Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala.";
+                        $message_content="Formulir Antrian Anda Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala.";
                         $message_type="success";
                         $message_succes = true;
                     }

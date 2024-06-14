@@ -5,9 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use App\Imports\UsersImport;
 use App\Models\User;
+use App\Models\BiodataKaryawan;
 use Spatie\Permission\Models\Role;
 use \Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 use DB;
 use Hash;
@@ -19,12 +22,16 @@ class UserController extends Controller
 {
     function __construct(
         User $user,
-        Role $role
+        Role $role,
+        BiodataKaryawan $biodata_karyawan
     ){
         $this->user = $user;
         $this->role = $role;
-        $this->middleware('permission:user-management-list', ['only' => ['index']]);
-        $this->middleware('permission:user-management-edit', ['only' => ['edit','update']]);
+        $this->biodata_karyawan = $biodata_karyawan;
+        $this->middleware('permission:user-list', ['only' => ['index','detail']]);
+        $this->middleware('permission:user-store', ['only' => ['simpan']]);
+        $this->middleware('permission:user-edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:user-delete', ['only' => ['delete']]);
         // $this->middleware('permission:user-management-delete', ['only' => ['edit','update']]);
     }
 
@@ -34,6 +41,23 @@ class UserController extends Controller
             $data = $this->user->all();
             return DataTables::of($data)
                             ->addIndexColumn()
+                            ->addColumn('roles', function($row){
+                                return $row->getRoleNames();
+                                // return '<label class="badge bg-primary">'.$row->getRoleNames().'</label>';
+                                // foreach ($row->getRoleNames() as $key => $roles_name) {
+                                //     $data_roles = $roles_name;
+                                // }
+                                // return $data_roles;
+                                // if (!empty($row->getRoleNames())) {
+                                //     foreach ($row->getRoleNames() as $key => $roles_name) {
+                                //         $data_roles = '<label class="badge bg-primary mx-1">'.$roles_name.'</label>';
+                                //         return $data_roles;
+                                //     }
+                                // }
+                                // else{
+                                //     return '-';
+                                // }
+                            })
                             ->addColumn('action', function($row){
                                 $btn = "<div>";
                                 $btn = $btn."<a href=".route('user.edit',['generate' => $row->id_generate])." class='btn btn-warning mb-2 me-2'>
@@ -41,7 +65,7 @@ class UserController extends Controller
                                                 <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
                                             </svg> Edit
                                             </a>";
-                                $btn = $btn."<form action=".route('roles.destroy',['id' => $row->id])." method='GET'>";
+                                $btn = $btn."<form action=".route('user.delete',['generate' => $row->id_generate])." method='GET'>";
                                 $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
                                             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
                                                 <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
@@ -51,16 +75,20 @@ class UserController extends Controller
 
                                 return $btn;
                             })
-                            ->rawColumns(['action','last_seen'])
+                            ->rawColumns(['roles','action'])
                             ->make(true);
         }
         $data['roles'] = $this->role->pluck('name','name')->all();
+        $data['names'] = $this->biodata_karyawan->where('status_karyawan','!=','R')
+                                                ->orWhere('status_karyawan',null)
+                                                ->get();
         return view('backend.users.index',$data);
     }
 
     public function simpan(Request $request)
     {
         $rules = [
+            'nik' => 'required',
             'username' => 'required',
             'name' => 'required',
             // 'password' => 'required|same:confirm-password',
@@ -68,6 +96,7 @@ class UserController extends Controller
         ];
 
         $messages = [
+            'nik.required'  => 'Username wajib diisi.',
             'username.required'  => 'Username wajib diisi.',
             'name.required'  => 'Name wajib diisi.',
             // 'password.required'  => 'Password wajib diisi.',
@@ -79,8 +108,9 @@ class UserController extends Controller
 
         if ($validator->passes()) {
             $input = $request->all();
-            $input['username'] = $request->username;
             $input['id_generate'] = Str::uuid()->toString();
+            $input['nik'] = $request->nik;
+            $input['username'] = $request->username;
             $input['password'] = Hash::make('default123');
     
             $user = $this->user->create($input);
@@ -107,6 +137,15 @@ class UserController extends Controller
                 'error' => $validator->errors()->all()
             ]
         );
+    }
+
+    public function search_nik($nama)
+    {
+        $biodata_karyawans = $this->biodata_karyawan->where('nama',$nama)->first();
+        return response()->json([
+            'success' => true,
+            'nik' => $biodata_karyawans->nik
+        ]);
     }
 
     public function detail($generate)
@@ -161,5 +200,46 @@ class UserController extends Controller
     
         return redirect()->route('user')
                         ->with('success','User updated successfully');
+    }
+
+    public function delete($generate)
+    {
+        $user = $this->user->where('id_generate',$generate)->first();
+        if (empty($user)) {
+            return redirect()->back()->with('error','Akun Tidak Ditemukan');
+        }
+        $user->delete();
+        return redirect()->route('user')->with('success','User Deleted successfully');
+    }
+
+    public function import_user(Request $request)
+    {
+        // dd($request->all());
+        $this->validate($request, [
+            'file' => 'required|mimes:csv,xls,xlsx'
+        ]);
+
+        $file = $request->file('file');
+
+        // membuat nama file unik
+        $nama_file = $file->hashName();
+        // dd($nama_file);
+
+        // //temporary file
+        $path = $file->move('excel/',$nama_file);
+
+        // import data
+        $import = Excel::import(new UsersImport(), public_path('excel/'.$nama_file));
+
+        //remove from server
+        \File::delete($path);
+
+        if($import) {
+            //redirect
+            return redirect()->route('user')->with(['success' => 'Data Berhasil Diimport!']);
+        } else {
+            //redirect
+            return redirect()->route('user')->with(['error' => 'Data Gagal Diimport!']);
+        }
     }
 }

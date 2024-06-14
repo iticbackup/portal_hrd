@@ -34,7 +34,7 @@
                         
         <div class="shadow-bottom"></div>
         <ul class="list-unstyled menu-categories" id="accordionExample">
-            <li class="menu {{ request()->is('home') ? 'active' : '' }}">
+            <li class="menu {{ request()->is('home*') ? 'active' : '' }}">
                 <a href="{{ route('home') }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -43,8 +43,31 @@
                 </a>
             </li>
             @can('antrian-list')
-            <li class="menu {{ request()->is('antrian') ? 'active' : '' }}">
+            <li class="menu {{ request()->is('antrian*') ? 'active' : '' }}">
                 <a href="{{ route('b_antrian') }}" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m8-10a8 8 0 1 0-16 0a8 8 0 0 0 16 0m-4-1a1 1 0 0 1 0 2h-3c-1.1 0-2-.9-2-2V7a1 1 0 0 1 2 0v4z" />
+                        </svg>
+                        <span>Antrian</span>
+                    </div>
+                </a>
+            </li>
+            @endcan
+            @can('ijinkeluarmasuk-list')
+            <li class="menu {{ request()->is('ijin_keluar_masuk*') ? 'active' : '' }}">
+                <a href="{{ route('b_ijin_keluar_masuk') }}" class="dropdown-toggle">
+                    <div class="">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10s-4.477 10-10 10m8-10a8 8 0 1 0-16 0a8 8 0 0 0 16 0m-4-1a1 1 0 0 1 0 2h-3c-1.1 0-2-.9-2-2V7a1 1 0 0 1 2 0v4z" />
+                        </svg>
+                        <span>Ijin Keluar Masuk</span>
+                    </div>
+                </a>
+            </li>
+            @endcan
+            {{-- <li class="menu {{ request()->is('antrian*') ? 'active' : '' }}">
+                <a href="#" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -52,12 +75,11 @@
                             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                             <polyline points="9 22 9 12 15 12 15 22"></polyline>
                         </svg>
-                        <span>Antrian</span>
+                        <span>Ijin Absen</span>
                     </div>
                 </a>
-            </li>
-            @endcan
-            @can('user-management-list')
+            </li> --}}
+            @can('usermanagement-list')
             <li class="menu menu-heading">
                 <div class="heading"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -65,7 +87,8 @@
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                     </svg><span style="text-transform: uppercase">User Management</span></div>
             </li>
-            <li class="menu {{ request()->is('users') ? 'active' : '' }}">
+            @can('user-list')
+            <li class="menu {{ request()->is('users*') ? 'active' : '' }}">
                 <a href="{{ route('user') }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -78,7 +101,9 @@
                     </div>
                 </a>
             </li>
-            <li class="menu {{ request()->is('roles') ? 'active' : '' }}">
+            @endcan
+            @can('role-list')
+            <li class="menu {{ request()->is('roles*') ? 'active' : '' }}">
                 <a href="{{ route('roles.index') }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 30 30"
@@ -91,7 +116,9 @@
                     </div>
                 </a>
             </li>
-            <li class="menu {{ request()->is('permission') ? 'active' : '' }}">
+            @endcan
+            @can('permission-list')
+            <li class="menu {{ request()->is('permission*') ? 'active' : '' }}">
                 <a href="{{ route('permission') }}" class="dropdown-toggle">
                     <div class="">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 28 28"
@@ -104,6 +131,7 @@
                     </div>
                 </a>
             </li>
+            @endcan
             @endcan
         </ul>
         

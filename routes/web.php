@@ -33,6 +33,11 @@ Route::prefix('formulir_antrian')->group(function () {
     Route::post('simpan', [App\Http\Controllers\AntrianController::class, 'simpan'])->name('antrian.simpan');
 });
 
+Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
+    Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_index'])->name('f.form_ijin_keluar_masuk');
+    Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
+});
+
 Route::get('testing', function(){
     // return view('testing');
     event(new \App\Events\BackendAntrianNotification('1'));
@@ -49,12 +54,24 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/resend_mail', [App\Http\Controllers\AntrianController::class, 'b_resend_mail'])->name('b_antrian.resend_mail');
             Route::get('{id}/panggilan', [App\Http\Controllers\AntrianController::class, 'b_panggilan'])->name('b_antrian.panggilan');
         });
+        Route::prefix('ijin_keluar_masuk')->group(function () {
+            Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_index'])->name('b_ijin_keluar_masuk');
+            Route::post('input_jam_datang/update', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang_update'])->name('b_ijin_keluar_masuk.b_input_jam_datang_update');
+            Route::get('{id}', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_detail'])->name('b_ijin_keluar_masuk.detail');
+            Route::get('{id}/input_jam_datang', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang'])->name('b_ijin_keluar_masuk.b_input_jam_datang');
+            Route::get('{id}/validasi', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi'])->name('b_ijin_keluar_masuk.b_validasi');
+            Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi_simpan'])->name('b_ijin_keluar_masuk.b_validasi_simpan');
+            Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinKeluarMasukController::class, 'cetak_surat'])->name('b_ijin_keluar_masuk.cetak_surat');
+        });
         Route::prefix('users')->group(function () {
             Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('user');
             Route::post('simpan', [App\Http\Controllers\UserController::class, 'simpan'])->name('user.simpan');
+            Route::post('import_user', [App\Http\Controllers\UserController::class, 'import_user'])->name('user.import_user');
+            Route::get('search/{nama}', [App\Http\Controllers\UserController::class, 'search_nik'])->name('user.search_nik');
             Route::get('{generate}', [App\Http\Controllers\UserController::class, 'detail'])->name('user.detail');
             Route::get('{generate}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
             Route::post('{generate}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
+            Route::get('{generate}/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('user.delete');
         });
         Route::prefix('roles')->group(function () {
             Route::get('/', [App\Http\Controllers\RoleController::class, 'index'])->name('roles.index');

@@ -13,10 +13,14 @@
     <link rel="stylesheet" href="{{ asset('plugins/src/sweetalerts2/sweetalerts2.css') }}">
     <link href="{{ asset('plugins/css/light/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('plugins/css/dark/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/src/tomSelect/tom-select.default.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/light/tomSelect/custom-tomSelect.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/dark/tomSelect/custom-tomSelect.css') }}">
 @endsection
 
 @section('content')
 @include('backend.users.modalBuat')
+@include('backend.users.modalImport')
 <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="page-meta">
@@ -37,16 +41,34 @@
                         {{ $message }}
                     </div>
                 @endif
-                <button class="btn btn-info mb-2 me-2" onclick="buat()">Create New User</button>
-                <button class="btn btn-info mb-2 me-2" onclick="reload()">Reload</button>
+                <button class="btn btn-primary mb-2 me-2" onclick="buat()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
+                        <path fill="currentColor" fill-rule="evenodd" d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
+                    </svg>
+                    Create New User
+                </button>
+                <button class="btn mb-2 me-2" onclick="import_user()" style="background-color: #059212; 
+                color: white; 
+                box-shadow: 0 10px 20px -10px rgba(5, 146, 18, 0.59);">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
+                    <path fill="currentColor" fill-rule="evenodd" d="M6 2h10l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2m9 2H6v16h12V7h-3zm-8 8h3l2 2l2-2h3l-3 3l3 3h-3l-2-2l-2 2H7l3-3z" />
+                </svg>
+                    Import User
+                </button>
+                <button class="btn btn-info mb-2 me-2" onclick="reload()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
+                        <path fill="currentColor" d="M2 12a9 9 0 0 0 9 9c2.39 0 4.68-.94 6.4-2.6l-1.5-1.5A6.7 6.7 0 0 1 11 19c-6.24 0-9.36-7.54-4.95-11.95S18 5.77 18 12h-3l4 4h.1l3.9-4h-3a9 9 0 0 0-18 0" />
+                    </svg>
+                    Reload
+                </button>
                 <div class="widget-content widget-content-area br-8">
                     <table class="table dt-table-hover" id="datatable" style="width:100%">
                         <thead>
                             <tr>
-                                <th>Username</th>
+                                <th>NIK</th>
                                 <th>Name</th>
-                                <th>Email</th>
                                 <th>Departemen</th>
+                                <th>Roles</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -64,11 +86,43 @@
     <script src="{{ asset('plugins/src/sweetalerts2/sweetalerts2.min.js') }}"></script>
     <script src="{{ asset('plugins/src/sweetalerts2/custom-sweetalert.js') }}"></script>
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    <script src="{{ asset('plugins/src/tomSelect/tom-select.base.js') }}"></script>
+    <script src="{{ asset('plugins/src/tomSelect/custom-tom-select.js') }}"></script>
     <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
+        });
+
+        $(document).ready(function(){
+            new TomSelect(".select2",{
+                create: true,
+                sortField: {
+                    field: "text",
+                    direction: "asc"
+                }
+            });
+        });
+
+        $('#name').on('change',function(){
+            $.ajax({
+                type:'GET',
+                url: "{{ url('users/') }}"+'/'+'search'+'/'+$('#name').val(),
+                contentType: "application/json;  charset=utf-8",
+                cache: false,
+                success: (result) => {
+                    if(result.success == true){
+                        // alert('OK');
+                        $('#nik').val(result.nik);
+                    }else{
+
+                    }
+                },
+                error: function (request, status, error) {
+                    
+                }
+            });
         });
 
         var table = $('#datatable').DataTable({
@@ -77,20 +131,20 @@
             ajax: "{{ route('user') }}",
             columns: [
                 {
-                    data: 'username',
-                    name: 'username'
+                    data: 'nik',
+                    name: 'nik'
                 },
                 {
                     data: 'name',
                     name: 'name'
                 },
                 {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
                     data: 'departemen',
                     name: 'departemen'
+                },
+                {
+                    data: 'roles',
+                    name: 'roles'
                 },
                 {
                     data: 'action',
@@ -123,6 +177,10 @@
 
         function buat(){
             $('#buat').modal('show');
+        }
+
+        function import_user(){
+            $('#import').modal('show');
         }
 
         function edit(generate) {

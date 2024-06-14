@@ -12,27 +12,42 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" name="username" class="form-control" placeholder="Name">
+                        <label>NIK</label>
+                        <input type="text" name="nik" class="form-control" placeholder="NIK" readonly id="nik">
                     </div> 
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
                         <label>Name</label>
-                        <input type="text" name="name" class="form-control" placeholder="Name">
+                        <select name="name" class="form-control select2" autocomplete="off" id="name">
+                            <option value="">-- Pilih Nama Karyawan --</option>
+                            @foreach ($names as $name)
+                                <option value="{{ $name->nama }}">{{ $name->nama }}</option>
+                            @endforeach
+                        </select>
+                        {{-- <input type="text" name="name" class="form-control" placeholder="Name" id="name"> --}}
+                    </div> 
+                </div>
+                <div class="mb-3">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Name" id="username">
                     </div> 
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
                         <label>Departemen</label>
-                        <select name="departemen" class="form-control" id="">
+                        <select name="departemen" class="form-control" id="departemen">
                             <option value="">-- Pilih Departemen --</option>
                             <option value="HRD">HRD</option>
                             <option value="Marketing">Marketing</option>
                             <option value="Purchasing">Purchasing</option>
+                            <option value="PPIC">PPIC</option>
+                            <option value="Produksi">Produksi</option>
                             <option value="Finance">Finance</option>
                             <option value="Corsec">Corsec</option>
                             <option value="IT">IT</option>
+                            <option value="Satpam">Satpam</option>
                         </select>
                     </div> 
                 </div>

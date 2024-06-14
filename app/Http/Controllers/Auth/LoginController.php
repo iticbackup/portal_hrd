@@ -43,7 +43,7 @@ class LoginController extends Controller
     protected function credentials(Request $request)
     {
         return [
-            'username' => request()->username,
+            'nik' => request()->nik,
             'password' => request()->password,
             // 'is_active' => 1
         ];
@@ -54,24 +54,24 @@ class LoginController extends Controller
         $input = $request->all();
   
         $this->validate($request, [
-            'username' => 'required',
+            'nik' => 'required',
             'password' => 'required',
         ],[
-            'username.required' => 'Username Wajib diisi',
+            'nik.required' => 'NIK Wajib diisi',
             'password.required' => 'Password Wajib diisi'
         ]);
         
         // if(auth()->attempt(array($input['username'])))
         // $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-        if(auth()->attempt(array($fieldType => $input['username'], 'password' => $input['password'])))
+        $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'nik';
+        if(auth()->attempt(array($fieldType => $input['nik'], 'password' => $input['password'])))
         {
             auth()->logoutOtherDevices(request()->password);
             return redirect()->route('home');
             // return redirect()->intended();
         }else{
             return redirect()->route('login')
-                ->with('error','Username / Password Salah.');
+                ->with('error','NIK / Password Salah.');
         }
     }
 }
