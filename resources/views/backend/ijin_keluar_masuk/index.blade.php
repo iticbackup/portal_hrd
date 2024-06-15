@@ -18,6 +18,7 @@
 
 @section('content')
     @include('backend.ijin_keluar_masuk.input_jam_datang')
+    @include('backend.ijin_keluar_masuk.modalDownloadRekap')
     <div class="layout-px-spacing">
         <div class="middle-content container-xxl p-0">
 
@@ -42,7 +43,7 @@
                     <button class="btn btn-info mb-2 me-2" onclick="window.location.href='{{ route('f.form_ijin_keluar_masuk') }}'">Buat Baru</button>
                     <button class="btn btn-info mb-2 me-2" onclick="reload()">Reload</button>
                     @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
-                    <button class="btn btn-info mb-2 me-2" onclick="alert('Sedang dalam pengembangan')">Download Rekap</button>
+                    <button class="btn btn-info mb-2 me-2" onclick="download_rekap()">Download Rekap</button>
                     @endif
                     <div class="widget-content widget-content-area br-8">
                         <table class="table dt-table-hover" id="datatable" style="width:100%">
@@ -128,12 +129,18 @@
             },
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
-            "pageLength": 10
+            "pageLength": 10,
+            order: [[0, 'desc']]
         });
 
         function reload()
         {
             table.ajax.reload();
+        }
+
+        function download_rekap()
+        {
+            $('#download_rekap').modal('show');
         }
 
         function input_jam_datang(id) {

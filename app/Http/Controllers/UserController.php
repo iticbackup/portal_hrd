@@ -232,7 +232,7 @@ class UserController extends Controller
         $import = Excel::import(new UsersImport(), public_path('excel/'.$nama_file));
 
         //remove from server
-        \File::delete($path);
+        \File::delete(public_path('excel/'.$nama_file));
 
         if($import) {
             //redirect

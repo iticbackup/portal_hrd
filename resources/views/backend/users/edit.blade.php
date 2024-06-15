@@ -35,8 +35,8 @@
                     @csrf
                     <div class="mb-3">
                         <div class="form-group">
-                            <label>Username</label>
-                            <input type="text" name="username" class="form-control" placeholder="Username" value="{{ $user->username }}" id="edit_username">
+                            <label>NIK</label>
+                            <input type="text" name="nik" class="form-control" placeholder="NIK" value="{{ $user->nik }}" readonly id="edit_nik">
                         </div> 
                     </div>
                     <div class="mb-3">
