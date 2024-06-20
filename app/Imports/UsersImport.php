@@ -14,12 +14,26 @@ class UsersImport implements ToModel
 {
     public function model(array $row)
     {
-        return new User([
+        $user = new User([
             'id_generate'       => Str::uuid()->toString(),
             'nik'               => $row[0],
             'name'              => $row[1],
             'departemen'        => $row[2],
             'password'          => Hash::make($row[3]),
         ]);
+        $user->assignRole($row[4]);
+        return $user;
+        // return new User([
+        //     'id_generate'       => Str::uuid()->toString(),
+        //     'nik'               => $row[0],
+        //     'name'              => $row[1],
+        //     'departemen'        => $row[2],
+        //     'password'          => Hash::make($row[3]),
+        // ]);
     }
+
+    // public function headingRow(): int
+    // {
+    //     return 2;
+    // }
 }
