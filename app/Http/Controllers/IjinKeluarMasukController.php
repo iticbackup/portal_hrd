@@ -572,8 +572,7 @@ class IjinKeluarMasukController extends Controller
 
     public function b_download_rekap(Request $request)
     {
-        $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk
-                                                            ->whereDate('created_at','>=',$request->mulai_tanggal)
+        $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk->whereDate('created_at','>=',$request->mulai_tanggal)
                                                             ->whereDate('created_at','<=',$request->sampai_tanggal)
                                                             ->orderBy('created_at','asc')
                                                             // ->whereBetween('created_at',["$request->mulai_tanggal", "$request->sampai_tanggal"])

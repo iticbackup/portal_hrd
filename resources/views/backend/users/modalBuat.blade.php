@@ -30,15 +30,10 @@
                 </div>
                 <div class="mb-3">
                     <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" name="username" class="form-control" placeholder="Name" id="username">
-                    </div> 
-                </div>
-                <div class="mb-3">
-                    <div class="form-group">
                         <label>Departemen</label>
                         <select name="departemen" class="form-control" id="departemen">
                             <option value="">-- Pilih Departemen --</option>
+                            <option value="Direktur">Direktur</option>
                             <option value="HRD">HRD</option>
                             <option value="Marketing">Marketing</option>
                             <option value="Purchasing">Purchasing</option>

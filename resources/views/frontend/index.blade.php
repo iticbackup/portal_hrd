@@ -77,7 +77,7 @@
                 </button>
             </div>
             <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 layout-spacing">
-                <button class="card bg-danger w-100" onclick="alert('Surat Ijin Absen Segera Hadir')">
+                <button class="card bg-danger w-100" onclick="window.location.href='{{ !\Auth::check() ? route('login') : route('f.form_ijin_absen') }}'">
                     <div class="card-body w-100">
                         <h5 class="card-title text-center">SURAT IJIN ABSEN</h5>
                         {{-- <p class="mb-0">-</p> --}}

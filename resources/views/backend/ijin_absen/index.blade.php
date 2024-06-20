@@ -1,9 +1,7 @@
 @extends('layouts.backend.master')
-
 @section('title')
-    Ijin Keluar Masuk
+    Ijin Absen
 @endsection
-
 @section('css')
     <link href="{{ asset('assets/css/light/components/modal.css') }}" rel="stylesheet" type="text/css" />
 
@@ -15,32 +13,21 @@
     <link href="{{ asset('plugins/css/light/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('plugins/css/dark/sweetalerts2/custom-sweetalert.css') }}" rel="stylesheet" type="text/css" />
 @endsection
-
 @section('content')
-    @include('backend.ijin_keluar_masuk.input_jam_datang')
-    @include('backend.ijin_keluar_masuk.modalDownloadRekap')
+    @include('backend.ijin_absen.modalDownloadRekap')
     <div class="layout-px-spacing">
         <div class="middle-content container-xxl p-0">
-
             <div class="page-meta">
                 <nav class="breadcrumb-style-one" aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">Ijin Keluar masuk</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Ijin Keluar Masuk</li>
+                        <li class="breadcrumb-item"><a href="#">Ijin Absen</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Ijin Absen</li>
                     </ol>
                 </nav>
             </div>
-
             <div class="row layout-top-spacing">
                 <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
-                    @if ($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><svg> ...
-                                </svg></button>
-                            {{ $message }}
-                        </div>
-                    @endif
-                    <button class="btn btn-primary mb-2 me-2" onclick="window.location.href='{{ route('f.form_ijin_keluar_masuk') }}'">
+                    <button class="btn btn-primary mb-2 me-2" onclick="window.location.href='{{ route('f.form_ijin_absen') }}'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                             <path fill="currentColor" d="M19 12.998h-6v6h-2v-6H5v-2h6v-6h2v6h6z" />
                         </svg> Buat Baru
@@ -73,15 +60,10 @@
                         </table>
                     </div>
                 </div>
-
             </div>
-            <!-- CONTENT AREA -->
-
         </div>
-
     </div>
 @endsection
-
 @section('script')
     <script src="{{ asset('plugins/src/table/datatable/datatables.js') }}"></script>
     <script src="{{ asset('plugins/src/sweetalerts2/sweetalerts2.min.js') }}"></script>
@@ -97,7 +79,7 @@
         var table = $('#datatable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('b_ijin_keluar_masuk') }}",
+            ajax: "{{ route('b_ijin_absen') }}",
             columns: [
                 {
                     data: 'no',
@@ -154,89 +136,5 @@
         {
             $('#download_rekap').modal('show');
         }
-
-        function input_jam_datang(id) {
-            $.ajax({
-                type:'GET',
-                url: "{{ url('ijin_keluar_masuk/') }}"+'/'+id+'/input_jam_datang',
-                contentType: "application/json;  charset=utf-8",
-                cache: false,
-                success: (result) => {
-                    if(result.success == true){
-                        $('#detail_jam_datang_id').val(result.data.id);
-                        document.getElementById('detail_jam_datang_nik').innerHTML = result.data.nik;
-                        document.getElementById('detail_jam_datang_name').innerHTML = result.data.nama;
-                        document.getElementById('detail_jam_datang_jabatan').innerHTML = result.data.jabatan;
-                        document.getElementById('detail_jam_datang_unit_kerja').innerHTML = result.data.unit_kerja;
-                        document.getElementById('detail_jam_datang_jenis_keperluan').innerHTML = result.data.jenis_keperluan;
-                        document.getElementById('detail_jam_datang_keperluan').innerHTML = result.data.keperluan;
-                        document.getElementById('detail_jam_datang_jam_kerja').innerHTML = result.data.jam_kerja;
-                        document.getElementById('detail_jam_datang_jam_rencana_keluar').innerHTML = result.data.jam_rencana_keluar;
-                        if (result.data.jam_datang == null) {
-                            document.getElementById('detail_jam_datang_jam_datang').innerHTML = "<input type='time' name='detail_jam_datang' class='form-control'>";
-                        }else{
-                            document.getElementById('detail_jam_datang_jam_datang').innerHTML = result.data.jam_rencana_keluar;
-                        }
-                        $('#jam_datang').modal('show');
-                    }else{
-
-                    }
-                },
-                error: function (request, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error
-                    });
-                }
-            });
-        }
-
-        $('#form-update').submit(function(e) {
-            e.preventDefault();
-            let formData = new FormData(this);
-            $('#image-input-error').text('');
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('b_ijin_keluar_masuk.b_input_jam_datang_update') }}",
-                data: formData,
-                contentType: false,
-                processData: false,
-                beforeSend: function() {
-                    Swal.fire({
-                        icon: 'info',
-                        title: 'Waiting',
-                        text: 'Sedang Proses'
-                    });
-                },
-                success: (result) => {
-                    if (result.success != false) {
-                        // alert(result.message_title+" - "+result.message_content);
-                        Swal.fire({
-                            icon: 'success',
-                            title: result.message_title,
-                            text: result.message_content
-                        });
-                        table.ajax.reload();
-                        $('#jam_datang').modal('hide');
-                    } else {
-                        // alert(result.success+" - "+JSON.stringify(result.error));
-                        Swal.fire({
-                            icon: 'error',
-                            title: result.success,
-                            text: result.error
-                        });
-                    }
-                },
-                error: function(request, status, error) {
-                    // alert("Error - "+error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error
-                    });
-                }
-            });
-        });
     </script>
 @endsection

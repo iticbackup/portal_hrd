@@ -38,10 +38,19 @@ Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
     Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
 });
 
-Route::get('testing', function(){
-    // return view('testing');
-    event(new \App\Events\BackendAntrianNotification('1'));
+Route::prefix('formulir_ijin_absen')->group(function () {
+    Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'f_index'])->name('f.form_ijin_absen');
+    Route::post('simpan', [App\Http\Controllers\IjinAbsenController::class, 'f_simpan'])->name('f.form_ijin_absen.simpan');
 });
+
+// Route::get('testing', function(){
+//     // return view('testing');
+//     // event(new \App\Events\BackendAntrianNotification('1'));
+
+// });
+
+Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');
+Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
 
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::group(['middleware' => 'auth'], function () {
@@ -63,6 +72,14 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/validasi', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi'])->name('b_ijin_keluar_masuk.b_validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi_simpan'])->name('b_ijin_keluar_masuk.b_validasi_simpan');
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinKeluarMasukController::class, 'cetak_surat'])->name('b_ijin_keluar_masuk.cetak_surat');
+        });
+        Route::prefix('ijin_absen')->group(function () {
+            Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'b_index'])->name('b_ijin_absen');
+            Route::get('download_rekap', [App\Http\Controllers\IjinAbsenController::class, 'b_download_rekap'])->name('b_ijin_absen.b_download_rekap');
+            Route::get('{id}', [App\Http\Controllers\IjinAbsenController::class, 'b_detail'])->name('b_ijin_absen.detail');
+            Route::get('{id}/validasi', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi'])->name('b_ijin_absen.validasi');
+            Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi_simpan'])->name('b_ijin_absen.b_validasi_simpan');
+            Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
         });
         Route::prefix('users')->group(function () {
             Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('user');

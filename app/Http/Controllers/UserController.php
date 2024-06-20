@@ -89,7 +89,7 @@ class UserController extends Controller
     {
         $rules = [
             'nik' => 'required',
-            'username' => 'required',
+            // 'username' => 'required',
             'name' => 'required',
             // 'password' => 'required|same:confirm-password',
             'roles' => 'required',
@@ -97,7 +97,7 @@ class UserController extends Controller
 
         $messages = [
             'nik.required'  => 'Username wajib diisi.',
-            'username.required'  => 'Username wajib diisi.',
+            // 'username.required'  => 'Username wajib diisi.',
             'name.required'  => 'Name wajib diisi.',
             // 'password.required'  => 'Password wajib diisi.',
             // 'password.same'  => 'Password harus sama.',
@@ -110,7 +110,7 @@ class UserController extends Controller
             $input = $request->all();
             $input['id_generate'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
-            $input['username'] = $request->username;
+            // $input['username'] = $request->username;
             $input['password'] = Hash::make('default123');
     
             $user = $this->user->create($input);
