@@ -35,12 +35,62 @@
         <td>:</td>
         <td>{{ $kendaraan }}</td>
     </tr>
-    <tr>
-        <td>Jam Kerja</td>
-        <td>:</td>
-        <td>{{ $jam_kerja }}</td>
-    </tr>
-    <tr>
+    @switch($kategori_izin)
+        @case('TL')
+            <tr>
+                <td>Status Izin</td>
+                <td>:</td>
+                <td>Terlambat</td>
+            </tr>
+            <tr>
+                <td>Jam Kerja</td>
+                <td>:</td>
+                <td>{{ $jam_kerja }}</td>
+            </tr>
+            <tr>
+                <td>Jam Datang</td>
+                <td>:</td>
+                <td>{{ $jam_datang }}</td>
+            </tr>
+            @break
+        @case('KL')
+            <tr>
+                <td>Status Izin</td>
+                <td>:</td>
+                <td>Keluar Masuk</td>
+            </tr>
+            <tr>
+                <td>Jam Kerja</td>
+                <td>:</td>
+                <td>{{ $jam_kerja }}</td>
+            </tr>
+            <tr>
+                <td>Jam Datang</td>
+                <td>:</td>
+                <td>{{ $jam_datang }}</td>
+            </tr>
+            @break
+        @case('PA')
+            <tr>
+                <td>Status Izin</td>
+                <td>:</td>
+                <td>Pulang Awal</td>
+            </tr>
+            <tr>
+                <td>Jam Kerja</td>
+                <td>:</td>
+                <td>{{ $jam_kerja }}</td>
+            </tr>
+            <tr>
+                <td>Jam Rencana Keluar</td>
+                <td>:</td>
+                <td>{{ $jam_rencana_keluar }}</td>
+            </tr>
+            @break
+        @default
+            
+    @endswitch
+    {{-- <tr>
         <td>Jam Rencana Keluar</td>
         <td>:</td>
         <td>{{ $jam_rencana_keluar }}</td>
@@ -49,7 +99,7 @@
         <td>Jam Datang</td>
         <td>:</td>
         <td>{{ $jam_datang }}</td>
-    </tr>
+    </tr> --}}
     <tr>
         <td>Status</td>
         <td>:</td>

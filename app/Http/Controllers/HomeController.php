@@ -37,9 +37,10 @@ class HomeController extends Controller
     {
         $live_date = Carbon::now()->addDay($this->addDay);
         $data['antrian'] = $this->antrian->select('no_urut')
-                                        ->where('status','Terpanggil')
-                                        ->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
-                                        ->orderBy('updated_at','desc')
+                                        // ->where('status','Waiting')
+                                        ->whereIn('status',['Proses','Selesai','Tolak','Cancel'])
+                                        ->whereDate('created_at',$live_date)
+                                        ->orderBy('created_at','desc')
                                         ->first();
         if (empty($data['antrian'])) {
             $data['no_antrian'] = 0;
@@ -47,7 +48,7 @@ class HomeController extends Controller
             $data['no_antrian'] = $data['antrian']['no_urut'];
         }
 
-        $data['sisa_antrian_hari_ini'] = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
+        $data['sisa_antrian_hari_ini'] = $this->antrian->whereDate('created_at',$live_date)
                                                 ->whereIn('status',['Waiting'])
                                                 ->count();
         $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk->with('ijin_keluar_masuk_ttd')->whereHas('ijin_keluar_masuk_ttd', function($ikmt){

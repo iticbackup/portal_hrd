@@ -14,17 +14,19 @@ class FrontendNotification implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $message;
+    public $antrian;
     public $sisa_antrian_hari_ini;
+    public $message;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($message,$sisa_antrian_hari_ini)
+    public function __construct($antrian,$sisa_antrian_hari_ini,$message)
     {
-        $this->message = $message;
+        $this->antrian = $antrian;
         $this->sisa_antrian_hari_ini = $sisa_antrian_hari_ini;
+        $this->message = $message;
     }
 
     /**

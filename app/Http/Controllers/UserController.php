@@ -37,47 +37,48 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = $this->user->all();
-            return DataTables::of($data)
-                            ->addIndexColumn()
-                            ->addColumn('roles', function($row){
-                                return $row->getRoleNames();
-                                // return '<label class="badge bg-primary">'.$row->getRoleNames().'</label>';
-                                // foreach ($row->getRoleNames() as $key => $roles_name) {
-                                //     $data_roles = $roles_name;
-                                // }
-                                // return $data_roles;
-                                // if (!empty($row->getRoleNames())) {
-                                //     foreach ($row->getRoleNames() as $key => $roles_name) {
-                                //         $data_roles = '<label class="badge bg-primary mx-1">'.$roles_name.'</label>';
-                                //         return $data_roles;
-                                //     }
-                                // }
-                                // else{
-                                //     return '-';
-                                // }
-                            })
-                            ->addColumn('action', function($row){
-                                $btn = "<div>";
-                                $btn = $btn."<a href=".route('user.edit',['generate' => $row->id_generate])." class='btn btn-warning mb-2 me-2'>
-                                            <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
-                                                <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
-                                            </svg> Edit
-                                            </a>";
-                                $btn = $btn."<form action=".route('user.delete',['generate' => $row->id_generate])." method='GET'>";
-                                $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
-                                            <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
-                                                <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
-                                            </svg> Delete</button>";
-                                $btn = $btn."<form>";
-                                $btn = $btn."</div>";
+        // if ($request->ajax()) {
+        //     $data = $this->user->all();
+        //     return DataTables::of($data)
+        //                     ->addIndexColumn()
+        //                     ->addColumn('roles', function($row){
+        //                         // return $row->getRoleNames();
+        //                         // return '<label class="badge bg-primary">'.$row->getRoleNames().'</label>';
+        //                         // foreach ($row->getRoleNames() as $key => $roles_name) {
+        //                         //     $data_roles = $roles_name;
+        //                         // }
+        //                         // return $data_roles;
+        //                         // if (!empty($row->getRoleNames())) {
+        //                         //     foreach ($row->getRoleNames() as $key => $roles_name) {
+        //                         //         $data_roles = '<label class="badge bg-primary mx-1">'.$roles_name.'</label>';
+        //                         //         return $data_roles;
+        //                         //     }
+        //                         // }
+        //                         // else{
+        //                         //     return '-';
+        //                         // }
+        //                     })
+        //                     ->addColumn('action', function($row){
+        //                         $btn = "<div>";
+        //                         $btn = $btn."<a href=".route('user.edit',['generate' => $row->id_generate])." class='btn btn-warning mb-2 me-2'>
+        //                                     <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
+        //                                         <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
+        //                                     </svg> Edit
+        //                                     </a>";
+        //                         $btn = $btn."<form action=".route('user.delete',['generate' => $row->id_generate])." method='GET'>";
+        //                         $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
+        //                                     <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
+        //                                         <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
+        //                                     </svg> Delete</button>";
+        //                         $btn = $btn."<form>";
+        //                         $btn = $btn."</div>";
 
-                                return $btn;
-                            })
-                            ->rawColumns(['roles','action'])
-                            ->make(true);
-        }
+        //                         return $btn;
+        //                     })
+        //                     ->rawColumns(['roles','action'])
+        //                     ->make(true);
+        // }
+        $data['users'] = $this->user->all();
         $data['roles'] = $this->role->pluck('name','name')->all();
         $data['names'] = $this->biodata_karyawan->where('status_karyawan','!=','R')
                                                 ->orWhere('status_karyawan',null)

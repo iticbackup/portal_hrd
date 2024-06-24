@@ -66,6 +66,7 @@
                 </a>
             </li>
             @endcan
+            @can('ijinabsen-list')
             <li class="menu {{ request()->is('ijin_absen*') ? 'active' : '' }}">
                 <a href="{{ route('b_ijin_absen') }}" class="dropdown-toggle">
                     <div class="">
@@ -76,6 +77,7 @@
                     </div>
                 </a>
             </li>
+            @endcan
             {{-- <li class="menu {{ request()->is('antrian*') ? 'active' : '' }}">
                 <a href="#" class="dropdown-toggle">
                     <div class="">

@@ -52,7 +52,6 @@
                         <label>Status</label>
                         <select name="detail_status" class="form-control" id="">
                             <option value="">-- Pilih Status --</option>
-                            <option value="Proses">Ya</option>
                             <option value="Selesai">Selesai</option>
                             <option value="Tolak">Tolak</option>
                             <option value="Cancel">Cancel</option>

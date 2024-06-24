@@ -23,8 +23,9 @@ class CreateIjinKeluarMasukTable extends Migration
             $table->string('email');
             $table->text('keperluan');
             $table->string('kendaraan');
+            $table->string('kategori_izin');
             $table->time('jam_kerja');
-            $table->time('jam_rencana_keluar');
+            $table->time('jam_rencana_keluar')->nullable();
             $table->time('jam_datang')->nullable();
             $table->string('kategori_keperluan');
             $table->string('status');

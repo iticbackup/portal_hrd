@@ -217,7 +217,7 @@
     </tr>
     <tr>
         <td class="text-center">{{ $ijin_keluar_masuk->nama }}</td>
-        <td class="text-center">Manager Bagian</td>
+        <td class="text-center">{{ $explode_validasi_manager_bagian[0] }}</td>
         <td class="text-center">Personalia</td>
         <td class="text-center">Ka, Kend / Satpam</td>
     </tr>

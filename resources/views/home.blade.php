@@ -61,7 +61,7 @@
                             </div>
                             <div class="media-body">
                                 <p class="widget-text">Nomor Antrian</p>
-                                <p class="widget-numeric-value">{{ $no_antrian }}</p>
+                                <p class="widget-numeric-value" id="no_antrian">{{ $no_antrian }}</p>
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             </div>
                             <div class="media-body">
                                 <p class="widget-text">Sisa Antrian Hari Ini</p>
-                                <p class="widget-numeric-value">{{ $sisa_antrian_hari_ini }}</p>
+                                <p class="widget-numeric-value" id="sisa_antrian_hari_ini">{{ $sisa_antrian_hari_ini }}</p>
                             </div>
                         </div>
                     </div>
@@ -220,5 +220,22 @@
 @endsection
 @section('script')
     <script src="{{ $asset }}/js/dashboard/dash_1.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     {{-- <script src="{{ $asset }}/js/apps/notes.js"></script> --}}
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
+            cluster: '{{ env("PUSHER_APP_CLUSTER") }}'
+        });
+
+        var channel = pusher.subscribe('notification');
+        channel.bind('App\\Events\\FrontendNotification', function(data) {
+            // alert(JSON.stringify(data));
+            // alert('OK');
+            document.getElementById('no_antrian').innerHTML = data.antrian;
+            document.getElementById('sisa_antrian_hari_ini').innerHTML = data.sisa_antrian_hari_ini;
+        });
+    </script>
 @endsection

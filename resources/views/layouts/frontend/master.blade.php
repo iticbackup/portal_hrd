@@ -161,12 +161,12 @@
         channel.bind('App\\Events\\FrontendNotification', function(data) {
             // alert(JSON.stringify(data));
             // alert('OK');
-            // document.getElementById('no_antrian').innerHTML = data.message;
+            document.getElementById('no_antrian').innerHTML = data.antrian;
             document.getElementById('sisa_antrian_hari_ini').innerHTML = data.sisa_antrian_hari_ini;
             Swal.fire({
                 position: "center-middle",
                 icon: "info",
-                title: "Nomor Antrian "+data.message,
+                title: data.message,
                 showConfirmButton: false,
                 timer: 10000
             });

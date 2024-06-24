@@ -359,6 +359,7 @@
                             </svg>
                             Back
                         </button>
+                        @can('ijinabsen-verifikasi')
                         @if (empty($ijin_absen->ijin_absen_ttd->tgl_signature_manager) ||
                                 empty($ijin_absen->ijin_absen_ttd->tgl_signature_bersangkutan) ||
                                 empty($ijin_absen->ijin_absen_ttd->tgl_signature_saksi_1) ||
@@ -372,6 +373,7 @@
                                 Verifikasi
                             </button>
                         @endif
+                        @endcan
                     </div>
                 </div>
             </div>

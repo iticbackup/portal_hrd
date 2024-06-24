@@ -22,6 +22,7 @@ class IjinKeluarMasuk extends Model
         'email',
         'keperluan',
         'kendaraan',
+        'kategori_izin',
         'jam_kerja',
         'jam_rencana_keluar',
         'jam_datang',

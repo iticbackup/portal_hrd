@@ -65,17 +65,51 @@
                                 <td style="border: 0px solid black;">:</td>
                                 <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_kerja }}</td>
                             </tr>
-                            <tr style="border: 0px solid black;">
-                                <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Rencana Keluar</td>
-                                <td style="border: 0px solid black;">:</td>
-                                <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
-                            </tr>
-                            <tr style="border: 0px solid black;">
-                                <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Datang</td>
-                                <td style="border: 0px solid black;">:</td>
-                                {{-- <td style="border: 0px solid black;">{!! $ijin_keluar_masuk->jam_datang == null ? '<span class="badge badge-warning">Menunggu Datang</span>' : $ijin_keluar_masuk->jam_datang !!}</td> --}}
-                                <td style="border: 0px solid black;">{!! $ijin_keluar_masuk->jam_datang !!}</td>
-                            </tr>
+                            @switch($ijin_keluar_masuk->kategori_izin)
+                                @case('TL')
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Datang</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">{!! $ijin_keluar_masuk->jam_datang !!}</td>
+                                    </tr>
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Status Izin</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">Terlambat</td>
+                                    </tr>
+                                    @break
+                                @case('KL')
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Rencana Keluar</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
+                                    </tr>
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Datang</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">{!! $ijin_keluar_masuk->jam_datang !!}</td>
+                                    </tr>
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Status Izin</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">Keluar Masuk</td>
+                                    </tr>
+                                    @break
+                                @case('PA')
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Jam Rencana Keluar</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
+                                    </tr>
+                                    <tr style="border: 0px solid black;">
+                                        <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Status Izin</td>
+                                        <td style="border: 0px solid black;">:</td>
+                                        <td style="border: 0px solid black;">Pulang Awal</td>
+                                    </tr>
+                                    @break
+                                @default
+                                    
+                            @endswitch
                             <tr style="border: 0px solid black;">
                                 <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Pemohon</td>
                                 <td style="border: 0px solid black;">:</td>
@@ -179,20 +213,22 @@
                     </div>
                     {{-- <div class="mb-3">
                     </div> --}}
-                    <button class="btn btn-secondary mb-2 me-2" style="text-transform: uppercase" onclick="window.location.href='{{ url()->previous() }}'">
+                    <button class="btn btn-secondary mb-2 me-2" style="text-transform: uppercase" onclick="window.location.href='{{ route('b_ijin_keluar_masuk') }}'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                             <path fill="currentColor" fill-rule="evenodd" d="m15 4l2 2l-6 6l6 6l-2 2l-8-8z" />
                         </svg>
                         Back
                     </button>
-                    @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
-                    <button class="btn btn-info mb-2 me-2" style="text-transform: uppercase" onclick="window.location.href='{{ route('b_ijin_keluar_masuk.b_validasi',['id' => $ijin_keluar_masuk->id]) }}'">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
-                            <path fill="currentColor" fill-rule="evenodd" d="M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z" />
-                        </svg>
-                        Verifikasi
-                    </button>
-                    @endif
+                    @can('ijinkeluarmasuk-verifikasi')
+                        @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
+                        <button class="btn btn-info mb-2 me-2" style="text-transform: uppercase" onclick="window.location.href='{{ route('b_ijin_keluar_masuk.b_validasi',['id' => $ijin_keluar_masuk->id]) }}'">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
+                                <path fill="currentColor" fill-rule="evenodd" d="M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z" />
+                            </svg>
+                            Verifikasi
+                        </button>
+                        @endif
+                    @endcan
                 </div>
             </div>
         </div>

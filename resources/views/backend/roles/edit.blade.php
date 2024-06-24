@@ -51,15 +51,19 @@
                     <div class="mb-3">
                         <div class="form-group">
                             <label>Permission</label>
-                            @foreach ($permissions as $value)
-                                @php
-                                    $explode_permission = explode('-',$value->name);
-                                @endphp
-                                <div class="mb-3">
-                                    {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, ['class' => 'form-check-input']) }}
-                                    {{ $value->name }}
-                                </div>
-                            @endforeach
+                            <div class="row">
+                                @foreach ($permissions as $value)
+                                    @php
+                                        $explode_permission = explode('-',$value->name);
+                                    @endphp
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            {{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, ['class' => 'form-check-input']) }}
+                                            {{ $value->name }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div> 
                     </div>
                     <div class="mb-3">

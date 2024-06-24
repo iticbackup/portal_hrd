@@ -33,6 +33,12 @@ class IjinAbsenController extends Controller
         $this->ijin_absen_attachment = $ijin_absen_attachment;
         $this->biodata_karyawan = $biodata_karyawan;
         $this->addDay = 0;
+
+        $this->middleware('permission:ijinabsen-list', ['only' => ['f_index','b_detail']]);
+        $this->middleware('permission:ijinabsen-verifikasi', ['only' => ['b_validasi','b_validasi_simpan']]);
+        $this->middleware('permission:ijinabsen-store', ['only' => ['f_simpan']]);
+        // $this->middleware('permission:ijinabsen-edit', ['only' => ['edit','update']]);
+        // $this->middleware('permission:ijinabsen-delete', ['only' => ['delete']]);
     }
 
     public function f_index()
@@ -198,6 +204,9 @@ class IjinAbsenController extends Controller
                             ->addColumn('no', function($row){
                                 return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
                             })
+                            ->addColumn('nama', function($row){
+                                return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at.'</span>';
+                            })
                             ->addColumn('status', function($row){
                                 switch ($row->status) {
                                     case 'Waiting':
@@ -251,7 +260,7 @@ class IjinAbsenController extends Controller
     
                                 return $btn;
                             })
-                            ->rawColumns(['no','status','action'])
+                            ->rawColumns(['no','nama','status','action'])
                             ->make(true);
         }
         return view('backend.ijin_absen.index');

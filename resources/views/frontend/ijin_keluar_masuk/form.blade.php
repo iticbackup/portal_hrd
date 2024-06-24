@@ -95,6 +95,27 @@
                                 </div>
                                 <div class="col-xl-3">
                                     <div class="mb-3">
+                                        <label>Kategori Ijin</label>
+                                        <select name="kategori_izin" class="form-control" id="kategori_izin">
+                                            <option value="">-- Pilih Kategori Ijin --</option>
+                                            <option value="TL">Terlambat</option>
+                                            <option value="KL">Keluar Masuk</option>
+                                            <option value="PA">Pulang Awal</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+                                    <div class="mb-3">
+                                        <label>Jam Kerja</label>
+                                        <input type="time" name="jam_kerja" class="form-control" placeholder="Jam Kerja"
+                                            id="jam_kerja">
+                                        <div>AM : Pukul 00.00 - 12.00</div>
+                                        <div>PM : Pukul 12.00 - 23.59</div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3" id="kategori_all_date"></div>
+                                {{-- <div class="col-xl-3">
+                                    <div class="mb-3">
                                         <label>Jam Kerja</label>
                                         <input type="time" name="jam_kerja" class="form-control" placeholder="Jam Kerja"
                                             id="jam_kerja">
@@ -110,7 +131,7 @@
                                         <div>AM : Pukul 00.00 - 12.00</div>
                                         <div>PM : Pukul 12.00 - 23.59</div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <button class="btn btn-primary mb-2 me-2">Submit</button>
                             <a href="{{ route('frontend') }}" class="btn btn-info mb-2 me-4">Cancel</a>
@@ -198,6 +219,33 @@
                     direction: "asc"
                 }
             });
+        });
+
+        $('#kategori_izin').on('change', function(){
+            if ($('#kategori_izin').val() == 'TL') {
+                document.getElementById('kategori_all_date').innerHTML = "<div class='mb-3'>"+
+                                                                            "<label>Jam Datang</label>"+
+                                                                            "<input type='time' name='jam_datang' class='form-control' placeholder='Jam Datang' id='jam_datang'>"+
+                                                                            "<div>AM : Pukul 00.00 - 12.00</div>"+
+                                                                            "<div>PM : Pukul 12.00 - 23.59</div>"+
+                                                                        "</div>";
+            }else if($('#kategori_izin').val() == 'KL'){
+                document.getElementById('kategori_all_date').innerHTML = "<div class='mb-3'>"+
+                                                                            "<label>Jam Rencana Keluar</label>"+
+                                                                            "<input type='time' name='jam_rencana_keluar' class='form-control' placeholder='Jam Rencana Keluar' id='jam_rencana_keluar'>"+
+                                                                            "<div>AM : Pukul 00.00 - 12.00</div>"+
+                                                                            "<div>PM : Pukul 12.00 - 23.59</div>"+
+                                                                        "</div>";
+            }else if($('#kategori_izin').val() == 'PA'){
+                document.getElementById('kategori_all_date').innerHTML = "<div class='mb-3'>"+
+                                                                            "<label>Jam Rencana Keluar</label>"+
+                                                                            "<input type='time' name='jam_rencana_keluar' class='form-control' placeholder='Jam Rencana Keluar' id='jam_rencana_keluar'>"+
+                                                                            "<div>AM : Pukul 00.00 - 12.00</div>"+
+                                                                            "<div>PM : Pukul 12.00 - 23.59</div>"+
+                                                                        "</div>";
+            }else{
+                document.getElementById('kategori_all_date').innerHTML = null;
+            }
         });
 
         $('#form-simpan').submit(function(e) {

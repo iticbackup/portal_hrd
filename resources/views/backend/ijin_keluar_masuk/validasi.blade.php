@@ -309,7 +309,7 @@
                                 </table>
                             </div>
                             <button type="button" class="btn btn-secondary mb-2 me-2" style="text-transform: uppercase"
-                                onclick="window.location.href='{{ url()->previous() }}'">
+                                onclick="window.location.href='{{ route('b_ijin_keluar_masuk.detail',['id' => $ijin_keluar_masuk->id]) }}'">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                     viewBox="0 0 28 28">
                                     <path fill="currentColor" fill-rule="evenodd" d="m15 4l2 2l-6 6l6 6l-2 2l-8-8z" />

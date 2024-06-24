@@ -27,6 +27,13 @@ Auth::routes([
 // });
 Route::get('/', [App\Http\Controllers\AntrianController::class, 'index'])->name('frontend');
 
+Route::get('coba', function(){
+    $fruits = ["apple", "banana", "cherry"];
+    // for ($i=0; $i < $fruits; $i++) { 
+    //     echo $i;
+    // }
+});
+
 Route::prefix('formulir_antrian')->group(function () {
     Route::get('/', [App\Http\Controllers\AntrianController::class, 'formulir_antrian'])->name('antrian');
     Route::get('search_nik/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik'])->name('antrian.search_nik');
@@ -58,6 +65,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
         // Route::resource('roles', App\Http\Controllers\RoleController::class);
         Route::prefix('antrian')->group(function () {
             Route::get('/', [App\Http\Controllers\AntrianController::class, 'b_index'])->name('b_antrian');
+            Route::get('cek_panggil_selanjutnya', [App\Http\Controllers\AntrianController::class, 'cek_panggilan_selanjutnya'])->name('b_antrian.panggilan_selanjutnya');
             Route::post('detail_update', [App\Http\Controllers\AntrianController::class, 'b_detail_update'])->name('b_antrian.detail_update');
             Route::get('{id}', [App\Http\Controllers\AntrianController::class, 'b_detail'])->name('b_antrian.detail');
             Route::get('{id}/resend_mail', [App\Http\Controllers\AntrianController::class, 'b_resend_mail'])->name('b_antrian.resend_mail');

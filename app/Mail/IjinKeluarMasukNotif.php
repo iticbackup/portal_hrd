@@ -19,7 +19,7 @@ class IjinKeluarMasukNotif extends Mailable
     public function __construct(
         $konfirmasi,
         $name,$no_id,$nama_karyawan,$jabatan,$unit_kerja,
-        $jenis_keperluan,$keperluan,$kendaraan,
+        $jenis_keperluan,$keperluan,$kendaraan,$kategori_izin,
         $jam_kerja,$jam_rencana_keluar,$jam_datang,$status,$departemen
     )
     {
@@ -32,6 +32,7 @@ class IjinKeluarMasukNotif extends Mailable
         $this->jenis_keperluan = $jenis_keperluan;
         $this->keperluan = $keperluan;
         $this->kendaraan = $kendaraan;
+        $this->kategori_izin = $kategori_izin;
         $this->jam_kerja = $jam_kerja;
         $this->jam_rencana_keluar = $jam_rencana_keluar;
         $this->jam_datang = $jam_datang;
@@ -60,6 +61,7 @@ class IjinKeluarMasukNotif extends Mailable
                         'jenis_keperluan' => $this->jenis_keperluan,
                         'keperluan' => $this->keperluan,
                         'kendaraan' => $this->kendaraan,
+                        'kategori_izin' => $this->kategori_izin,
                         'jam_kerja' => $this->jam_kerja,
                         'jam_rencana_keluar' => $this->jam_rencana_keluar,
                         'jam_datang' => $this->jam_datang,
