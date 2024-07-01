@@ -18,9 +18,20 @@ class IjinKeluarMasukNotif extends Mailable
      */
     public function __construct(
         $konfirmasi,
-        $name,$no_id,$nama_karyawan,$jabatan,$unit_kerja,
-        $jenis_keperluan,$keperluan,$kendaraan,$kategori_izin,
-        $jam_kerja,$jam_rencana_keluar,$jam_datang,$status,$departemen
+        $name,
+        $no_id,
+        $nama_karyawan,
+        $jabatan,
+        $unit_kerja,
+        $jenis_keperluan,
+        $keperluan,
+        $kendaraan,
+        $kategori_izin,
+        $jam_kerja,
+        $jam_rencana_keluar,
+        $jam_datang,
+        $status,
+        $departemen
     )
     {
         $this->konfirmasi = $konfirmasi;

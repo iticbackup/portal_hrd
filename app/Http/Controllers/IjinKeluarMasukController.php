@@ -57,7 +57,7 @@ class IjinKeluarMasukController extends Controller
             'keperluan' => 'required',
             'kategori_izin' => 'required',
             'jam_kerja' => 'required',
-            'jam_rencana_keluar' => 'required',
+            // 'jam_rencana_keluar' => 'required',
             // 'jam_datang' => 'required',
         ];
 
@@ -69,7 +69,7 @@ class IjinKeluarMasukController extends Controller
             'keperluan.required'  => 'Keperluan User wajib diisi.',
             'kategori_izin.required'  => 'Kategori Ijin Keluar Masuk wajib diisi.',
             'jam_kerja.required'  => 'Jam Kerja wajib diisi.',
-            'jam_rencana_keluar.required'  => 'Jam Rencana Keluar wajib diisi.',
+            // 'jam_rencana_keluar.required'  => 'Jam Rencana Keluar wajib diisi.',
             // 'jam_datang.required'  => 'Jam Datang wajib diisi.',
         ];
 
@@ -205,23 +205,23 @@ class IjinKeluarMasukController extends Controller
             // dd($input['no']);
             $input['status'] = 'Waiting';
 
-            // Mail::to($input['email'])
-            //     ->send(new IjinKeluarMasukNotif(
-            //         'Konfirmasi Ijin Keluar Masuk',
-            //         $input['nama'],
-            //         $input['no'].'-'.$live_date->format('Ymd'),
-            //         $input['nama'].' ('.$input['nik'].')',
-            //         $input['jabatan'],
-            //         $input['unit_kerja'],
-            //         $input['kategori_keperluan'],
-            //         $input['keperluan'],
-            //         $input['kendaraan'],
-            //         $input['jam_kerja'],
-            //         $input['jam_rencana_keluar'],
-            //         '-',
-            //         'Menunggu Verifikasi',
-            //         'HRD'
-            // ));
+            Mail::to($input['email'])
+                ->send(new IjinKeluarMasukNotif(
+                    'Konfirmasi Ijin Keluar Masuk',
+                    $input['nama'],
+                    $input['no'].'-'.$live_date->format('Ymd'),
+                    $input['nama'].' ('.$input['nik'].')',
+                    $input['jabatan'],
+                    $input['unit_kerja'],
+                    $input['kategori_keperluan'],
+                    $input['keperluan'],
+                    $input['kendaraan'],
+                    $input['jam_kerja'],
+                    $input['jam_rencana_keluar'],
+                    '-',
+                    'Menunggu Verifikasi',
+                    'HRD'
+            ));
 
             $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
             if ($save_ijin_keluar_masuk) {
@@ -253,8 +253,10 @@ class IjinKeluarMasukController extends Controller
 
     public function b_index(Request $request)
     {
+        // dd(auth()->user()->getRoleNames()[0]);
         if ($request->ajax()) {
-            if (auth()->user()->departemen == 'Administrator' || auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Satpam') {
+            if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Satpam') {
+            // if (auth()->user()->can('Administrator') || auth()->user()->can('HRD') || auth()->user()->can('Satpam')) {
                 $data = $this->ijin_keluar_masuk->all();
             }else{
                 $data = $this->ijin_keluar_masuk->whereHas('ijin_keluar_masuk_ttd', function($ikmt){
@@ -287,7 +289,7 @@ class IjinKeluarMasukController extends Controller
                                         //         # code...
                                         //         break;
                                         // }
-                                        return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at.'</span>';
+                                        return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at->isoFormat('LLL').'</span>';
                                     })
                                     ->addColumn('status', function($row){
                                         // switch ($row->status) {
@@ -396,7 +398,7 @@ class IjinKeluarMasukController extends Controller
                                                                     </span>';
                                                         }else{
                                                             $jam_datang = Carbon::create($row->jam_datang);
-                                                            $jam_kerja = Carbon::create($row->jam_kerja);
+                                                            $jam_rencana_keluar = Carbon::create($row->jam_rencana_keluar);
                                                             return '<span class="badge badge-success mb-2 me-2">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
                                                                             <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
@@ -407,7 +409,7 @@ class IjinKeluarMasukController extends Controller
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
                                                                             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
                                                                             <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
-                                                                        </svg>'.$jam_datang->diffForHumans($jam_kerja,true).'
+                                                                        </svg>'.$jam_datang->diffForHumans($jam_rencana_keluar,true).'
                                                                     </span>';
                                                         }
                                                         break;
@@ -429,6 +431,11 @@ class IjinKeluarMasukController extends Controller
                                                         break;
                                                 }
 
+                                                break;
+                                            case 'Rejected':
+                                                return '<span class="badge badge-danger mb-2 me-4"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                            <path fill="currentColor" d="m13.41 12l4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29l-4.3 4.29a1 1 0 0 0 0 1.42a1 1 0 0 0 1.42 0l4.29-4.3l4.29 4.3a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.42Z" />
+                                                        </svg> Rejected</span>';
                                                 break;
                                             default:
                                                 # code...
@@ -471,10 +478,12 @@ class IjinKeluarMasukController extends Controller
                                                     break;
                                                 case 'KL':
                                                     if ($row->jam_datang == null) {
-                                                        $btn = $btn."<button class='btn btn-info mb-2 me-2' onclick='input_jam_datang(`".$row->id."`)'>
-                                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                                    <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
-                                                                </svg> Input Jam Datang</button>";
+                                                        if (auth()->user()->getRoleNames()[0] == 'Satpam' || auth()->user()->getRoleNames()[0] == 'Administrator') {
+                                                            $btn = $btn."<button class='btn btn-info mb-2 me-2' onclick='input_jam_datang(`".$row->id."`)'>
+                                                                    <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                                        <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
+                                                                    </svg> Input Jam Datang</button>";
+                                                        }
                                                     }
                                                     break;
                                                 
@@ -616,6 +625,7 @@ class IjinKeluarMasukController extends Controller
         }
 
         // dd($request->all());
+        // dd($request->all());
         $update_ttd = $data_ijin_keluar_masuk->ijin_keluar_masuk_ttd->update($input);
         if ($update_ttd) {
             if (!empty($data_ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager)) {
@@ -651,9 +661,10 @@ class IjinKeluarMasukController extends Controller
                         $data_ijin_keluar_masuk->kategori_keperluan,
                         $data_ijin_keluar_masuk->keperluan,
                         $data_ijin_keluar_masuk->kendaraan,
+                        $data_ijin_keluar_masuk->kategori_izin,
                         $data_ijin_keluar_masuk->jam_kerja,
-                        $data_ijin_keluar_masuk->jam_rencana_keluar,
-                        $data_ijin_keluar_masuk->jam_datang,
+                        $data_ijin_keluar_masuk->jam_rencana_keluar == null ? "-" : $data_ijin_keluar_masuk->jam_rencana_keluar,
+                        $data_ijin_keluar_masuk->jam_datang == null ? "-" : $data_ijin_keluar_masuk->jam_datang,
                         'Approved',
                         'HRD'
                 ));
@@ -672,9 +683,10 @@ class IjinKeluarMasukController extends Controller
                         $data_ijin_keluar_masuk->kategori_keperluan,
                         $data_ijin_keluar_masuk->keperluan,
                         $data_ijin_keluar_masuk->kendaraan,
+                        $data_ijin_keluar_masuk->kategori_izin,
                         $data_ijin_keluar_masuk->jam_kerja,
-                        $data_ijin_keluar_masuk->jam_rencana_keluar,
-                        $data_ijin_keluar_masuk->jam_datang,
+                        $data_ijin_keluar_masuk->jam_rencana_keluar == null ? "-" : $data_ijin_keluar_masuk->jam_rencana_keluar,
+                        $data_ijin_keluar_masuk->jam_datang == null ? "-" : $data_ijin_keluar_masuk->jam_datang,
                         'Rejected',
                         'HRD'
                 ));
@@ -693,9 +705,10 @@ class IjinKeluarMasukController extends Controller
                         $data_ijin_keluar_masuk->kategori_keperluan,
                         $data_ijin_keluar_masuk->keperluan,
                         $data_ijin_keluar_masuk->kendaraan,
+                        $data_ijin_keluar_masuk->kategori_izin,
                         $data_ijin_keluar_masuk->jam_kerja,
-                        $data_ijin_keluar_masuk->jam_rencana_keluar,
-                        $data_ijin_keluar_masuk->jam_datang,
+                        $data_ijin_keluar_masuk->jam_rencana_keluar == null ? "-" : $data_ijin_keluar_masuk->jam_rencana_keluar,
+                        $data_ijin_keluar_masuk->jam_datang == null ? "-" : $data_ijin_keluar_masuk->jam_datang,
                         'Rejected',
                         'HRD'
                 ));
@@ -714,9 +727,10 @@ class IjinKeluarMasukController extends Controller
                         $data_ijin_keluar_masuk->kategori_keperluan,
                         $data_ijin_keluar_masuk->keperluan,
                         $data_ijin_keluar_masuk->kendaraan,
+                        $data_ijin_keluar_masuk->kategori_izin,
                         $data_ijin_keluar_masuk->jam_kerja,
-                        $data_ijin_keluar_masuk->jam_rencana_keluar,
-                        $data_ijin_keluar_masuk->jam_datang,
+                        $data_ijin_keluar_masuk->jam_rencana_keluar == null ? "-" : $data_ijin_keluar_masuk->jam_rencana_keluar,
+                        $data_ijin_keluar_masuk->jam_datang == null ? "-" : $data_ijin_keluar_masuk->jam_datang,
                         'Rejected',
                         'HRD'
                 ));

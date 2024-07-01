@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mail\IjinAbsenNotif;
+use App\Mail\IjinKeluarMasukNotif;
 use \Carbon\Carbon;
 use Mail;
 use PDF;
@@ -35,5 +36,27 @@ class TestingController extends Controller
                 'Ijin Keperluan Pribadi',
                 'Approved',
             ));
+    }
+
+    public function testing_mail_ijin_keluar_masuk()
+    {
+        Mail::to('rioanugrah999@gmail.com')
+            ->send(new IjinKeluarMasukNotif(
+                'Konfirmasi Ijin Keluar Masuk',
+                'Rio',
+                '001-32421',
+                'Rio Anugrah A.S (2103484)',
+                'Staff',
+                'IT',
+                'Pribadi',
+                'Ijin Ke Bank',
+                'Pribadi',
+                'KL',
+                '08:00:00',
+                '11:50:00',
+                null,
+                'Approved',
+                'HRD'
+        ));
     }
 }

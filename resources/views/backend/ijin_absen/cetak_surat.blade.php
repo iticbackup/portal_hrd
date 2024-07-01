@@ -159,7 +159,7 @@
                             <tr>
                                 <td style="border: 0px solid;">&nbsp;&nbsp;&nbsp; Unit Kerja</td>
                                 <td style="border: 0px solid;">:</td>
-                                <td style="border: 0px solid;">{{ $explode_saksi_1_3 }}</td>
+                                <td style="border: 0px solid;">{{ explode('|',$ijin_absen->saksi_1)[2] }}</td>
                             </tr>
                             <tr>
                                 <td style="border: 0px solid; width: 35%">2. Nama Terang</td>
@@ -169,7 +169,7 @@
                             <tr>
                                 <td style="border: 0px solid;">&nbsp;&nbsp;&nbsp; Unit Kerja</td>
                                 <td style="border: 0px solid;">:</td>
-                                <td style="border: 0px solid;">{{ $explode_saksi_2_3 }}</td>
+                                <td style="border: 0px solid;">{{ explode('|',$ijin_absen->saksi_2)[2] }}</td>
                             </tr>
                         </table>
                         {{-- <div>

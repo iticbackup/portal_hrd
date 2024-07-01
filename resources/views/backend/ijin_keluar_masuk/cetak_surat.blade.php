@@ -62,6 +62,25 @@
                     <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->unit_kerja }}</td>
                 </tr>
                 <tr style="border: 0px solid black;">
+                    <td style="border: 0px solid black; text-transform: uppercase">Jenis Izin</td>
+                    <td style="border: 0px solid black;">:</td>
+                    <td style="border: 0px solid black;">
+                        @switch($ijin_keluar_masuk->kategori_izin)
+                            @case('TL')
+                                Terlambat
+                                @break
+                            @case('KL')
+                                Keluar Masuk
+                                @break
+                            @case('PA')
+                                Pulang Awal
+                                @break
+                            @default
+                                
+                        @endswitch
+                    </td>
+                </tr>
+                <tr style="border: 0px solid black;">
                     <td style="border: 0px solid black; text-transform: uppercase">Jenis Keperluan</td>
                     <td style="border: 0px solid black;">:</td>
                     <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->kategori_keperluan }}</td>
@@ -81,15 +100,33 @@
                     <td style="border: 0px solid black;">:</td>
                     <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_kerja }}</td>
                 </tr>
-                <tr style="border: 0px solid black;">
+                @switch($ijin_keluar_masuk->kategori_izin)
+                    @case('KL')
+                    <tr style="border: 0px solid black;">
+                        <td style="border: 0px solid black; text-transform: uppercase">Jam Rencana Keluar</td>
+                        <td style="border: 0px solid black;">:</td>
+                        <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
+                    </tr>
+                        @break
+                    @case('PA')
+                    <tr style="border: 0px solid black;">
+                        <td style="border: 0px solid black; text-transform: uppercase">Jam Rencana Keluar</td>
+                        <td style="border: 0px solid black;">:</td>
+                        <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
+                    </tr>
+                        @break
+                    @default
+                        
+                @endswitch
+                {{-- <tr style="border: 0px solid black;">
                     <td style="border: 0px solid black; text-transform: uppercase">Jam Rencana Keluar</td>
                     <td style="border: 0px solid black;">:</td>
                     <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</td>
-                </tr>
+                </tr> --}}
                 <tr style="border: 0px solid black;">
                     <td style="border: 0px solid black; text-transform: uppercase">Jam Datang</td>
                     <td style="border: 0px solid black;">:</td>
-                    <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_datang }}</td>
+                    <td style="border: 0px solid black;">{{ $ijin_keluar_masuk->jam_datang == null ? '-' :  $ijin_keluar_masuk->jam_datang}}</td>
                 </tr>
             </table>
         </td>

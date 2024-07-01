@@ -17,7 +17,8 @@
             <div class="row layout-top-spacing">
                 <div class="col-xl-8">
                     <div class="widget-content widget-content-area">
-                        <div style="font-weight: bold; text-transform: uppercase; text-align: center">Formulir Ijin Absen</div>
+                        <div style="font-weight: bold; text-transform: uppercase; text-align: center">Formulir Ijin Absen
+                        </div>
                         <hr>
                         <form method="post" id="form-simpan" enctype="multipart/form-data">
                             @csrf
@@ -29,31 +30,33 @@
                                             <td>NIK</td>
                                             <td>:</td>
                                             <td><input type="text" name="nik" class="form-control" placeholder="NIK"
-                                                id="nik"></td>
+                                                    id="nik"></td>
                                         </tr>
                                         <tr>
                                             <td>Nama Terang</td>
                                             <td>:</td>
-                                            <td><input type="text" name="nama" class="form-control" placeholder="Nama Terang"
-                                                readonly id="name" style="color: black"></td>
+                                            <td><input type="text" name="nama" class="form-control"
+                                                    placeholder="Nama Terang" readonly id="name" style="color: black">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Email</td>
                                             <td>:</td>
-                                            <td><input type="email" name="email" class="form-control" placeholder="Email"
-                                                id="email"></td>
+                                            <td><input type="email" name="email" class="form-control"
+                                                    placeholder="Email" id="email"></td>
                                         </tr>
                                         <tr>
                                             <td>Departemen</td>
                                             <td>:</td>
                                             <td><input type="text" name="departemen" class="form-control"
-                                                placeholder="Departemen" readonly id="departemen" style="color: black"></td>
+                                                    placeholder="Departemen" readonly id="departemen" style="color: black">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>Jabatan</td>
                                             <td>:</td>
-                                            <td><input type="text" name="jabatan" class="form-control" placeholder="Jabatan"
-                                                readonly id="jabatan" style="color: black"></td>
+                                            <td><input type="text" name="jabatan" class="form-control"
+                                                    placeholder="Jabatan" readonly id="jabatan" style="color: black"></td>
                                         </tr>
                                     </table>
                                 </div>
@@ -65,7 +68,8 @@
                                             <td>Hari</td>
                                             <td>:</td>
                                             <td>
-                                                <input type="text" name="hari" class="form-control" placeholder="Hari">
+                                                <input type="text" name="hari" class="form-control"
+                                                    placeholder="Hari">
                                             </td>
                                         </tr>
                                         <tr>
@@ -73,9 +77,11 @@
                                             <td>:</td>
                                             <td>
                                                 <div class="input-group mb-3">
-                                                    <input type="date" name="tgl_mulai" class="form-control" placeholder="Tgl Mulai">
+                                                    <input type="date" name="tgl_mulai" class="form-control"
+                                                        placeholder="Tgl Mulai">
                                                     <span class="input-group-text">s/d</span>
-                                                    <input type="date" name="tgl_berakhir" class="form-control" placeholder="Tgl Berakhir">
+                                                    <input type="date" name="tgl_berakhir" class="form-control"
+                                                        placeholder="Tgl Berakhir">
                                                 </div>
                                             </td>
                                         </tr>
@@ -84,7 +90,8 @@
                                             <td>:</td>
                                             <td>
                                                 <div class="input-group mb-3">
-                                                    <input type="text" name="selama" class="form-control" placeholder="Selama">
+                                                    <input type="text" name="selama" class="form-control"
+                                                        placeholder="Selama">
                                                     <span class="input-group-text">Hari</span>
                                                 </div>
                                                 {{-- <input type="text" name="selama" class="form-control" placeholder="Selama"> --}}
@@ -94,7 +101,8 @@
                                             <td>Untuk Keperluan</td>
                                             <td>:</td>
                                             <td>
-                                                <textarea name="keperluan" class="form-control" id="" cols="30" rows="2" placeholder="Untuk Keperluan"></textarea>
+                                                <textarea name="keperluan" class="form-control" id="" cols="30" rows="2"
+                                                    placeholder="Untuk Keperluan"></textarea>
                                             </td>
                                         </tr>
                                     </table>
@@ -107,10 +115,13 @@
                                             <td>1. Nama Terang</td>
                                             <td>:</td>
                                             <td>
-                                                <select name="saksi_1" class="form-control selectsaksi1" required id="saksi_1">
+                                                <select name="saksi_1" class="form-control selectsaksi1" required
+                                                    id="saksi_1">
                                                     <option value="">-- Pilih Saksi 1 --</option>
                                                     @foreach ($saksis as $biodata_karyawan)
-                                                    <option value="{{ $biodata_karyawan->nama.'|'.$biodata_karyawan->nik }}">{{ $biodata_karyawan->nama }}</option>
+                                                        <option
+                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                            {{ $biodata_karyawan->nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -118,16 +129,21 @@
                                         <tr>
                                             <td>&nbsp;&nbsp;&nbsp; Unit Kerja</td>
                                             <td>:</td>
-                                            <td><input type="text" name="saksi1_unit_kerja" class="form-control" style="color: black" readonly placeholder="Unit Kerja" id="saksi1_unit_kerja"></td>
+                                            <td><input type="text" name="saksi1_unit_kerja" class="form-control"
+                                                    style="color: black" readonly placeholder="Unit Kerja"
+                                                    id="saksi1_unit_kerja"></td>
                                         </tr>
                                         <tr>
                                             <td>2. Nama Terang</td>
                                             <td>:</td>
                                             <td>
-                                                <select name="saksi_2" class="form-control selectsaksi2" required id="saksi_2">
+                                                <select name="saksi_2" class="form-control selectsaksi2" required
+                                                    id="saksi_2">
                                                     <option value="">-- Pilih Saksi 2 --</option>
                                                     @foreach ($saksis as $biodata_karyawan)
-                                                    <option value="{{ $biodata_karyawan->nama.'|'.$biodata_karyawan->nik }}">{{ $biodata_karyawan->nama }}</option>
+                                                        <option
+                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                            {{ $biodata_karyawan->nama }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -135,23 +151,69 @@
                                         <tr>
                                             <td>&nbsp;&nbsp;&nbsp; Unit Kerja</td>
                                             <td>:</td>
-                                            <td><input type="text" name="saksi2_unit_kerja" class="form-control" style="color: black" readonly placeholder="Unit Kerja" id="saksi2_unit_kerja"></td>
+                                            <td><input type="text" name="saksi2_unit_kerja" class="form-control"
+                                                    style="color: black" readonly placeholder="Unit Kerja"
+                                                    id="saksi2_unit_kerja"></td>
                                         </tr>
                                     </table>
                                 </div>
-                                <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonusm apabila dalam kesaksian ini saya berbohong.</p>
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label>Mengetahui Manager Bagian</label>
-                                        <select name="mengetahui_manager_bagian" class="form-control select2" required id="">
-                                            <option value="">-- Pilih Manager Bagian --</option>
-                                            @foreach ($biodata_karyawans as $biodata_karyawan)
-                                            <option value="{{ $biodata_karyawan->nama.'|'.$biodata_karyawan->nik }}">{{ $biodata_karyawan->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonusm apabila dalam kesaksian ini
+                                    saya berbohong.</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label>Mengetahui Manager Bagian</label>
+                                            <select name="mengetahui_manager_bagian" class="form-control select2" required
+                                                id="">
+                                                <option value="">-- Pilih Manager Bagian --</option>
+                                                @foreach ($biodata_karyawans as $biodata_karyawan)
+                                                    <option
+                                                        value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                        {{ $biodata_karyawan->nama }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label>Kategori Ijin</label>
+                                            <select name="kategori_izin" class="form-control" id="kategori_izin">
+                                                <option value="">-- Pilih Kategori Ijin --</option>
+                                                <option value="CT">Cuti</option>
+                                                <option value="IP">Ijin Pribadi</option>
+                                                <option value="IS">Ijin Sakit</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                                <label>*Lampiran :</label>
+                                <div id="kategori_view_ijin" style="display: block">
+                                    <label>*Lampiran :</label>
+                                    <span>Format file (jpg/jpeg, png)</span>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id="formAttachment">
+                                                <input type="file" name="attachment[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 mt-3">
+                                                <button type="button" class="btn btn-success add" onclick="add()"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="currentColor" fill-rule="evenodd"
+                                                            d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
+                                                    </svg></button>
+                                                <button type="button" class="btn btn-danger remove"
+                                                    onclick="remove()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        width="1em" height="1em" viewBox="0 0 24 24">
+                                                        <path fill="currentColor"
+                                                            d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
+                                                    </svg></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <label>*Lampiran :</label>
                                 <span>Format file (jpg/jpeg, png)</span>
                                 <div class="row">
                                     <div class="col-md-6">
@@ -169,7 +231,7 @@
                                             </svg></button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             {{-- <div class="row">
                                 <div class="col-xl-3">
@@ -254,17 +316,17 @@
     <script>
         var formAttachment = document.getElementById('formAttachment');
 
-        function add(){
+        function add() {
             var newField = document.createElement('input');
-            newField.setAttribute('type','file');
-            newField.setAttribute('name','attachment[]');
-            newField.setAttribute('class','form-control');
+            newField.setAttribute('type', 'file');
+            newField.setAttribute('name', 'attachment[]');
+            newField.setAttribute('class', 'form-control');
             formAttachment.appendChild(newField);
         }
 
-        function remove(){
+        function remove() {
             var input_tags = formAttachment.getElementsByTagName('input');
-            if(input_tags.length > 0) {
+            if (input_tags.length > 0) {
                 formAttachment.removeChild(input_tags[(input_tags.length) - 1]);
             }
         }
@@ -330,7 +392,7 @@
                 url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
                 contentType: "application/json;  charset=utf-8",
                 cache: false,
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#saksi1_unit_kerja').val('Loading....');
                 },
                 success: (result) => {
@@ -356,7 +418,7 @@
                 url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
                 contentType: "application/json;  charset=utf-8",
                 cache: false,
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#saksi2_unit_kerja').val('Loading....');
                 },
                 success: (result) => {
@@ -376,22 +438,30 @@
             });
         });
 
-        $(document).ready(function(){
-            new TomSelect(".select2",{
+        // $('#kategori_izin').on('change', function() {
+        //     if ($('#kategori_izin').val() == 'IP' || $('#kategori_izin').val() == 'IS') {
+        //         document.getElementById('kategori_view_ijin').style.display = 'block';
+        //     }else{
+        //         document.getElementById('kategori_view_ijin').style.display = 'none';
+        //     }
+        // });
+
+        $(document).ready(function() {
+            new TomSelect(".select2", {
                 create: true,
                 sortField: {
                     field: "text",
                     direction: "asc"
                 }
             });
-            new TomSelect(".selectsaksi1",{
+            new TomSelect(".selectsaksi1", {
                 create: true,
                 sortField: {
                     field: "text",
                     direction: "asc"
                 }
             });
-            new TomSelect(".selectsaksi2",{
+            new TomSelect(".selectsaksi2", {
                 create: true,
                 sortField: {
                     field: "text",
@@ -425,7 +495,7 @@
                         data: formData,
                         contentType: false,
                         processData: false,
-                        beforeSend: function(){
+                        beforeSend: function() {
                             Swal.fire({
                                 icon: 'info',
                                 showConfirmButton: false,
@@ -442,7 +512,8 @@
                                 });
                                 this.reset();
                                 setTimeout(() => {
-                                    window.location.href="{{ route('b_ijin_absen') }}";
+                                    window.location.href =
+                                        "{{ route('b_ijin_absen') }}";
                                 }, 3000);
                             } else {
                                 Swal.fire({
@@ -462,7 +533,7 @@
                     });
                 }
             });
-            
+
         });
     </script>
 @endsection

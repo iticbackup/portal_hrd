@@ -91,8 +91,8 @@
                         <div class="row">
                             <div class="col-md-12 mb-3 text-center">
                                 
-                                <h2>Login Portal Antrian</h2>
-                                <p>Enter your nik and password to login</p>
+                                <h2>Login Portal HRD</h2>
+                                <p>Enter your NIK & Password to Login</p>
                                 
                             </div>
                             <div class="col-md-12">

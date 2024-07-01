@@ -18,10 +18,10 @@ class IjinAbsenAttachment extends Model
         'attachment',
     ];
 
-    // public function users()
-    // {
-    //     return $this->belongsTo(\App\Models\User::class, 'nik','nik');
-    // }
+    public function ijin_absen()
+    {
+        return $this->belongsTo(\App\Models\IjinAbsen::class, 'ijin_absen_id','id');
+    }
 
     // public function biodata_karyawan()
     // {

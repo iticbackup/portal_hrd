@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Auth::routes([
-    'register' => false,
+    'register' => true,
     'reset' => false,
     'verify' => false,
 ]);
@@ -50,14 +50,9 @@ Route::prefix('formulir_ijin_absen')->group(function () {
     Route::post('simpan', [App\Http\Controllers\IjinAbsenController::class, 'f_simpan'])->name('f.form_ijin_absen.simpan');
 });
 
-// Route::get('testing', function(){
-//     // return view('testing');
-//     // event(new \App\Events\BackendAntrianNotification('1'));
-
-// });
-
 Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');
 Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
+Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
 
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::group(['middleware' => 'auth'], function () {
@@ -88,6 +83,12 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/validasi', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi'])->name('b_ijin_absen.validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi_simpan'])->name('b_ijin_absen.b_validasi_simpan');
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
+            Route::post('{id}/attachment/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_attachment_simpan'])->name('b_ijin_absen.attachment_simpan');
+        });
+        Route::prefix('profile')->group(function () {
+            Route::get('/', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+            Route::get('setting', [App\Http\Controllers\ProfileController::class, 'setting'])->name('profile.setting');
+            Route::post('update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
         });
         Route::prefix('users')->group(function () {
             Route::get('/', [App\Http\Controllers\UserController::class, 'index'])->name('user');

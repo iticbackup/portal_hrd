@@ -37,7 +37,7 @@
                             <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 11A8.1 8.1 0 0 0 4.5 9M4 5v4h4m-4 4a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4" />
                         </svg> Reload
                     </button>
-                    @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
+                    @if (auth()->user()->getRoleNames()[0] == 'HRD' || auth()->user()->getRoleNames()[0] == 'Administrator')
                     <button class="btn btn-info mb-2 me-2" onclick="download_rekap()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                             <path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />

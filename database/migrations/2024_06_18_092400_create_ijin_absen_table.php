@@ -24,6 +24,7 @@ class CreateIjinAbsenTable extends Migration
             $table->string('hari',100);
             $table->date('tgl_mulai');
             $table->date('tgl_berakhir');
+            $table->string('kategori_izin',5);
             $table->string('selama',10);
             $table->text('keperluan');
             $table->string('saksi_1');

@@ -23,6 +23,7 @@ class IjinAbsen extends Model
         'hari',
         'tgl_mulai',
         'tgl_berakhir',
+        'kategori_izin',
         'selama',
         'keperluan',
         'saksi_1',

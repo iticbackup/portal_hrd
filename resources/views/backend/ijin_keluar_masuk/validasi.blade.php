@@ -112,7 +112,7 @@
                                     </tr>
                                     <tr style="border: 0px solid black;">
                                         <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">
-                                            Mengetahui Manager Bagian</td>
+                                            Mengetahui PIC/Manager Bagian</td>
                                         <td style="border: 0px solid black;">:</td>
                                         <td style="border: 0px solid black;">
                                             @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager))
@@ -159,7 +159,7 @@
                                                         <select name="status_validasi_manager" class="form-control"
                                                             id="">
                                                             <option value="">-- Pilih Status --</option>
-                                                            <option value="Approved">Setujui</option>
+                                                            <option value="Approved">Setuju</option>
                                                             <option value="Rejected">Tolak</option>
                                                         </select>
                                                     @else
@@ -176,11 +176,12 @@
                                         <td style="border: 0px solid black;">
                                             @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia))
                                                 {{-- <div>-</div> --}}
-                                                @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
+                                                {{-- @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator') --}}
+                                                @if (auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Administrator')
                                                     <select name="status_validasi_personalia" class="form-control"
                                                         id="">
                                                         <option value="">-- Pilih Status --</option>
-                                                        <option value="Approved">Setujui</option>
+                                                        <option value="Approved">Setuju</option>
                                                         <option value="Rejected">Tolak</option>
                                                     </select>
                                                 @else
@@ -224,11 +225,12 @@
                                                 @elseif ($explode_validasi_personalia[2] == 'Rejected')
                                                     <div>REJECTED</div>
                                                 @elseif ($explode_validasi_personalia[2] == 'Waiting')
-                                                    @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
+                                                    {{-- @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator') --}}
+                                                    @if (auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Administrator')
                                                         <select name="status_validasi_personalia" class="form-control"
                                                             id="">
                                                             <option value="">-- Pilih Status --</option>
-                                                            <option value="Approved">Setujui</option>
+                                                            <option value="Approved">Setuju</option>
                                                             <option value="Rejected">Tolak</option>
                                                         </select>
                                                     @else
@@ -244,11 +246,12 @@
                                         <td style="border: 0px solid black;">:</td>
                                         <td style="border: 0px solid black;">
                                             @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
-                                                @if (auth()->user()->departemen == 'Satpam' || auth()->user()->departemen == 'Administrator')
+                                                {{-- @if (auth()->user()->departemen == 'Satpam' || auth()->user()->departemen == 'Administrator') --}}
+                                                @if (auth()->user()->getRoleNames()[0] == 'Satpam' || auth()->user()->getRoleNames()[0] == 'Administrator')
                                                     <select name="status_validasi_kend_satpam" class="form-control"
                                                         id="">
                                                         <option value="">-- Pilih Status --</option>
-                                                        <option value="Approved">Setujui</option>
+                                                        <option value="Approved">Setuju</option>
                                                         <option value="Rejected">Tolak</option>
                                                     </select>
                                                 @else
@@ -292,11 +295,11 @@
                                                 @elseif ($explode_validasi_kend_satpam[2] == 'Rejected')
                                                     <div>REJECTED</div>
                                                 @elseif ($explode_validasi_kend_satpam[2] == 'Waiting')
-                                                    @if (auth()->user()->departemen == 'Satpam' || auth()->user()->departemen == 'Administrator')
+                                                    @if (auth()->user()->getRoleNames()[0] == 'Satpam' || auth()->user()->getRoleNames()[0] == 'Administrator')
                                                         <select name="status_validasi_kend_satpam" class="form-control"
                                                             id="">
                                                             <option value="">-- Pilih Status --</option>
-                                                            <option value="Approved">Setujui</option>
+                                                            <option value="Approved">Setuju</option>
                                                             <option value="Rejected">Tolak</option>
                                                         </select>
                                                     @else
@@ -316,7 +319,8 @@
                                 </svg>
                                 Back
                             </button>
-                            @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
+                            {{-- @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia)||empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
+                            @endif --}}
                             <button type="submit" class="btn btn-info mb-2 me-2" style="text-transform: uppercase">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
                                     viewBox="0 0 28 28">
@@ -325,7 +329,6 @@
                                 </svg>
                                 Submit
                             </button>
-                            @endif
                         </form>
                     </div>
                 </div>

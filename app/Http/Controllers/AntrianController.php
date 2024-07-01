@@ -242,7 +242,7 @@ class AntrianController extends Controller
 
     public function b_index(Request $request)
     {
-        if (auth()->user()->departemen == 'Administrator') {
+        if (auth()->user()->getRoleNames()[0] == 'Administrator') {
             if ($request->ajax()) {
                 $live_date = Carbon::now()->addDay($this->addDay);
                 $data = $this->antrian->where('tgl_input','like','%'.$live_date->format('Y-m-d').'%')
@@ -321,7 +321,7 @@ class AntrianController extends Controller
                 
             }
             return view('backend.antrian.index');
-        }elseif(auth()->user()->departemen == 'HRD'){
+        }elseif(auth()->user()->getRoleNames()[0] == 'HRGA Admin'){
             if ($request->ajax()) {
                 $live_date = Carbon::now()->addDay($this->addDay);
                 $datas = $this->antrian->where('created_at','like','%'.$live_date->format('Y-m-d').'%')

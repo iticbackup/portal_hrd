@@ -64,6 +64,7 @@ class IjinAbsenController extends Controller
             'hari' => 'required',
             'tgl_mulai' => 'required',
             'tgl_berakhir' => 'required',
+            'kategori_izin' => 'required',
             'selama' => 'required',
             'keperluan' => 'required',
             'saksi_1' => 'required',
@@ -77,6 +78,7 @@ class IjinAbsenController extends Controller
             'hari.required'  => 'Hari wajib diisi.',
             'tgl_mulai.required'  => 'Mulai Tanggal wajib diisi.',
             'tgl_berakhir.required'  => 'Sampai Tanggal wajib diisi.',
+            'kategori_izin.required'  => 'Kategori Izin wajib diisi.',
             'selama.required'  => 'Input Selama wajib diisi.',
             'keperluan.required'  => 'Keperluan wajib diisi.',
             'saksi_1.required'  => 'Saksi 1 wajib diisi.',
@@ -96,6 +98,7 @@ class IjinAbsenController extends Controller
             $input['hari'] = $request->hari;
             $input['tgl_mulai'] = $request->tgl_mulai;
             $input['tgl_berakhir'] = $request->tgl_berakhir;
+            $input['kategori_izin'] = $request->kategori_izin;
             $input['selama'] = $request->selama;
             $input['keperluan'] = $request->keperluan;
             $input['saksi_1'] = $request->saksi_1.'|'.$request->saksi1_unit_kerja;
@@ -114,40 +117,6 @@ class IjinAbsenController extends Controller
             $input['status'] = 'Waiting';
 
             // dd($request->attachment);
-            $attachment = $request->file('attachment');
-            foreach ($attachment as $atc) {
-                if ($atc->getClientOriginalExtension() == 'jpg' || $atc->getClientOriginalExtension() == 'jpeg' || $atc->getClientOriginalExtension() == 'png') {
-                    $filename = $request->nik.'-'.$request->nama.'-'.time().'.'.$atc->getClientOriginalExtension();
-                    $atc->move(public_path('ijin_absensi/'),$filename);
-
-                    $imgAttachment = \Image::make(public_path('ijin_absensi/'.$filename));
-                    // $imgAttachment = \Image::make($atc->path());
-                    $imgAttachment = $imgAttachment->encode('webp',75);
-                    $inputAttachment = $request->nik.'-'.$request->nama.'-'.time().'.webp';
-                    $dataAttachment[] = $inputAttachment;
-                    $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
-                    File::delete(public_path('ijin_absensi/'.$filename));
-                }else{
-                    return redirect()->back()->with('error','Attachment tidak sesuai format.');
-                }
-                // dd($atc->getClientOriginalExtension());
-            }
-
-            Mail::to($input['email'])
-                ->send(new IjinAbsenNotif(
-                    'Konfirmasi Ijin Absen',
-                    $input['no'].'-'.$live_date->format('Ymd'),
-                    $input['nama'],
-                    $input['jabatan'],
-                    $input['unit_kerja'],
-                    $input['email'],
-                    $input['hari'],
-                    $input['tgl_mulai'],
-                    $input['tgl_berakhir'],
-                    $input['selama'],
-                    $input['keperluan'],
-                    $input['status']
-            ));
 
             $save_ijin_absen = $this->ijin_absen->create($input);
 
@@ -160,11 +129,75 @@ class IjinAbsenController extends Controller
                     'signature_saksi_2' => $request->saksi_2.'|'.'Waiting',
                 ]);
 
-                $this->ijin_absen_attachment->create([
-                    'id' => Str::uuid()->toString(),
-                    'ijin_absen_id' => $input['id'],
-                    'attachment' => json_encode($dataAttachment)
-                ]);
+                // if ($request->file('attachment')) {
+                //     $attachment = $request->file('attachment');
+                //     foreach ($attachment as $atc) {
+                //         if ($atc->getClientOriginalExtension() == 'jpg' || $atc->getClientOriginalExtension() == 'jpeg' || $atc->getClientOriginalExtension() == 'png') {
+                //             $filename = $request->nik.'-'.$request->nama.'-'.time().'.'.$atc->getClientOriginalExtension();
+                //             $atc->move(public_path('ijin_absensi/'),$filename);
+    
+                //             $imgAttachment = \Image::make(public_path('ijin_absensi/'.$filename));
+                //             // $imgAttachment = \Image::make($atc->path());
+                //             $imgAttachment = $imgAttachment->encode('webp',75);
+                //             $inputAttachment = $request->nik.'-'.$request->nama.'-'.time().'.webp';
+                //             $dataAttachment[] = $inputAttachment;
+                //             $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
+                //             File::delete(public_path('ijin_absensi/'.$filename));
+                //         }else{
+                //             return redirect()->back()->with('error','Attachment tidak sesuai format.');
+                //         }
+                //         // dd($atc->getClientOriginalExtension());
+                //     }
+
+                //     $save_attachment = json_encode($dataAttachment);
+                // }else{
+                //     $save_attachment = null;
+                // }
+
+                if ($request->hasFile('attachment')) {
+                    $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
+                    $files = $request->file('attachment');
+                    foreach ($files as $file) {
+                        $filename = $file->getClientOriginalName();
+                        $extension = $file->getClientOriginalExtension();
+                        $check=in_array($extension,$allowedfileExtension);
+                        if ($check) {
+                            $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'),$filename));
+                            $imgAttachment->encode('webp',75);
+                            $inputAttachment = $request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
+                            $dataAttachment[] = $inputAttachment;
+                            $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
+                            File::delete(public_path('ijin_absensi/'.$filename));
+                            // $this->ijin_absen_attachment->create([
+                            //     'id' => Str::uuid()->toString(),
+                            //     'ijin_absen_id' => $input['id'],
+                            //     'attachment' => $inputAttachment
+                            // ]);
+                        }
+                    }
+                    $save_attachment = json_encode($dataAttachment);
+                    $this->ijin_absen_attachment->create([
+                        'id' => Str::uuid()->toString(),
+                        'ijin_absen_id' => $input['id'],
+                        'attachment' => $save_attachment
+                    ]);
+                }
+
+                Mail::to($input['email'])
+                    ->send(new IjinAbsenNotif(
+                        'Konfirmasi Ijin Absen',
+                        $input['no'].'-'.$live_date->format('Ymd'),
+                        $input['nama'],
+                        $input['jabatan'],
+                        $input['unit_kerja'],
+                        $input['email'],
+                        $input['hari'],
+                        $input['tgl_mulai'],
+                        $input['tgl_berakhir'],
+                        $input['selama'],
+                        $input['keperluan'],
+                        $input['status']
+                ));
 
                 $message_title="Berhasil !";
                 $message_content="Formulir Ijin Absen Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala.";
@@ -189,15 +222,21 @@ class IjinAbsenController extends Controller
 
     public function b_index(Request $request)
     {
+        // $user = request()->user()->roles;
+        // $user = \App\Models\User::with('roles')->where('id',auth()->user()->id)->first();
+        // dd($user);
         if ($request->ajax()) {
-            if (auth()->user()->departemen == 'Administrator' || auth()->user()->departemen == 'HRD') {
+            // if (auth()->user()->departemen == 'Administrator' || auth()->user()->departemen == 'HRD') {
+            if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin') {
                 $data = $this->ijin_absen->all();
             }else{
                 $data = $this->ijin_absen->whereHas('ijin_absen_ttd', function($iat){
                                             $iat->where('signature_bersangkutan','like','%'.auth()->user()->nik.'%')
                                                 ->orWhere('signature_saksi_1','like','%'.auth()->user()->nik.'%')
                                                 ->orWhere('signature_saksi_2','like','%'.auth()->user()->nik.'%');
-                                        })->get();
+                                        })
+                                        ->orWhere('nik',auth()->user()->nik)
+                                        ->get();
             }
             return DataTables::of($data)
                             ->addIndexColumn()
@@ -370,7 +409,7 @@ class IjinAbsenController extends Controller
             }
 
             if ($status_manager == 'Approved' && $status_bersangkutan == 'Approved' && $status_saksi_1 == 'Approved' && $status_saksi_2 == 'Approved') {
-                Mail::to($input['email'])
+                Mail::to($data_ijin_absen->email)
                     ->send(new IjinAbsenNotif(
                         'Konfirmasi Ijin Absen',
                         $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
@@ -390,7 +429,7 @@ class IjinAbsenController extends Controller
                 ]);
             }
             elseif($status_manager == 'Approved' && $status_bersangkutan == 'Approved' && $status_saksi_1 == 'Approved' && $status_saksi_2 == 'Rejected') {
-                Mail::to($input['email'])
+                Mail::to($data_ijin_absen->email)
                     ->send(new IjinAbsenNotif(
                         'Konfirmasi Ijin Absen',
                         $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
@@ -410,7 +449,7 @@ class IjinAbsenController extends Controller
                 ]);
             }
             elseif($status_manager == 'Approved' && $status_bersangkutan == 'Approved' && $status_saksi_1 == 'Rejected' && $status_saksi_2 == 'Rejected') {
-                Mail::to($input['email'])
+                Mail::to($data_ijin_absen->email)
                     ->send(new IjinAbsenNotif(
                         'Konfirmasi Ijin Absen',
                         $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
@@ -430,7 +469,7 @@ class IjinAbsenController extends Controller
                 ]);
             }
             elseif($status_manager == 'Approved' && $status_bersangkutan == 'Rejected' && $status_saksi_1 == 'Rejected' && $status_saksi_2 == 'Rejected') {
-                Mail::to($input['email'])
+                Mail::to($data_ijin_absen->email)
                     ->send(new IjinAbsenNotif(
                         'Konfirmasi Ijin Absen',
                         $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
@@ -450,7 +489,7 @@ class IjinAbsenController extends Controller
                 ]);
             }
             elseif($status_manager == 'Rejected' && $status_bersangkutan == 'Rejected' && $status_saksi_1 == 'Rejected' && $status_saksi_2 == 'Rejected') {
-                Mail::to($input['email'])
+                Mail::to($data_ijin_absen->email)
                     ->send(new IjinAbsenNotif(
                         'Konfirmasi Ijin Absen',
                         $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
@@ -507,5 +546,79 @@ class IjinAbsenController extends Controller
         $pdf = PDF::loadView('backend.ijin_absen.download_rekap',$data);
         $pdf->setPaper($customPaper);
         return $pdf->stream('Rekap Ijin Absen Tgl '.Carbon::parse($request->mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->sampai_tanggal)->format('d-m-Y'));
+    }
+
+    public function b_attachment_simpan(Request $request,$id)
+    {
+        // dd($request->file('attachment'));
+        $ijin_absen_attachment = $this->ijin_absen_attachment->where('ijin_absen_id',$id)->first();
+
+        // if ($request->hasFile('attachment')) {
+        //     $attachment = $request->file('attachment');
+        //     foreach ($attachment as $atc) {
+        //         if ($atc->getClientOriginalExtension() == 'jpg' || $atc->getClientOriginalExtension() == 'jpeg' || $atc->getClientOriginalExtension() == 'png') {
+        //             $filename = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.time().'.'.$atc->getClientOriginalExtension();
+        //             // $atc->move(public_path('ijin_absensi/'),$filename);
+        //             // $dataAttachment[] = $filename;
+        //             // $imgAttachment = \Image::make(public_path('ijin_absensi/'.$filename));
+        //             $imgAttachment = \Image::make($atc->move(public_path('ijin_absensi/'),$filename));
+        //             // $imgAttachment = \Image::make($atc->path());
+        //             $imgAttachment = $imgAttachment->encode('webp',75);
+        //             $inputAttachment = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.time().'.webp';
+        //             $dataAttachment[] = $inputAttachment;
+        //             $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
+        //             // File::delete(public_path('ijin_absensi/'.$filename));
+        //         }else{
+        //             return redirect()->back()->with('error','Attachment tidak sesuai format.');
+        //         }
+        //     }
+        //     $save_attachment = json_encode($dataAttachment);
+        // }else{
+        //     $save_attachment = null;
+        // }
+
+        if ($request->hasFile('attachment')) {
+            $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
+            $files = $request->file('attachment');
+            foreach ($files as $file) {
+                $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $check=in_array($extension,$allowedfileExtension);
+                if ($check) {
+                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'),$filename));
+                    $imgAttachment->encode('webp',75);
+                    $inputAttachment = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.rand(100,999).'.webp';
+                    $dataAttachment[] = $inputAttachment;
+                    $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
+                    File::delete(public_path('ijin_absensi/'.$filename));
+                }
+            }
+            $save_attachment = json_encode($dataAttachment);
+            $ijin_absen_attachment->update([
+                'attachment' => $save_attachment
+            ]);
+        }
+        
+
+        if ($ijin_absen_attachment) {
+            $message_title="Berhasil !";
+            $message_content="Attachment Berhasil Dikirim";
+            $message_type="success";
+            $message_succes = true;
+            
+            $array_message = array(
+                'success' => $message_succes,
+                'message_title' => $message_title,
+                'message_content' => $message_content,
+                'message_type' => $message_type,
+            );
+            return response()->json($array_message);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message_title' => 'Gagal',
+            'message_content' => 'Attachment Gagal Dikirim, silahkan periksa berkas kembali'
+        ]);
     }
 }

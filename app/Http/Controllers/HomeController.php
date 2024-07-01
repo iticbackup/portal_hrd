@@ -33,7 +33,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index(Request $request)
     {
         $live_date = Carbon::now()->addDay($this->addDay);
         $data['antrian'] = $this->antrian->select('no_urut')
@@ -68,6 +68,21 @@ class HomeController extends Controller
                                                 ->whereDate('created_at',$live_date->format('Y-m-d'))
                                                 ->orderBy('created_at','desc')
                                                 ->get();
+
+        // if ($request->ajax()) {
+        //     $dataIjinKeluarMasuk = $this->ijin_keluar_masuk->whereYear()
+        // }
+        $start_year_now = $live_date->startOfYear()->format('Y-m');
+        $end_year_now = $live_date->endOfYear()->format('Y-m');
+
+        for ($i=$start_year_now; $i <= $end_year_now; $i++) { 
+            $data['periode'][] = Carbon::create($i)->isoFormat('MMMM YYYY');
+            $data['total_ijin_terlambat'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','TL')->count();
+            $data['total_ijin_keluar_masuk'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','KL')->count();
+            $data['total_ijin_pulang_awal'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','PA')->count();
+            $data['total_ijin_absen'][] = $this->ijin_absen->where('created_at','LIKE','%'.$i.'%')->count();
+        }
+
         return view('home',$data);
     }
 }
