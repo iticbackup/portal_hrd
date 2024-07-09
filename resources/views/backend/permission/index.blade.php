@@ -36,8 +36,8 @@
             <div class="row layout-top-spacing">
 
                 <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
-                    <button class="btn btn-primary mb-2 me-4" onclick="buat()">Create New Permission</button>
-                    <button class="btn btn-info mb-2 me-4" onclick="reload()">Reload</button>
+                    <button class="btn btn-primary mb-2 me-2" onclick="buat()">Create New Permission</button>
+                    <button class="btn btn-info mb-2 me-2" onclick="reload()">Reload</button>
                     <div class="widget-content widget-content-area br-8">
                         <table class="table dt-table-hover" id="datatable" style="width:100%">
                             <thead>

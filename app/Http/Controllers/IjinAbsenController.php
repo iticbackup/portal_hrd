@@ -46,7 +46,7 @@ class IjinAbsenController extends Controller
         $data['biodata_karyawans'] = $this->biodata_karyawan->whereNotIn('nik',['1000001','1000002','1000003'])
                                                             ->where('status_karyawan','!=','R')
                                                             // ->orwhere('status_karyawan',null)
-                                                            ->where('id_jabatan','<=','10')
+                                                            ->where('id_jabatan','<=',10)
                                                             ->get();
         $data['saksis'] = $this->biodata_karyawan->whereNotIn('nik',['1000001','1000002','1000003'])
                                                             ->where('status_karyawan','!=','R')

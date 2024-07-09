@@ -47,7 +47,19 @@ class RoleController extends Controller
                             ->rawColumns(['action'])
                             ->make(true);
         }
-        $data['permissions'] = $this->permission->all();
+        // $data['permissions'] = $this->permission->all();
+        \DB::statement("SET SQL_MODE=''");
+        $permissions = $this->permission->select('id','name')->groupBy('name')->orderBy('created_at','asc')->get();
+        $data['custom_permission'] = array();
+
+        foreach ($permissions as $per) {
+            $key = substr($per->name, 0, strpos($per->name, "-"));
+            if(str_starts_with($per->name, $key)){
+                $data['custom_permission'][$key][] = $per;
+            }
+        }
+
+        // dd($data);
         return view('backend.roles.index',$data);
     }
 
@@ -128,14 +140,24 @@ class RoleController extends Controller
 
     public function edit($id)
     {
-        $data['role'] = $this->role->find($id);
-        if (empty($data['role'])) {
-            return redirect()->back()->with(['error' => 'Data tidak ditemukan']);
+        // $data['role'] = $this->role->find($id);
+        // if (empty($data['role'])) {
+        //     return redirect()->back()->with(['error' => 'Data tidak ditemukan']);
+        // }
+        // $data['permissions'] = $this->permission->all();
+        // $data['rolePermissions'] = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
+        //                         ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
+        //                         ->all();
+        $data['role'] = $this->role->with('permissions')->find($id);
+        \DB::statement("SET SQL_MODE=''");
+        $permissions = $this->permission->select('name','id')->groupBy('name')->orderBy('created_at','asc')->get();
+        $data['custom_permission'] = array();
+        foreach($permissions as $per){
+            $key = substr($per->name, 0, strpos($per->name, "-"));
+            if(str_starts_with($per->name, $key)){
+                $data['custom_permission'][$key][] = $per;
+            }
         }
-        $data['permissions'] = $this->permission->all();
-        $data['rolePermissions'] = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
-                                ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
-                                ->all();
         return view('backend.roles.edit',$data);
     }
 

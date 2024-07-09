@@ -89,6 +89,31 @@ class AntrianController extends Controller
     public function search_nik(Request $request)
     {
         $search_nik = $this->biodata_karyawan->where('nik',$request->nik)->first();
+        // dd($search_nik);
+        if (empty($search_nik)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal',
+                'message_content' => 'NIK tidak ditemukan'
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'message_title' => 'Success',
+            'data' => [
+                'nik' => $search_nik->nik,
+                'nama' => $search_nik->nama,
+                'satuan_kerja' => $search_nik->satuan_kerja,
+                'departemen' => $search_nik->departemen->nama_departemen,
+                'bagian' => $search_nik->posisi->nama_posisi,
+            ]
+        ]);
+    }
+
+    public function search_nik_saksi1(Request $request)
+    {
+        $search_nik = $this->biodata_karyawan->where('nik',explode('|',$request->saksi_1)[1])->first();
+        dd($search_nik);
         if (empty($search_nik)) {
             return response()->json([
                 'success' => false,

@@ -19,14 +19,27 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label>Permission</label>
-                        @foreach ($permissions as $permission)
+                        <div class="row">
+                            @foreach($custom_permission as $key => $group)
+                            <div class="mb-2" style="font-weight: bold">{{ ucfirst($key) }}</div>
+                                @forelse($group as $permission)
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ Form::checkbox('permission[]', $permission->id, false, ['class' => 'form-check-input']) }}
+                                        {{ $permission->name }}
+                                    </div>
+                                </div>
+                                @empty
+                                    {{ __("No permission in this group !") }}
+                                @endforelse
+                            @endforeach
+                        </div>
+                        {{-- @foreach ($permissions as $permission)
                             <div class="mb-3">
                                 {{ Form::checkbox('edit_permission[]', $permission->id, false, ['class' => 'form-check-input', 'id' => 'edit'.$permission->id]) }}
                                 {{ $permission->name }}
-                                {{-- <input type="checkbox" name="permission[]" class="form-check-input">
-                                {{ $permission->name }} --}}
                             </div>
-                        @endforeach
+                        @endforeach --}}
                         {{-- <select name="permission[]" class="form-control" id="">
                             <option value="">-- Select Guard Name --</option>
                             <option value="web">WEB</option>

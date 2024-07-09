@@ -21,7 +21,6 @@
 
 @section('content')
     @include('backend.roles.modalBuat')
-    @include('backend.roles.modalEdit')
     <div class="layout-px-spacing">
         <div class="middle-content container-xxl p-0">
 
@@ -44,8 +43,8 @@
                         {{ $message }}
                     </div>
                     @endif
-                    <button class="btn btn-primary mb-2 me-4" onclick="buat()">Create New Role</button>
-                    <button class="btn btn-info mb-2 me-4" onclick="reload()">Reload</button>
+                    <button class="btn btn-primary mb-2 me-2" onclick="buat()">Create New Role</button>
+                    <button class="btn btn-info mb-2 me-2" onclick="reload()">Reload</button>
                     <div class="widget-content widget-content-area br-8">
                         <table class="table dt-table-hover" id="datatable" style="width:100%">
                             <thead>

@@ -52,7 +52,20 @@
                         <div class="form-group">
                             <label>Permission</label>
                             <div class="row">
-                                @foreach ($permissions as $value)
+                                @foreach($custom_permission as $key => $group)
+                                <div class="mb-2" style="font-weight: bold">* {{ ucfirst($key) }}</div>
+                                    @forelse($group as $permission)
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <input {{ $role->permissions->contains('id',$permission->id) ? "checked" : "" }} name="permissions[]" class="rounded-md border" type="checkbox" value="{{ $permission->id }}">
+                                            {{ $permission->name }}
+                                        </div>
+                                    </div>
+                                    @empty
+                                        {{ __("No permission in this group !") }}
+                                    @endforelse
+                                @endforeach
+                                {{-- @foreach ($permissions as $value)
                                     @php
                                         $explode_permission = explode('-',$value->name);
                                     @endphp
@@ -62,7 +75,7 @@
                                             {{ $value->name }}
                                         </div>
                                     </div>
-                                @endforeach
+                                @endforeach --}}
                             </div>
                         </div> 
                     </div>

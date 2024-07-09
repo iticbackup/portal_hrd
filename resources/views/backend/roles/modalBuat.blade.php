@@ -19,17 +19,32 @@
                 <div class="mb-3">
                     <div class="form-group">
                         <label>Permission</label>
-                        @foreach ($permissions as $permission)
-                            @php
-                                $explode_permission = explode('-',$permission->name);
-                            @endphp
-                            <div class="mb-3">
-                                {{ Form::checkbox('permission[]', $permission->id, false, ['class' => 'form-check-input']) }}
-                                {{ $permission->name }}
-                                {{-- <input type="checkbox" name="permission[]" class="form-check-input">
-                                {{ $permission->name }} --}}
-                            </div>
-                        @endforeach
+                        <div class="row">
+                            @foreach($custom_permission as $key => $group)
+                            <div class="mb-2" style="font-weight: bold">{{ ucfirst($key) }}</div>
+                                @forelse($group as $permission)
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ Form::checkbox('permission[]', $permission->id, false, ['class' => 'form-check-input']) }}
+                                        {{ $permission->name }}
+                                    </div>
+                                </div>
+                                @empty
+                                    {{ __("No permission in this group !") }}
+                                @endforelse
+                            @endforeach
+                            {{-- @foreach ($permissions as $permission)
+                                @php
+                                    $explode_permission = explode('-',$permission->name);
+                                @endphp
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        {{ Form::checkbox('permission[]', $permission->id, false, ['class' => 'form-check-input']) }}
+                                        {{ $permission->name }}
+                                    </div>
+                                </div>
+                            @endforeach --}}
+                        </div>
                         {{-- <select name="permission[]" class="form-control" id="">
                             <option value="">-- Select Guard Name --</option>
                             <option value="web">WEB</option>

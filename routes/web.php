@@ -42,6 +42,7 @@ Route::prefix('formulir_antrian')->group(function () {
 
 Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
     Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_index'])->name('f.form_ijin_keluar_masuk');
+    Route::get('search_nik/saksi_1/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik_saksi1']);
     Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
 });
 
@@ -53,6 +54,7 @@ Route::prefix('formulir_ijin_absen')->group(function () {
 Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');
 Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
 Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
+Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::class, 'testing_mail_markdown']);
 
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::group(['middleware' => 'auth'], function () {
@@ -71,6 +73,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::post('input_jam_datang/update', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang_update'])->name('b_ijin_keluar_masuk.b_input_jam_datang_update');
             Route::get('download_rekap', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_download_rekap'])->name('b_ijin_keluar_masuk.b_download_rekap');
             Route::get('{id}', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_detail'])->name('b_ijin_keluar_masuk.detail');
+            Route::get('{id}/resend_mail', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_resend_mail'])->name('b_ijin_keluar_masuk.b_resend_mail');
             Route::get('{id}/input_jam_datang', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang'])->name('b_ijin_keluar_masuk.b_input_jam_datang');
             Route::get('{id}/validasi', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi'])->name('b_ijin_keluar_masuk.b_validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi_simpan'])->name('b_ijin_keluar_masuk.b_validasi_simpan');

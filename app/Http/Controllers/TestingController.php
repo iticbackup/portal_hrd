@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Mail\IjinAbsenNotif;
 use App\Mail\IjinKeluarMasukNotif;
+use App\Mail\TestingMarkdown;
 use \Carbon\Carbon;
 use Mail;
 use PDF;
@@ -58,5 +59,13 @@ class TestingController extends Controller
                 'Approved',
                 'HRD'
         ));
+    }
+
+    public function testing_mail_markdown()
+    {
+        // Mail::to('rioanugrah999@gmail.com')
+        //     ->send(new TestingMarkdown());
+        // Mail::mailer('mailtrap')->to('rioanugrah999@gmail.com')
+        //                         ->send(new TestingMarkdown());
     }
 }

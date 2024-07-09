@@ -10,6 +10,7 @@ use App\Models\BiodataKaryawan;
 use \Carbon\Carbon;
 
 use App\Mail\IjinKeluarMasukNotif;
+use App\Mail\IjinKeluarMasukNotifV1;
 
 use Auth;
 use DB;
@@ -42,8 +43,9 @@ class IjinKeluarMasukController extends Controller
         $data['biodata_karyawans'] = $this->biodata_karyawan->whereNotIn('nik',['1000001','1000002','1000003'])
                                                             ->where('status_karyawan','!=','R')
                                                             // ->orwhere('status_karyawan',null)
-                                                            ->where('id_jabatan','<=','10')
+                                                            ->where('id_jabatan','<=',10)
                                                             ->get();
+                                                            // dd($data);
         return view('frontend.ijin_keluar_masuk.form',$data);
     }
 
@@ -206,7 +208,7 @@ class IjinKeluarMasukController extends Controller
             $input['status'] = 'Waiting';
 
             Mail::to($input['email'])
-                ->send(new IjinKeluarMasukNotif(
+                ->send(new IjinKeluarMasukNotifV1(
                     'Konfirmasi Ijin Keluar Masuk',
                     $input['nama'],
                     $input['no'].'-'.$live_date->format('Ymd'),
@@ -216,10 +218,11 @@ class IjinKeluarMasukController extends Controller
                     $input['kategori_keperluan'],
                     $input['keperluan'],
                     $input['kendaraan'],
+                    $input['kategori_izin'],
                     $input['jam_kerja'],
                     $input['jam_rencana_keluar'],
                     '-',
-                    'Menunggu Verifikasi',
+                    $input['status'],
                     'HRD'
             ));
 
@@ -269,6 +272,9 @@ class IjinKeluarMasukController extends Controller
                                     ->addIndexColumn()
                                     ->addColumn('no', function($row){
                                         return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
+                                    })
+                                    ->addColumn('created_at', function($row){
+                                        return $row->created_at->format('Y-m-d H:i:s');
                                     })
                                     ->addColumn('nama', function($row){
                                         // switch ($row->kategori_izin) {
@@ -500,6 +506,11 @@ class IjinKeluarMasukController extends Controller
                                                         </svg>
                                                     </svg> Cetak Surat</a>";
                                         }
+                                        $btn = $btn."<a class='btn btn-info mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                        <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                            <path fill='currentColor' d='M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2zm-2 0l-8 5l-8-5zm0 12H4V8l8 5l8-5z' />
+                                                        </svg>
+                                                    </svg> Resend Email</a>";
                                         $btn = $btn."</div>";
     
                                         return $btn;
@@ -540,9 +551,40 @@ class IjinKeluarMasukController extends Controller
                 'message_content' => 'Data tidak ditemukan'
             ]);
         }
+
+        switch ($data->kategori_izin) {
+            case 'TL':
+                $kategori_izin = 'Terlambat';
+                break;
+            case 'KL':
+                $kategori_izin = 'Keluar Masuk';
+                break;
+            case 'PA':
+                $kategori_izin = 'Pulang Awal';
+                break;
+            default:
+                # code...
+                break;
+        }
         return response()->json([
             'success' => true,
-            'data' => $data
+            'data' => [
+                'id' => $data->id,
+                'no' => $data->no,
+                'nik' => $data->nik,
+                'nama' => $data->nama,
+                'jabatan' => $data->jabatan,
+                'unit_kerja' => $data->unit_kerja,
+                'email' => $data->email,
+                'keperluan' => $data->keperluan,
+                'kendaraan' => $data->kendaraan,
+                'kategori_izin' => $kategori_izin,
+                'jam_kerja' => $data->jam_kerja,
+                'jam_rencana_keluar' => $data->jam_rencana_keluar,
+                'jam_datang' => $data->jam_datang,
+                'kategori_keperluan' => $data->kategori_keperluan,
+                'status' => $data->status,
+            ]
         ]);
     }
 
@@ -651,7 +693,7 @@ class IjinKeluarMasukController extends Controller
 
             if ($status_manager == 'Approved' && $status_personalia == 'Approved' && $status_satpam == 'Approved') {
                 Mail::to($data_ijin_keluar_masuk->email)
-                    ->send(new IjinKeluarMasukNotif(
+                    ->send(new IjinKeluarMasukNotifV1(
                         'Konfirmasi Ijin Keluar Masuk',
                         $data_ijin_keluar_masuk->nama,
                         $data_ijin_keluar_masuk->no.'-'.$data_ijin_keluar_masuk->created_at->format('Ymd'),
@@ -673,7 +715,7 @@ class IjinKeluarMasukController extends Controller
                 ]);
             }elseif ($status_manager == 'Approved' && $status_personalia == 'Approved' && $status_satpam == 'Rejected') {
                 Mail::to($data_ijin_keluar_masuk->email)
-                    ->send(new IjinKeluarMasukNotif(
+                    ->send(new IjinKeluarMasukNotifV1(
                         'Konfirmasi Ijin Keluar Masuk',
                         $data_ijin_keluar_masuk->nama,
                         $data_ijin_keluar_masuk->no.'-'.$data_ijin_keluar_masuk->created_at->format('Ymd'),
@@ -695,7 +737,7 @@ class IjinKeluarMasukController extends Controller
                 ]);
             }elseif ($status_manager == 'Approved' && $status_personalia == 'Rejected') {
                 Mail::to($data_ijin_keluar_masuk->email)
-                    ->send(new IjinKeluarMasukNotif(
+                    ->send(new IjinKeluarMasukNotifV1(
                         'Konfirmasi Ijin Keluar Masuk',
                         $data_ijin_keluar_masuk->nama,
                         $data_ijin_keluar_masuk->no.'-'.$data_ijin_keluar_masuk->created_at->format('Ymd'),
@@ -717,7 +759,7 @@ class IjinKeluarMasukController extends Controller
                 ]);
             }elseif ($status_manager == 'Rejected') {
                 Mail::to($data_ijin_keluar_masuk->email)
-                    ->send(new IjinKeluarMasukNotif(
+                    ->send(new IjinKeluarMasukNotifV1(
                         'Konfirmasi Ijin Keluar Masuk',
                         $data_ijin_keluar_masuk->nama,
                         $data_ijin_keluar_masuk->no.'-'.$data_ijin_keluar_masuk->created_at->format('Ymd'),
@@ -779,5 +821,49 @@ class IjinKeluarMasukController extends Controller
         $pdf = PDF::loadView('backend.ijin_keluar_masuk.download_rekap',$data);
         $pdf->setPaper($customPaper);
         return $pdf->stream('Rekap Ijin Keluar Masuk Tgl '.Carbon::parse($request->mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->sampai_tanggal)->format('d-m-Y'));
+    }
+
+    public function b_resend_mail($id)
+    {
+        $data_ijin_keluar_masuk = $this->ijin_keluar_masuk::find($id);
+        if (empty($data_ijin_keluar_masuk)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal',
+                'message_content' => 'Data Ijin Keluar Masuk Tidak Ditemukan'
+            ]);
+        }
+        
+        Mail::to($data_ijin_keluar_masuk->email)
+            ->send(new IjinKeluarMasukNotifV1(
+                'Konfirmasi Ijin Keluar Masuk',
+                $data_ijin_keluar_masuk->nama,
+                $data_ijin_keluar_masuk->no.'-'.$data_ijin_keluar_masuk->created_at->format('Ymd'),
+                $data_ijin_keluar_masuk->nama.' ('.$data_ijin_keluar_masuk->nik.')',
+                $data_ijin_keluar_masuk->jabatan,
+                $data_ijin_keluar_masuk->unit_kerja,
+                $data_ijin_keluar_masuk->kategori_keperluan,
+                $data_ijin_keluar_masuk->keperluan,
+                $data_ijin_keluar_masuk->kendaraan,
+                $data_ijin_keluar_masuk->kategori_izin,
+                $data_ijin_keluar_masuk->jam_kerja,
+                $data_ijin_keluar_masuk->jam_rencana_keluar == null ? "-" : $data_ijin_keluar_masuk->jam_rencana_keluar,
+                $data_ijin_keluar_masuk->jam_datang == null ? "-" : $data_ijin_keluar_masuk->jam_datang,
+                $data_ijin_keluar_masuk->status,
+                'HRD'
+        ));
+
+        $message_title="Berhasil !";
+        $message_content="Email ".$data_ijin_keluar_masuk->email." Berhasil Dikirim";
+        $message_type="success";
+        $message_succes = true;
+
+        $array_message = array(
+            'success' => $message_succes,
+            'message_title' => $message_title,
+            'message_content' => $message_content,
+            'message_type' => $message_type,
+        );
+        return response()->json($array_message);
     }
 }

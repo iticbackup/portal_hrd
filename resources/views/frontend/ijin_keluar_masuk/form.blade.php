@@ -34,7 +34,7 @@
                                     <div class="mb-3">
                                         <label>Nama</label>
                                         <input type="text" name="nama" class="form-control" placeholder="Nama"
-                                            readonly id="name">
+                                            readonly id="name" style="color: #000">
                                     </div>
                                 </div>
                                 <div class="col-xl-5">
@@ -49,14 +49,14 @@
                                     <div class="mb-3">
                                         <label>Departemen</label>
                                         <input type="text" name="departemen" class="form-control"
-                                            placeholder="Departemen" readonly id="departemen">
+                                            placeholder="Departemen" readonly id="departemen" style="color: #000">
                                     </div>
                                 </div>
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Jabatan</label>
                                         <input type="text" name="jabatan" class="form-control" placeholder="Bagian"
-                                            readonly id="jabatan">
+                                            readonly id="jabatan" style="color: #000">
                                     </div>
                                 </div>
                                 <div class="col-xl-3">

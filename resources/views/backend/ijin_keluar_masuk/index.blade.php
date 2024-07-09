@@ -62,6 +62,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
+                                    <th>Tanggal Buat</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
                                     <th>Unit Kerja</th>
@@ -104,6 +105,10 @@
                     name: 'no'
                 },
                 {
+                    data: 'created_at',
+                    name: 'created_at'
+                },
+                {
                     data: 'nama',
                     name: 'nama'
                 },
@@ -142,7 +147,7 @@
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
             "pageLength": 10,
-            order: [[0, 'desc']]
+            order: [[1, 'desc']]
         });
 
         function reload()
@@ -168,7 +173,7 @@
                         document.getElementById('detail_jam_datang_name').innerHTML = result.data.nama;
                         document.getElementById('detail_jam_datang_jabatan').innerHTML = result.data.jabatan;
                         document.getElementById('detail_jam_datang_unit_kerja').innerHTML = result.data.unit_kerja;
-                        document.getElementById('detail_jam_datang_jenis_keperluan').innerHTML = result.data.jenis_keperluan;
+                        document.getElementById('detail_jam_datang_jenis_keperluan').innerHTML = result.data.kategori_izin;
                         document.getElementById('detail_jam_datang_keperluan').innerHTML = result.data.keperluan;
                         document.getElementById('detail_jam_datang_jam_kerja').innerHTML = result.data.jam_kerja;
                         document.getElementById('detail_jam_datang_jam_rencana_keluar').innerHTML = result.data.jam_rencana_keluar;
@@ -180,6 +185,46 @@
                         $('#jam_datang').modal('show');
                     }else{
 
+                    }
+                },
+                error: function (request, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                }
+            });
+        }
+
+        function resend_mail(id) {
+            $.ajax({
+                type:'GET',
+                url: "{{ url('ijin_keluar_masuk/') }}"+'/'+id+'/resend_mail',
+                contentType: "application/json;  charset=utf-8",
+                cache: false,
+                beforeSend: function(){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Waiting',
+                        text: 'Sedang Proses',
+                        showConfirmButton: false,
+                    });
+                },
+                success: (result) => {
+                    if(result.success == true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: result.message_title,
+                            text: result.message_content
+                        });
+                        table.ajax.reload();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: result.success,
+                            text: result.error
+                        });
                     }
                 },
                 error: function (request, status, error) {
