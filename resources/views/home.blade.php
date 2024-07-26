@@ -211,6 +211,8 @@
                                         </p>
                                         <p class="mb-0">Jabatan : {{ $ijin_absen->jabatan }}</p>
                                         <p class="mb-0">Unit Kerja : {{ $ijin_absen->unit_kerja }}</p>
+                                        <p class="mb-0">Jenis Izin : {{ $ijin_absen->kategori_izin == 'CT' ? 'Cuti' : $ijin_absen->kategori_izin == 'IP' ? 'Ijin Pribadi' : $ijin_absen->kategori_izin == 'IS' ? 'Ijin Sakit' : '-' }}</p>
+                                        <p class="mb-0">Tanggal Dibuat : {{ $ijin_absen->created_at->isoFormat('LLL') }}</p>
                                     </div>
                                 </a>
                             </div>
