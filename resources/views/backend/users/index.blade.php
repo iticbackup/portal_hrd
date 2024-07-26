@@ -73,6 +73,7 @@
                                     <th>Name</th>
                                     <th>Departemen</th>
                                     <th>Roles</th>
+                                    <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -87,6 +88,13 @@
                                                 @foreach ($user->getRoleNames() as $key => $roles_name)
                                                     <label class="badge bg-primary mx-1">{{ $roles_name }}</label>
                                                 @endforeach
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if(Cache::has('is_online' . $user->id))
+                                                <span class="text-success">Online</span>
+                                            @else
+                                                <span class="text-secondary">Offline</span>
                                             @endif
                                         </td>
                                         <td>
