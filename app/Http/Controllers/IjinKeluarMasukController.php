@@ -179,6 +179,7 @@ class IjinKeluarMasukController extends Controller
             switch ($request->kategori_izin) {
                 case 'TL':
                     $input['jam_datang'] = $request->jam_datang;
+                    $input['jam_rencana_keluar'] = "-";
                     break;
                 case 'KL':
                     $input['jam_rencana_keluar'] = $request->jam_rencana_keluar;
