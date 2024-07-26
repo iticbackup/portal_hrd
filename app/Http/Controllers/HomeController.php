@@ -52,7 +52,7 @@ class HomeController extends Controller
                                                 ->whereIn('status',['Waiting'])
                                                 ->count();
         $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk->with('ijin_keluar_masuk_ttd')->whereHas('ijin_keluar_masuk_ttd', function($ikmt){
-                                                                    $ikmt->where('signature_manager','like','%'.auth()->user()->nik.'%')
+                                                                    $ikmt->orWhere('signature_manager','like','%'.auth()->user()->nik.'%')
                                                                         ->orWhere('signature_personalia','like','%'.auth()->user()->nik.'%')
                                                                         ->orWhere('signature_kend_satpam','like','%'.auth()->user()->nik.'%');
                                                                 })
@@ -60,15 +60,15 @@ class HomeController extends Controller
                                                                 ->orderBy('created_at','desc')
                                                                 ->get();
         $data['ijin_absens'] = $this->ijin_absen->with('ijin_absen_ttd')->whereHas('ijin_absen_ttd', function($iat){
-                                                    $iat->where('signature_manager','like','%'.auth()->user()->nik.'%')
+                                                    $iat->orWhere('signature_manager','like','%'.auth()->user()->nik.'%')
                                                         ->orWhere('signature_bersangkutan','like','%'.auth()->user()->nik.'%')
                                                         ->orWhere('signature_saksi_1','like','%'.auth()->user()->nik.'%')
                                                         ->orWhere('signature_saksi_2','like','%'.auth()->user()->nik.'%');
                                                 })
-                                                ->whereDate('created_at',$live_date->format('Y-m-d'))
+                                                ->whereDate('created_at','>=',$live_date->format('Y-m-d'))
                                                 ->orderBy('created_at','desc')
                                                 ->get();
-
+        // dd($data);
         // if ($request->ajax()) {
         //     $dataIjinKeluarMasuk = $this->ijin_keluar_masuk->whereYear()
         // }
