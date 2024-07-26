@@ -106,62 +106,25 @@
                                 </table>
                             </div>
                         </div>
-                        <p>Lampiran :</p>
-                        {{-- <p>{{ $ijin_absen->ijin_absen_attachment->attachment }}</p> --}}
-                        {{-- <div class="row">
-                            @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $attachment)
-                                <div class="col-md-3">
-                                    <img src="{{ asset('ijin_absensi/'.$attachment) }}" width="120">
+                        <p>Lampiran Surat Tulis :</p>
+                        @if (!empty($ijin_absen->ijin_absen_attachment->attachment_written_letter))
+                            <div class="row">
+                                @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment_written_letter) as $key => $attachment_written_letter)
+                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
+                                    <a href="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment_written_letter) }}" class="defaultGlightbox glightbox-content">
+                                        <img src="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment_written_letter) }}" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" />
+                                    </a>
                                 </div>
-                            @endforeach
-                        </div> --}}
-                        @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
-                            {{-- <ol>
-                                @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $key => $attachment)
-                                    <li class="mb-3">
-                                        <div>
-                                            {{ $attachment }}
-                                            <div class="modal fade" id="key{{ $key + 1 }}" tabindex="-1"
-                                                role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">
-                                                                {{ $attachment }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em"
-                                                                    height="1em" viewBox="0 0 24 24">
-                                                                    <path fill="currentColor"
-                                                                        d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="text-center">
-                                                                <img src="{{ asset('ijin_absensi/' . $attachment) }}"
-                                                                    width="120">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <a href="#key{{ $key + 1 }}" class="btn btn-primary"
-                                                data-bs-toggle="modal"><svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="1em" height="1em" viewBox="0 0 24 24">
-                                                    <path fill="currentColor" fill-rule="evenodd"
-                                                        d="M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6" />
-                                                </svg> View
-                                            </a>
-                                        </div>
-                                    </li>
                                 @endforeach
-                            </ol> --}}
+                            </div>
+                        @endif
+                        <p>Lampiran Swab & Surat Pendukung :</p>
+                        @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
                             <div class="row">
                                 @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $key => $attachment)
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
-                                    <a href="{{ asset('ijin_absensi/'.$attachment) }}" class="defaultGlightbox glightbox-content">
-                                        <img src="{{ asset('ijin_absensi/'.$attachment) }}" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" />
+                                    <a href="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment) }}" class="defaultGlightbox glightbox-content">
+                                        <img src="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment) }}" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" />
                                     </a>
                                 </div>
                                 @endforeach
@@ -245,7 +208,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Disetujui</td>
+                                        <td>Disetujui PIC/Manager Bagian</td>
                                         <td>:</td>
                                         <td>
                                             @if (empty($ijin_absen->ijin_absen_ttd->signature_bersangkutan))

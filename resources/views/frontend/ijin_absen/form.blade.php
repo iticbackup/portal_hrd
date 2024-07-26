@@ -122,6 +122,9 @@
                                                         <option
                                                             value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
                                                             {{ $biodata_karyawan->nama }}</option>
+                                                        {{-- <option
+                                                            value="{{ $biodata_karyawan->nik }}">
+                                                            {{ $biodata_karyawan->nama }}</option> --}}
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -186,7 +189,34 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="kategori_view_ijin" style="display: block">
+                                <div id="kategori_view_ijin" style="display: none">
+                                    <label>*Upload Lampiran Surat Ijin Tertulis:</label>
+                                    <span>Format file (jpg/jpeg, png)</span>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div id="formAttachmentWrittenLetter">
+                                                <input type="file" name="attachment_written_letter[]" class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3 mt-3">
+                                                <button type="button" class="btn btn-success add" onclick="add()"><svg
+                                                        xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                                        viewBox="0 0 24 24">
+                                                        <path fill="currentColor" fill-rule="evenodd"
+                                                            d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
+                                                    </svg></button>
+                                                <button type="button" class="btn btn-danger remove"
+                                                    onclick="remove()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                        width="1em" height="1em" viewBox="0 0 24 24">
+                                                        <path fill="currentColor"
+                                                            d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
+                                                    </svg></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div id="kategori_view_ijin" style="display: block">
                                     <label>*Lampiran :</label>
                                     <span>Format file (jpg/jpeg, png)</span>
                                     <div class="row">
@@ -212,82 +242,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                {{-- <label>*Lampiran :</label>
-                                <span>Format file (jpg/jpeg, png)</span>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div id="formAttachment">
-                                            <input type="file" name="attachment[]" class="form-control" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="mb-3 mt-3">
-                                            <button type="button" class="btn btn-success add" onclick="add()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <path fill="currentColor" fill-rule="evenodd" d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
-                                            </svg></button>
-                                            <button type="button" class="btn btn-danger remove" onclick="remove()"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
-                                            </svg></button>
-                                        </div>
-                                    </div>
                                 </div> --}}
                             </div>
-                            {{-- <div class="row">
-                                <div class="col-xl-3">
-                                    <div class="mb-3">
-                                        <label>NIK</label>
-                                        <input type="text" name="nik" class="form-control" placeholder="NIK"
-                                            id="nik">
-                                    </div>
-                                </div>
-                                <div class="col-xl-4">
-                                    <div class="mb-3">
-                                        <label>Nama</label>
-                                        <input type="text" name="nama" class="form-control" placeholder="Nama"
-                                            readonly id="name">
-                                    </div>
-                                </div>
-                                <div class="col-xl-5">
-                                    <div class="mb-3">
-                                        <label>Email</label>
-                                        <input type="email" name="email" class="form-control" placeholder="Email"
-                                            id="email">
-                                        <span>* Email ini untuk pemberitahuan notifikasi</span>
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="mb-3">
-                                        <label>Departemen</label>
-                                        <input type="text" name="departemen" class="form-control"
-                                            placeholder="Departemen" readonly id="departemen">
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="mb-3">
-                                        <label>Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian"
-                                            readonly id="jabatan">
-                                    </div>
-                                </div>
-                                <div class="col-xl-3">
-                                    <div class="mb-3">
-                                        <label>Mengetahui Manager Bagian</label>
-                                        <select name="mengetahui_manager_bagian" class="form-control select2" required
-                                            id="">
-                                            <option value="">-- Pilih Manager Bagian --</option>
-                                            @foreach ($biodata_karyawans as $biodata_karyawan)
-                                                <option
-                                                    value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
-                                                    {{ $biodata_karyawan->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <button class="btn btn-primary mb-2 me-2">Submit</button>
-                            <a href="{{ route('frontend') }}" class="btn btn-info mb-2 me-4">Cancel</a> --}}
                             <div class="mt-3">
                                 <button class="btn btn-primary mb-2 me-2">Submit</button>
                                 <a href="{{ route('frontend') }}" class="btn btn-info mb-2 me-4">Cancel</a>
@@ -314,20 +270,20 @@
     <script src="{{ asset('plugins/src/tomSelect/tom-select.base.js') }}"></script>
     <script src="{{ asset('plugins/src/tomSelect/custom-tom-select.js') }}"></script>
     <script>
-        var formAttachment = document.getElementById('formAttachment');
+        var formAttachmentWrittenLetter = document.getElementById('formAttachmentWrittenLetter');
 
         function add() {
             var newField = document.createElement('input');
             newField.setAttribute('type', 'file');
             newField.setAttribute('name', 'attachment[]');
             newField.setAttribute('class', 'form-control');
-            formAttachment.appendChild(newField);
+            formAttachmentWrittenLetter.appendChild(newField);
         }
 
         function remove() {
-            var input_tags = formAttachment.getElementsByTagName('input');
+            var input_tags = formAttachmentWrittenLetter.getElementsByTagName('input');
             if (input_tags.length > 0) {
-                formAttachment.removeChild(input_tags[(input_tags.length) - 1]);
+                formAttachmentWrittenLetter.removeChild(input_tags[(input_tags.length) - 1]);
             }
         }
     </script>
@@ -389,9 +345,12 @@
         $('#saksi_1').on('change', function() {
             $.ajax({
                 type: 'GET',
-                url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
+                // url: "{{ url('formulir_ijin_absen/search_nik/saksi_1/') }}" + "/" + $('#nik').val(),
+                url: "{{ url('formulir_ijin_absen/search_nik/saksi/') }}" + "/" + this.value,
+                // url: "{{ url('formulir_ijin_absen/search_nik/saksi_1/') }}",
                 contentType: "application/json;  charset=utf-8",
-                cache: false,
+                contentType: false,
+                processData: false,
                 beforeSend: function() {
                     $('#saksi1_unit_kerja').val('Loading....');
                 },
@@ -415,7 +374,7 @@
         $('#saksi_2').on('change', function() {
             $.ajax({
                 type: 'GET',
-                url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
+                url: "{{ url('formulir_ijin_absen/search_nik/saksi/') }}" + "/" + this.value,
                 contentType: "application/json;  charset=utf-8",
                 cache: false,
                 beforeSend: function() {
@@ -438,13 +397,13 @@
             });
         });
 
-        // $('#kategori_izin').on('change', function() {
-        //     if ($('#kategori_izin').val() == 'IP' || $('#kategori_izin').val() == 'IS') {
-        //         document.getElementById('kategori_view_ijin').style.display = 'block';
-        //     }else{
-        //         document.getElementById('kategori_view_ijin').style.display = 'none';
-        //     }
-        // });
+        $('#kategori_izin').on('change', function() {
+            if ($('#kategori_izin').val() == 'CT' || $('#kategori_izin').val() == 'IP') {
+                document.getElementById('kategori_view_ijin').style.display = 'block';
+            }else{
+                document.getElementById('kategori_view_ijin').style.display = 'none';
+            }
+        });
 
         $(document).ready(function() {
             new TomSelect(".select2", {

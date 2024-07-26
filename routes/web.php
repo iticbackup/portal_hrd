@@ -42,13 +42,13 @@ Route::prefix('formulir_antrian')->group(function () {
 
 Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
     Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_index'])->name('f.form_ijin_keluar_masuk');
-    Route::get('search_nik/saksi_1/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik_saksi1']);
     Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
 });
 
 Route::prefix('formulir_ijin_absen')->group(function () {
     Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'f_index'])->name('f.form_ijin_absen');
     Route::post('simpan', [App\Http\Controllers\IjinAbsenController::class, 'f_simpan'])->name('f.form_ijin_absen.simpan');
+    Route::get('search_nik/saksi/{nik}', [App\Http\Controllers\IjinAbsenController::class, 'search_nik_saksi1']);
 });
 
 Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');

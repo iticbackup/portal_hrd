@@ -15,6 +15,7 @@ class IjinAbsenAttachment extends Model
     public $fillable = [
         'id',
         'ijin_absen_id',
+        'attachment_written_letter',
         'attachment',
     ];
 

@@ -121,6 +121,10 @@ class IjinAbsenController extends Controller
             $save_ijin_absen = $this->ijin_absen->create($input);
 
             if ($save_ijin_absen) {
+                // $this->ijin_absen_attachment->create([
+                //     'id' => Str::uuid()->toString(),
+                //     'ijin_absen_id' => $input['id'],
+                // ]);
                 $this->ijin_absen_ttd->create([
                     'id' => Str::uuid()->toString(),
                     'ijin_absen_id' => $input['id'],
@@ -154,20 +158,24 @@ class IjinAbsenController extends Controller
                 //     $save_attachment = null;
                 // }
 
-                if ($request->hasFile('attachment')) {
+                if ($request->hasFile('attachment_written_letter')) {
+                    $path_absen = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd'));
+                    if(!File::isDirectory($path_absen)){
+                        File::makeDirectory($path_absen, 0777, true, true);
+                    }
                     $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
-                    $files = $request->file('attachment');
+                    $files = $request->file('attachment_written_letter');
                     foreach ($files as $file) {
                         $filename = $file->getClientOriginalName();
                         $extension = $file->getClientOriginalExtension();
                         $check=in_array($extension,$allowedfileExtension);
                         if ($check) {
-                            $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'),$filename));
+                            $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd')),$filename));
                             $imgAttachment->encode('webp',75);
-                            $inputAttachment = $request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
+                            $inputAttachment = 'SuratTulis_'.$request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
                             $dataAttachment[] = $inputAttachment;
-                            $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
-                            File::delete(public_path('ijin_absensi/'.$filename));
+                            $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd')).'/'.$inputAttachment);
+                            File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/'.$filename));
                             // $this->ijin_absen_attachment->create([
                             //     'id' => Str::uuid()->toString(),
                             //     'ijin_absen_id' => $input['id'],
@@ -175,11 +183,11 @@ class IjinAbsenController extends Controller
                             // ]);
                         }
                     }
-                    $save_attachment = json_encode($dataAttachment);
+                    $save_attachment_written_letter = json_encode($dataAttachment);
                     $this->ijin_absen_attachment->create([
                         'id' => Str::uuid()->toString(),
                         'ijin_absen_id' => $input['id'],
-                        'attachment' => $save_attachment
+                        'attachment_written_letter' => $save_attachment_written_letter
                     ]);
                 }
 
@@ -552,32 +560,12 @@ class IjinAbsenController extends Controller
     {
         // dd($request->file('attachment'));
         $ijin_absen_attachment = $this->ijin_absen_attachment->where('ijin_absen_id',$id)->first();
-
-        // if ($request->hasFile('attachment')) {
-        //     $attachment = $request->file('attachment');
-        //     foreach ($attachment as $atc) {
-        //         if ($atc->getClientOriginalExtension() == 'jpg' || $atc->getClientOriginalExtension() == 'jpeg' || $atc->getClientOriginalExtension() == 'png') {
-        //             $filename = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.time().'.'.$atc->getClientOriginalExtension();
-        //             // $atc->move(public_path('ijin_absensi/'),$filename);
-        //             // $dataAttachment[] = $filename;
-        //             // $imgAttachment = \Image::make(public_path('ijin_absensi/'.$filename));
-        //             $imgAttachment = \Image::make($atc->move(public_path('ijin_absensi/'),$filename));
-        //             // $imgAttachment = \Image::make($atc->path());
-        //             $imgAttachment = $imgAttachment->encode('webp',75);
-        //             $inputAttachment = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.time().'.webp';
-        //             $dataAttachment[] = $inputAttachment;
-        //             $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
-        //             // File::delete(public_path('ijin_absensi/'.$filename));
-        //         }else{
-        //             return redirect()->back()->with('error','Attachment tidak sesuai format.');
-        //         }
-        //     }
-        //     $save_attachment = json_encode($dataAttachment);
-        // }else{
-        //     $save_attachment = null;
-        // }
-
         if ($request->hasFile('attachment')) {
+            $path_absen = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd'));
+            if(!File::isDirectory($path_absen)){
+                File::makeDirectory($path_absen, 0777, true, true);
+            }
+            
             $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
             $files = $request->file('attachment');
             foreach ($files as $file) {
@@ -585,12 +573,13 @@ class IjinAbsenController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $check=in_array($extension,$allowedfileExtension);
                 if ($check) {
-                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'),$filename));
+                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd')),$filename));
+                    // $imgAttachment = \Image::make($file->path());
                     $imgAttachment->encode('webp',75);
                     $inputAttachment = $ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.rand(100,999).'.webp';
                     $dataAttachment[] = $inputAttachment;
-                    $imgAttachment->save(public_path('ijin_absensi/').$inputAttachment);
-                    File::delete(public_path('ijin_absensi/'.$filename));
+                    $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/').$inputAttachment);
+                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/'.$filename));
                 }
             }
             $save_attachment = json_encode($dataAttachment);
@@ -598,11 +587,29 @@ class IjinAbsenController extends Controller
                 'attachment' => $save_attachment
             ]);
         }
+
+        // $ijin_absen = $this->ijin_absen->find($id);
+        // if (empty($ijin_absen)) {
+        //     $message_title="Gagal !";
+        //     $message_content="Data tidak ditemukan";
+        //     $message_type="error";
+        //     $message_succes = false;
+            
+        //     $array_message = array(
+        //         'success' => $message_succes,
+        //         'message_title' => $message_title,
+        //         'message_content' => $message_content,
+        //         'message_type' => $message_type,
+        //     );
+        //     return response()->json($array_message); 
+        // }
+
+
         
 
         if ($ijin_absen_attachment) {
             $message_title="Berhasil !";
-            $message_content="Attachment Berhasil Dikirim";
+            $message_content="Attachment Berhasil Dikirim, Silahkan tunggu";
             $message_type="success";
             $message_succes = true;
             
@@ -619,6 +626,31 @@ class IjinAbsenController extends Controller
             'success' => false,
             'message_title' => 'Gagal',
             'message_content' => 'Attachment Gagal Dikirim, silahkan periksa berkas kembali'
+        ]);
+    }
+
+    public function search_nik_saksi1(Request $request,$nik)
+    {
+        // dd($nik);
+        $search_nik = $this->biodata_karyawan->where('nik',explode('|',$nik)[1])->first();
+        // dd($search_nik);
+        if (empty($search_nik)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal',
+                'message_content' => 'NIK tidak ditemukan'
+            ]);
+        }
+        return response()->json([
+            'success' => true,
+            'message_title' => 'Success',
+            'data' => [
+                'nik' => $search_nik->nik,
+                'nama' => $search_nik->nama,
+                'satuan_kerja' => $search_nik->satuan_kerja,
+                'departemen' => $search_nik->departemen->nama_departemen >= 2 ? $search_nik->departemen->nama_unit : $search_nik->departemen->nama_departemen,
+                'bagian' => $search_nik->posisi->nama_posisi,
+            ]
         ]);
     }
 }
