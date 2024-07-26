@@ -118,8 +118,8 @@
                                 @endforeach
                             </div>
                         @endif
-                        <p>Lampiran Swab & Surat Pendukung :</p>
                         @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
+                        <p>Lampiran Swab & Surat Pendukung :</p>
                             <div class="row">
                                 @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $key => $attachment)
                                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
@@ -130,6 +130,7 @@
                                 @endforeach
                             </div>
                         @else
+                            @if ($ijin_absen->nik == auth()->user()->nik)
                             <div class="mb-3 badge bg-info">Lampiran Belum Tersedia</div>
                             <div class="widget-content widget-content-area mb-3">
                                 <div>Format File Lampiran (jpg/jpeg, png)</div>
@@ -161,6 +162,7 @@
                                 <button type="submit" class="btn btn-success">Submit</button>
                                 </form>
                             </div>
+                            @endif
                         @endif
                         <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonus, apabila dalam kesaksian ini saya
                             berbohong.</p>
