@@ -275,7 +275,7 @@
         function add() {
             var newField = document.createElement('input');
             newField.setAttribute('type', 'file');
-            newField.setAttribute('name', 'attachment[]');
+            newField.setAttribute('name', 'attachment_written_letter[]');
             newField.setAttribute('class', 'form-control');
             formAttachmentWrittenLetter.appendChild(newField);
         }
