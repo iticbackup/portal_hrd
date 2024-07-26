@@ -174,7 +174,7 @@ class IjinAbsenController extends Controller
                             $imgAttachment->encode('webp',75);
                             $inputAttachment = 'SuratTulis_'.$request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
                             $dataAttachment[] = $inputAttachment;
-                            $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd')).'/'.$inputAttachment);
+                            $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/').$inputAttachment);
                             File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/'.$filename));
                             // $this->ijin_absen_attachment->create([
                             //     'id' => Str::uuid()->toString(),
