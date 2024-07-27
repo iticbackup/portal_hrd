@@ -116,8 +116,18 @@
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Hari</label>
-                                            <input type="text" name="hari" class="form-control"
-                                                        placeholder="Hari">
+                                            <select name="hari" class="form-control" id="">
+                                                <option value="">-- Pilih Hari --</option>
+                                                <option value="Senin">Senin</option>
+                                                <option value="Selasa">Selasa</option>
+                                                <option value="Rabu">Rabu</option>
+                                                <option value="Kamis">Kamis</option>
+                                                <option value="Jumat">Jumat</option>
+                                                <option value="Sabtu">Sabtu</option>
+                                                <option value="Minggu">Minggu</option>
+                                            </select>
+                                            {{-- <input type="text" name="hari" class="form-control"
+                                                        placeholder="Hari"> --}}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
