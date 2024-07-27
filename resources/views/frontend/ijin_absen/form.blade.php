@@ -9,6 +9,17 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/src/tomSelect/tom-select.default.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/light/tomSelect/custom-tomSelect.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/dark/tomSelect/custom-tomSelect.css') }}">
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="layout-px-spacing">
@@ -23,8 +34,47 @@
                         <form method="post" id="form-simpan" enctype="multipart/form-data">
                             @csrf
                             <div class="col-md-12">
-                                <label>Yang bertanda tangan di bawah ini :</label>
-                                <div class="table-responsive">
+                                <div class="mb-3">
+                                    <label>Yang bertanda tangan di bawah ini :</label>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>NIK</label>
+                                            <input type="text" name="nik" class="form-control" placeholder="NIK"
+                                                    id="nik">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Nama Terang</label>
+                                            <input type="text" name="nama" class="form-control"
+                                                    placeholder="Nama Terang" readonly id="name" style="color: black">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Email</label>
+                                            <input type="email" name="email" class="form-control"
+                                                    placeholder="Email" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Departemen</label>
+                                            <input type="text" name="departemen" class="form-control"
+                                                    placeholder="Departemen" readonly id="departemen" style="color: black">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Jabatan</label>
+                                            <input type="text" name="jabatan" class="form-control"
+                                                    placeholder="Jabatan" readonly id="jabatan" style="color: black">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="table-responsive">
                                     <table class="table">
                                         <tr>
                                             <td>NIK</td>
@@ -59,10 +109,48 @@
                                                     placeholder="Jabatan" readonly id="jabatan" style="color: black"></td>
                                         </tr>
                                     </table>
-                                </div>
+                                </div> --}}
                                 <hr>
                                 <label>Memohon Ijin untuk tidak masuk kerja pada :</label>
-                                <div class="table-responsive">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Hari</label>
+                                            <input type="text" name="hari" class="form-control"
+                                                        placeholder="Hari">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Tanggal</label>
+                                            <div class="input-group mb-3">
+                                                <input type="date" name="tgl_mulai" class="form-control"
+                                                    placeholder="Tgl Mulai">
+                                                <span class="input-group-text">s/d</span>
+                                                <input type="date" name="tgl_berakhir" class="form-control"
+                                                    placeholder="Tgl Berakhir">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Selama</label>
+                                            <div class="input-group mb-3">
+                                                <input type="number" name="selama" class="form-control"
+                                                    placeholder="Selama">
+                                                <span class="input-group-text">Hari</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>Untuk Keperluan</label>
+                                            <textarea name="keperluan" class="form-control" id="" cols="30" rows="2"
+                                                        placeholder="Untuk Keperluan"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="table-responsive">
                                     <table class="table">
                                         <tr>
                                             <td>Hari</td>
@@ -90,11 +178,10 @@
                                             <td>:</td>
                                             <td>
                                                 <div class="input-group mb-3">
-                                                    <input type="text" name="selama" class="form-control"
+                                                    <input type="number" name="selama" class="form-control"
                                                         placeholder="Selama">
                                                     <span class="input-group-text">Hari</span>
                                                 </div>
-                                                {{-- <input type="text" name="selama" class="form-control" placeholder="Selama"> --}}
                                             </td>
                                         </tr>
                                         <tr>
@@ -106,10 +193,52 @@
                                             </td>
                                         </tr>
                                     </table>
-                                </div>
+                                </div> --}}
                                 <hr>
                                 <label>Kami yang bertanda tangan di bawah ini :</label>
-                                <div class="table-responsive">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>1. Nama Terang</label>
+                                            <select name="saksi_1" class="form-control selectsaksi1" required
+                                                    id="saksi_1">
+                                                    <option value="">-- Pilih Saksi 1 --</option>
+                                                    @foreach ($saksis as $biodata_karyawan)
+                                                        <option
+                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                            {{ $biodata_karyawan->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Unit Kerja Saksi 1</label>
+                                            <input type="text" name="saksi1_unit_kerja" class="form-control"
+                                                    style="color: black" readonly placeholder="Unit Kerja"
+                                                    id="saksi1_unit_kerja">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label>2. Nama Terang</label>
+                                            <select name="saksi_2" class="form-control selectsaksi2" required
+                                                    id="saksi_2">
+                                                    <option value="">-- Pilih Saksi 2 --</option>
+                                                    @foreach ($saksis as $biodata_karyawan)
+                                                        <option
+                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                            {{ $biodata_karyawan->nama }}</option>
+                                                    @endforeach
+                                                </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label>Unit Kerja Saksi 2</label>
+                                            <input type="text" name="saksi2_unit_kerja" class="form-control"
+                                                    style="color: black" readonly placeholder="Unit Kerja"
+                                                    id="saksi2_unit_kerja">
+                                        </div>
+                                    </div>
+                                </div>
+                                {{-- <div class="table-responsive">
                                     <table class="table">
                                         <tr>
                                             <td>1. Nama Terang</td>
@@ -122,9 +251,6 @@
                                                         <option
                                                             value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
                                                             {{ $biodata_karyawan->nama }}</option>
-                                                        {{-- <option
-                                                            value="{{ $biodata_karyawan->nik }}">
-                                                            {{ $biodata_karyawan->nama }}</option> --}}
                                                     @endforeach
                                                 </select>
                                             </td>
@@ -159,7 +285,7 @@
                                                     id="saksi2_unit_kerja"></td>
                                         </tr>
                                     </table>
-                                </div>
+                                </div> --}}
                                 <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonusm apabila dalam kesaksian ini
                                     saya berbohong.</p>
                                 <div class="row">
