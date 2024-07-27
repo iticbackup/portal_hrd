@@ -308,7 +308,7 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td>Disetujui</td>
+                                            <td>Disetujui PIC/Manager Bagian</td>
                                             <td>:</td>
                                             <td>
                                                 @php
