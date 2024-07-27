@@ -34,7 +34,7 @@ class RoleController extends Controller
                                                 <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
                                             </svg> Edit
                                             </a>";
-                                $btn = $btn."<form action=".route('roles.destroy',['id' => $row->id])." method='GET'>";
+                                $btn = $btn."<form action=".route('roles.destroy',['id' => $row->id])." method='DELETE'>";
                                 $btn = $btn."<button type='submit' class='btn btn-danger mb-2 me-2'>
                                             <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 28 28'>
                                                 <path fill='currentColor' d='M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z' />
@@ -163,18 +163,32 @@ class RoleController extends Controller
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
         // $this->validate($request, [
         //     'name' => 'required',
         //     'permission' => 'required',
         // ]);
     
-        $role = Role::find($id);
+        // $role = Role::find($id);
+        // // dd($role);
+        // $role->name = $request->input('name');
+        // $role->save();
+    
+        // $role->syncPermissions($request->input('permission'));
+    
+        // return redirect()->route('roles.index')
+        //                 ->with('success','Role updated successfully');
+
+        $this->validate($request, [
+            'name' => 'required',
+            'permission' => 'required',
+        ]);
+
+        $role = $this->role->find($id);
         $role->name = $request->input('name');
         $role->save();
-    
+
         $role->syncPermissions($request->input('permission'));
-    
+
         return redirect()->route('roles.index')
                         ->with('success','Role updated successfully');
     }

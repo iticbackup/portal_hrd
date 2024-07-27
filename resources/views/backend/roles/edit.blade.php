@@ -57,7 +57,7 @@
                                     @forelse($group as $permission)
                                     <div class="col-md-6">
                                         <div class="mb-3">
-                                            <input {{ $role->permissions->contains('id',$permission->id) ? "checked" : "" }} name="permissions[]" class="rounded-md border" type="checkbox" value="{{ $permission->id }}">
+                                            <input {{ $role->permissions->contains('id',$permission->id) ? "checked" : "" }} name="permission[]" class="rounded-md border" type="checkbox" value="{{ $permission->id }}">
                                             {{ $permission->name }}
                                         </div>
                                     </div>
