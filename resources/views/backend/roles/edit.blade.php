@@ -53,7 +53,7 @@
                             <label>Permission</label>
                             <div class="row">
                                 @foreach($custom_permission as $key => $group)
-                                <div class="mb-2" style="font-weight: bold">* {{ ucfirst($key) }}</div>
+                                <div class="mb-2 mt-2" style="font-weight: bold">* {{ ucfirst($key) }}</div>
                                     @forelse($group as $permission)
                                     <div class="col-md-6">
                                         <div class="mb-3">
