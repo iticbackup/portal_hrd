@@ -11,8 +11,9 @@
         border-collapse: collapse;
     }
 </style>
+<title>Laporan Ijin Keluar Masuk Tgl {{ \Carbon\Carbon::create($_GET['rekap_karyawan_mulai_tanggal'])->isoFormat('DD MMMM YYYY').' sd '.\Carbon\Carbon::create($_GET['rekap_karyawan_sampai_tanggal'])->isoFormat('DD MMMM YYYY') }}</title>
 <div style="text-align: center; margin-top: 1.5%; margin-bottom: 1.5%">
-    <div style="font-weight: bold; font-size: 16pt">Laporan Absensi Ijin Keluar Masuk</div>
+    <div style="font-weight: bold; font-size: 16pt">Laporan Ijin Keluar Masuk</div>
     <div>Periode {{ \Carbon\Carbon::create($_GET['rekap_karyawan_mulai_tanggal'])->isoFormat('DD MMMM YYYY').' sd '.\Carbon\Carbon::create($_GET['rekap_karyawan_sampai_tanggal'])->isoFormat('DD MMMM YYYY') }}</div>
 </div>
 <table>

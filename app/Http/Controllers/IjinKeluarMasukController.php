@@ -821,7 +821,7 @@ class IjinKeluarMasukController extends Controller
         $customPaper = array(0,0,812.5,378);
         $pdf = PDF::loadView('backend.ijin_keluar_masuk.download_rekap',$data);
         $pdf->setPaper($customPaper);
-        return $pdf->stream('Rekap Ijin Keluar Masuk Tgl '.Carbon::parse($request->mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->sampai_tanggal)->format('d-m-Y'));
+        return $pdf->stream('Rekap Ijin Keluar Masuk Tgl '.Carbon::parse($request->mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->sampai_tanggal)->format('d-m-Y').'.pdf');
     }
 
     public function b_download_rekap_karyawan(Request $request)
@@ -838,7 +838,7 @@ class IjinKeluarMasukController extends Controller
                                                             ->get();
                                                             // dd($data);
         $pdf = PDF::loadView('backend.ijin_keluar_masuk.download_rekap_karyawan',$data);
-        return $pdf->stream();
+        return $pdf->stream('Laporan Ijin Keluar Masuk Tgl '.Carbon::parse($request->rekap_karyawan_mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->rekap_karyawan_sampai_tanggal)->format('d-m-Y').'.pdf');
     }
 
     public function b_resend_mail($id)
