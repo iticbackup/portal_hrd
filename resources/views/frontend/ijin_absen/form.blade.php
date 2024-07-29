@@ -449,11 +449,6 @@
                             "<td>" + result.data.nama + "</td>" +
                             "</tr>" +
                             "<tr>" +
-                            "<td>" + "Email" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + $('#nik').val() + "</td>" +
-                            "</tr>" +
-                            "<tr>" +
                             "<td>" + "Departemen" + "</td>" +
                             "<td>" + ":" + "</td>" +
                             "<td>" + result.data.departemen + "</td>" +

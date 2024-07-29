@@ -26,7 +26,7 @@
                             @csrf
                             <hr>
                             <p>Yang bertanda tangan di bawah ini :</p>
-                            <div class="col-md-3">
+                            {{-- <div class="col-md-3">
                                 <div class="mb-3">
                                     <table class="table">
                                         <tr>
@@ -46,37 +46,189 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
-                            <p>Memohon Ijin untuk tidak masuk kerja pada :</p>
-                            <div class="col-md-3">
-                                <div class="mb-3">
-                                    <table class="table">
-                                        <tr>
-                                            <td>Hari</td>
-                                            <td>:</td>
-                                            <td>{{ $ijin_absen->hari }}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Tanggal</td>
-                                            <td>:</td>
-                                            <td>{{ \Carbon\Carbon::create($ijin_absen->tgl_mulai)->isoFormat('DD MMMM YYYY') . ' s/d ' . \Carbon\Carbon::create($ijin_absen->tgl_berakhir)->isoFormat('DD MMMM YYYY') }}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Selama</td>
-                                            <td>:</td>
-                                            <td>{{ $ijin_absen->selama }} Hari</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Untuk Keperluan</td>
-                                            <td>:</td>
-                                            <td>{{ $ijin_absen->keperluan }}</td>
-                                        </tr>
-                                    </table>
+                            </div> --}}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div>Nama</div>
+                                        <div style="color: #000">{{ $ijin_absen->nama }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div>Jabatan</div>
+                                        <div style="color: #000">{{ $ijin_absen->jabatan }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div>Unit Kerja</div>
+                                        <div style="color: #000">{{ $ijin_absen->unit_kerja }}</div>
+                                    </div>
                                 </div>
                             </div>
+                            <hr>
+                            <p>Memohon Ijin untuk tidak masuk kerja pada :</p>
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <div>Hari</div>
+                                        <div style="color: #000">{{ $ijin_absen->hari }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div>Tanggal</div>
+                                        <div style="color: #000">{{ \Carbon\Carbon::create($ijin_absen->tgl_mulai)->isoFormat('DD MMMM YYYY') . ' s/d ' . \Carbon\Carbon::create($ijin_absen->tgl_berakhir)->isoFormat('DD MMMM YYYY') }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <div>Kategori Izin</div>
+                                        <div style="color: #000">{{ $ijin_absen->kategori_izin == "IP" ? "Ijin Pulang Awal" : $ijin_absen->kategori_izin == "IS" ? "Ijin Sakit" : $ijin_absen->kategori_izin == "CT" ? "Ijin Cuti" : "-" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <div>Selama</div>
+                                        <div style="color: #000">{{ $ijin_absen->selama }} Hari</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="mb-3">
+                                        <div>Keperluan</div>
+                                        <div style="color: #000">{{ $ijin_absen->keperluan }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
                             <p>Kami yang bertanda tangan di bawah ini :</p>
-                            <div class="col-md-3">
+                            @php
+                                $explode_saksi_1 = explode('|', $ijin_absen->saksi_1);
+                                $explode_saksi_2 = explode('|', $ijin_absen->saksi_2);
+                            @endphp
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <div>1. Nama Terang</div>
+                                        <div style="color: #000">{{ $explode_saksi_1[0] . ' (' . $explode_saksi_1[1] . ')' }}</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div>Unit Kerja 1</div>
+                                        <div style="color: #000">{{ $explode_saksi_1[2] }}</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div>Saksi 1</div>
+                                        @if (empty($ijin_absen->ijin_absen_ttd->signature_saksi_1))
+                                            <select name="saksi_1" class="form-control" id="">
+                                                <option value="">-- Pilih Status --</option>
+                                                <option value="Approved">Disetujui</option>
+                                                <option value="Rejected">Ditolak</option>
+                                            </select>
+                                        @else
+                                            @php
+                                                $explode_signature_saksi_1 = explode(
+                                                    '|',
+                                                    $ijin_absen->ijin_absen_ttd->signature_saksi_1,
+                                                );
+                                                $detail = [
+                                                    'saksi_1' =>
+                                                        'ID: ' .
+                                                        $ijin_absen->id .
+                                                        "\n" .
+                                                        'Kode Formulir: ' .
+                                                        $ijin_absen->no .
+                                                        '-' .
+                                                        $ijin_absen->created_at->format('Ymd') .
+                                                        "\n" .
+                                                        'Signature: ' .
+                                                        $explode_signature_saksi_1[0] .
+                                                        ' (' .
+                                                        $explode_signature_saksi_1[1] .
+                                                        ')' .
+                                                        "\n" .
+                                                        'Tanggal Formulir: ' .
+                                                        $ijin_absen->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+
+                                            @if ($explode_signature_saksi_1[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail['saksi_1'], 'QRCODE', 2, 2) !!}
+                                            @elseif($explode_signature_saksi_1[2] == 'Rejected')
+                                                <span class="badge badge-danger">REJECTED</span>
+                                            @else
+                                                @if ($explode_signature_saksi_1[1] == auth()->user()->nik || auth()->user()->nik == '0000000')
+                                                    <select name="saksi_1" class="form-control" id="">
+                                                        <option value="">-- Pilih Status --</option>
+                                                        <option value="Approved">Disetujui</option>
+                                                        <option value="Rejected">Ditolak</option>
+                                                    </select>
+                                                @endif
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <div>2. Nama Terang</div>
+                                        <div style="color: #000">{{ $explode_saksi_2[0] . ' (' . $explode_saksi_2[1] . ')' }}</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div>Unit Kerja 2</div>
+                                        <div style="color: #000">{{ $explode_saksi_2[2] }}</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div>Saksi 1</div>
+                                        @if (empty($ijin_absen->ijin_absen_ttd->signature_saksi_2))
+                                            <select name="saksi_2" class="form-control" id="">
+                                                <option value="">-- Pilih Status --</option>
+                                                <option value="Approved">Disetujui</option>
+                                                <option value="Rejected">Ditolak</option>
+                                            </select>
+                                        @else
+                                            @php
+                                                $explode_signature_saksi_2 = explode(
+                                                    '|',
+                                                    $ijin_absen->ijin_absen_ttd->signature_saksi_2,
+                                                );
+                                                $detail = [
+                                                    'saksi_2' =>
+                                                        'ID: ' .
+                                                        $ijin_absen->id .
+                                                        "\n" .
+                                                        'Kode Formulir: ' .
+                                                        $ijin_absen->no .
+                                                        '-' .
+                                                        $ijin_absen->created_at->format('Ymd') .
+                                                        "\n" .
+                                                        'Signature: ' .
+                                                        $explode_signature_saksi_2[0] .
+                                                        ' (' .
+                                                        $explode_signature_saksi_2[1] .
+                                                        ')' .
+                                                        "\n" .
+                                                        'Tanggal Formulir: ' .
+                                                        $ijin_absen->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            @if ($explode_signature_saksi_2[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail['saksi_2'], 'QRCODE', 2, 2) !!}
+                                            @elseif($explode_signature_saksi_2[2] == 'Rejected')
+                                                <span class="badge badge-danger">REJECTED</span>
+                                            @else
+                                                @if ($explode_signature_saksi_2[1] == auth()->user()->nik || auth()->user()->nik == '000000')
+                                                    <select name="saksi_2" class="form-control" id="">
+                                                        <option value="">-- Pilih Status --</option>
+                                                        <option value="Approved">Disetujui</option>
+                                                        <option value="Rejected">Ditolak</option>
+                                                    </select>
+                                                @endif
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-3">
                                 <div class="mb-3">
                                     @php
                                         $explode_saksi_1 = explode('|', $ijin_absen->saksi_1);
@@ -210,56 +362,17 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
+                            </div> --}}
+                            <hr>
                             <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonus, apabila dalam kesaksian ini saya
                                 berbohong.</p>
-                            <div class="col-md-12">
+                            {{-- <div class="col-md-12">
                                 <div class="table-responsive">
                                     <table class="table">
                                         <tr>
                                             <td>Mengetahui Mgr. Adm & Personalia</td>
                                             <td>:</td>
                                             <td>
-                                                {{-- @if (empty($ijin_absen->ijin_absen->signature_manager))
-                                                    <span class="badge badge-warning">Menunggu Persetujuan</span>
-                                                @else
-                                                    @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
-                                                    <select name="signature_manager" class="form-control" id="">
-                                                        <option value="">-- Pilih Status --</option>
-                                                        <option value="Approved">Disetujui</option>
-                                                        <option value="Rejected">Ditolak</option>
-                                                    </select>
-                                                    @else
-                                                        @php
-                                                            $explode_signature_manager = explode('|',$ijin_absen->ijin_absen->signature_manager);
-                                                            $detail = [
-                                                            'signature_manager' =>
-                                                                'ID: ' .
-                                                                $ijin_absen->id .
-                                                                "\n" .
-                                                                'Kode Formulir: ' .
-                                                                $ijin_absen->no .
-                                                                '-' .
-                                                                $ijin_absen->created_at->format('Ymd') .
-                                                                "\n" .
-                                                                'Signature: ' .
-                                                                $explode_signature_manager[0] .
-                                                                ' (' .
-                                                                $explode_signature_manager[1] .
-                                                                ')' .
-                                                                "\n" .
-                                                                'Tanggal Formulir: ' .
-                                                                $ijin_absen->created_at->isoFormat('LL'),
-                                                        ];
-                                                        @endphp
-                                                        @if ($explode_signature_manager[2] == 'Approved')
-                                                        {!! DNS2D::getBarcodeHTML($detail['signature_manager'], 'QRCODE', 2, 2) !!}
-                                                        @elseif($explode_signature_manager[2] == 'Rejected')
-                                                        <span class="badge badge-danger">REJECTED</span>
-                                                        @else
-                                                        @endif
-                                                    @endif
-                                                @endif --}}
                                                 @if (empty($ijin_absen->ijin_absen_ttd->signature_manager))
                                                     @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
                                                         <select name="signature_manager" class="form-control"
@@ -383,6 +496,131 @@
                                             </td>
                                         </tr>
                                     </table>
+                                </div>
+                            </div> --}}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Mengetahui Mgr. Adm & Personalia</div>
+                                        @if (empty($ijin_absen->ijin_absen_ttd->signature_manager))
+                                            @if (auth()->user()->departemen == 'HRD' || auth()->user()->departemen == 'Administrator')
+                                                <select name="signature_manager" class="form-control"
+                                                    id="">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Approved">Disetujui</option>
+                                                    <option value="Rejected">Ditolak</option>
+                                                </select>
+                                            @else
+                                                <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            @endif
+                                        @else
+                                            @php
+                                                $explode_signature_manager = explode(
+                                                    '|',
+                                                    $ijin_absen->ijin_absen_ttd->signature_manager,
+                                                );
+                                                $detail = [
+                                                    'signature_manager' =>
+                                                        'ID: ' .
+                                                        $ijin_absen->id .
+                                                        "\n" .
+                                                        'Kode Formulir: ' .
+                                                        $ijin_absen->no .
+                                                        '-' .
+                                                        $ijin_absen->created_at->format('Ymd') .
+                                                        "\n" .
+                                                        'Signature: ' .
+                                                        $explode_signature_manager[0] .
+                                                        ' (' .
+                                                        $explode_signature_manager[1] .
+                                                        ')' .
+                                                        "\n" .
+                                                        'Tanggal Formulir: ' .
+                                                        $ijin_absen->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            @if ($explode_signature_manager[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail['signature_manager'], 'QRCODE', 2, 2) !!}
+                                            @elseif($explode_signature_manager[2] == 'Rejected')
+                                                <span class="badge badge-danger">REJECTED</span>
+                                            @else
+                                                <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Disetujui PIC/Manager Bagian</div>
+                                        @php
+                                            $explode_signature_bersangkutan = explode(
+                                                '|',
+                                                $ijin_absen->ijin_absen_ttd->signature_bersangkutan,
+                                            );
+                                            $detail = [
+                                                'signature_bersangkutan' =>
+                                                    'ID: ' .
+                                                    $ijin_absen->id .
+                                                    "\n" .
+                                                    'Kode Formulir: ' .
+                                                    $ijin_absen->no .
+                                                    '-' .
+                                                    $ijin_absen->created_at->format('Ymd') .
+                                                    "\n" .
+                                                    'Signature: ' .
+                                                    $explode_signature_bersangkutan[0] .
+                                                    ' (' .
+                                                    $explode_signature_bersangkutan[1] .
+                                                    ')' .
+                                                    "\n" .
+                                                    'Tanggal Formulir: ' .
+                                                    $ijin_absen->created_at->isoFormat('LL'),
+                                            ];
+                                        @endphp
+                                        @if ($explode_signature_bersangkutan[2] == 'Approved')
+                                            {!! DNS2D::getBarcodeHTML($detail['signature_bersangkutan'], 'QRCODE', 2, 2) !!}
+                                        @elseif($explode_signature_bersangkutan[2] == 'Rejected')
+                                            <span class="badge badge-danger">REJECTED</span>
+                                        @else
+                                            @if ($explode_signature_bersangkutan[1] == auth()->user()->nik || auth()->user()->nik == '000000')
+                                                <select name="signature_bersangkutan" class="form-control"
+                                                    id="">
+                                                    <option value="">-- Pilih Status --</option>
+                                                    <option value="Approved">Disetujui</option>
+                                                    <option value="Rejected">Ditolak</option>
+                                                </select>
+                                            @else
+                                                <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Pemohon</div>
+                                        @php
+                                            $detail = [
+                                                'pemohon' =>
+                                                    'ID: ' .
+                                                    $ijin_absen->id .
+                                                    "\n" .
+                                                    'Kode Formulir: ' .
+                                                    $ijin_absen->no .
+                                                    '-' .
+                                                    $ijin_absen->created_at->format('Ymd') .
+                                                    "\n" .
+                                                    'Signature: ' .
+                                                    $ijin_absen->nama .
+                                                    ' (' .
+                                                    $ijin_absen->nik .
+                                                    ')' .
+                                                    "\n" .
+                                                    'Tanggal Formulir: ' .
+                                                    $ijin_absen->created_at->isoFormat('LL'),
+                                            ];
+                                        @endphp
+                                        {!! DNS2D::getBarcodeHTML($detail['pemohon'], 'QRCODE', 2, 2) !!}
+                                    </div>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary mb-2 me-2" style="text-transform: uppercase"

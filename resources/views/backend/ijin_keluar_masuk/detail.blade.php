@@ -28,7 +28,7 @@
             <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
                 <div class="widget-content widget-content-area br-8">
                     <div class="mb-3" style="font-weight: bold; font-size: 14pt">Detail Ijin Keluar Masuk</div>
-                    <div class="table-responsive">
+                    {{-- <div class="table-responsive">
                         <table class="table">
                             <tr style="border: 0px solid black;">
                                 <td style="border: 0px solid black; text-transform: uppercase; font-weight: bold">Nama</td>
@@ -210,9 +210,174 @@
                                 </td>
                             </tr>
                         </table>
-                    </div>
-                    {{-- <div class="mb-3">
                     </div> --}}
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Nama</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Jabatan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->jabatan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Unit Kerja</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->unit_kerja }}</div>
+                            </div>
+                        </div>
+                        @switch($ijin_keluar_masuk->kategori_izin)
+                            @case('TL')
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jam Datang</div>
+                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_datang }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000">Terlambat</div>
+                                    </div>
+                                </div>
+                                @break
+                            @case('KL')
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jam Rencana Keluar</div>
+                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jam Datang</div>
+                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_datang }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000">Keluar Masuk</div>
+                                    </div>
+                                </div>
+                                @break
+                            @case('TL')
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jam Rencana Keluar</div>
+                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000">Pulang Awal</div>
+                                    </div>
+                                </div>
+                                @break
+                            @default
+                        @endswitch
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Jenis Keperluan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->kategori_keperluan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Keperluan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->keperluan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Kendaraan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->kendaraan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000">Jam Kerja</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->jam_kerja }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Pemohon</div>
+                                        @php
+                                            $detail = [
+                                                'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                'Signature: ' . $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' . "\n" . 
+                                                                'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                            ];
+                                        @endphp
+                                        {!! DNS2D::getBarcodeHTML($detail['identifier'], 'QRCODE', 2, 2) !!}
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Mengetahui PIC/Manager Bagian</div>
+                                        @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager))
+                                        <div>-</div>
+                                        @else
+                                            @php
+                                                $explode_validasi_manager_bagian = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager);
+                                                $detail_manager_bagian = [
+                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                    'Signature: ' . $explode_validasi_manager_bagian[0].' ('.$explode_validasi_manager_bagian[1].') '. "\n" . 
+                                                                    'Status Signature: ' . $explode_validasi_manager_bagian[2] . "\n" . 
+                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_manager . "\n" . 
+                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            @if ($explode_validasi_manager_bagian[2] == 'Approved')
+                                            {!! DNS2D::getBarcodeHTML($detail_manager_bagian['identifier'], 'QRCODE', 2, 2) !!}
+                                            @elseif ($explode_validasi_manager_bagian[2] == 'Rejected')
+                                            <div class="badge bg-danger">REJECTED</div>
+                                            @else
+                                            <div>-</div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Mengetahui Personalia</div>
+                                        @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia))
+                                        <div>-</div>
+                                        @else
+                                            @php
+                                                $explode_validasi_personalia = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia);
+                                                $detail_personalia = [
+                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                    'Signature: ' . $explode_validasi_personalia[0].' ('.$explode_validasi_personalia[1].') '. "\n" . 
+                                                                    'Status Signature: ' . $explode_validasi_personalia[2] . "\n" . 
+                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
+                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            @if ($explode_validasi_personalia[2] == 'Approved')
+                                            {!! DNS2D::getBarcodeHTML($detail_personalia['identifier'], 'QRCODE', 2, 2) !!}
+                                            @elseif ($explode_validasi_personalia[2] == 'Rejected')
+                                            <div class="badge bg-danger">REJECTED</div>
+                                            @else
+                                            <div>-</div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-secondary mb-2 me-2" style="text-transform: uppercase" onclick="window.location.href='{{ route('b_ijin_keluar_masuk') }}'">
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                             <path fill="currentColor" fill-rule="evenodd" d="m15 4l2 2l-6 6l6 6l-2 2l-8-8z" />
