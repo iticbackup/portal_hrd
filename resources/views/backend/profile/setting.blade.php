@@ -60,7 +60,7 @@
 
                             <div class="col-md-12 mt-1">
                                 <div class="form-group text-end">
-                                    <button class="btn btn-secondary" onclick="window.location.href='{{ route('profile') }}'">Back</button>
+                                    <button class="btn btn-secondary" type="button" onclick="window.location.href='{{ route('profile') }}'">Back</button>
                                     <button class="btn btn-success">Submit</button>
                                 </div>
                             </div>

@@ -88,7 +88,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
             Route::post('{id}/attachment/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_attachment_simpan'])->name('b_ijin_absen.attachment_simpan');
         });
-        Route::prefix('profile')->group(function () {
+        Route::prefix('profiles')->group(function () {
             Route::get('/', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
             Route::get('setting', [App\Http\Controllers\ProfileController::class, 'setting'])->name('profile.setting');
             Route::post('update', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');

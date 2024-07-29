@@ -3,14 +3,14 @@
     Profile
 @endsection
 @section('css')
-<link href="{{ asset('assets/css/light/components/list-group.css') }}" rel="stylesheet" type="text/css">
+{{-- <link href="{{ asset('assets/css/light/components/list-group.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('assets/css/light/users/user-profile.css') }}" rel="stylesheet" type="text/css" />
 
 <link href="{{ asset('assets/css/dark/components/list-group.css') }}" rel="stylesheet" type="text/css">
-<link href="{{ asset('assets/css/dark/users/user-profile.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('assets/css/dark/users/user-profile.css') }}" rel="stylesheet" type="text/css" /> --}}
 @endsection
 @section('content')
-<div class="layout-px-spacing">
+{{-- <div class="layout-px-spacing">
     <div class="middle-content container-xxl p-0">
         <div class="row layout-top-spacing">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 layout-top-spacing">
@@ -37,6 +37,26 @@
                             </div>                                    
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> --}}
+
+<div class="layout-px-spacing">
+    <div class="middle-content container-xxl p-0">
+        <div class="page-meta">
+            <nav class="breadcrumb-style-one" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Profile</a></li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row layout-top-spacing">
+            <div class="col-xl-12 col-lg-12 col-sm-12 layout-spacing">
+                <div class="d-flex justify-content-between">
+                    <h3 class="">Profile</h3>
+                    <a onclick="window.location.href='{{ route('profile.setting') }}'" class="mt-2 edit-profile"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></a>
                 </div>
             </div>
         </div>

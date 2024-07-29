@@ -19,6 +19,7 @@
 @section('content')
     @include('backend.ijin_keluar_masuk.input_jam_datang')
     @include('backend.ijin_keluar_masuk.modalDownloadRekap')
+    @include('backend.ijin_keluar_masuk.modalDownloadRekapKaryawan')
     <div class="layout-px-spacing">
         <div class="middle-content container-xxl p-0">
 
@@ -55,6 +56,11 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                             <path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
                         </svg> Download Rekap
+                    </button>
+                    <button class="btn btn-secondary mb-2 me-2" onclick="download_rekap_karyawan()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
+                            <path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z" />
+                        </svg> Download Rekap Karyawan
                     </button>
                     @endif
                     <div class="widget-content widget-content-area br-8">
@@ -158,6 +164,11 @@
         function download_rekap()
         {
             $('#download_rekap').modal('show');
+        }
+
+        function download_rekap_karyawan()
+        {
+            $('#download_rekap_karyawan').modal('show');
         }
 
         function input_jam_datang(id) {
