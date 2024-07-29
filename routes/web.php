@@ -72,6 +72,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_index'])->name('b_ijin_keluar_masuk');
             Route::post('input_jam_datang/update', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang_update'])->name('b_ijin_keluar_masuk.b_input_jam_datang_update');
             Route::get('download_rekap', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_download_rekap'])->name('b_ijin_keluar_masuk.b_download_rekap');
+            Route::get('download_rekap_karyawan', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_download_rekap_karyawan'])->name('b_ijin_keluar_masuk.b_download_rekap_karyawan');
             Route::get('{id}', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_detail'])->name('b_ijin_keluar_masuk.detail');
             Route::get('{id}/resend_mail', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_resend_mail'])->name('b_ijin_keluar_masuk.b_resend_mail');
             Route::get('{id}/input_jam_datang', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_input_jam_datang'])->name('b_ijin_keluar_masuk.b_input_jam_datang');

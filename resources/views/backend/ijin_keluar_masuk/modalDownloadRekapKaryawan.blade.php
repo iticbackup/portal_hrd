@@ -1,6 +1,6 @@
 <div class="modal fade" id="download_rekap_karyawan" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <form method="get" action="#" enctype="multipart/form-data">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="get" action="{{ route('b_ijin_keluar_masuk.b_download_rekap_karyawan') }}" enctype="multipart/form-data" target="_blank">
         {{-- @csrf --}}
         <div class="modal-content">
             <div class="modal-header">

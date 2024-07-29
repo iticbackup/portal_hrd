@@ -824,6 +824,23 @@ class IjinKeluarMasukController extends Controller
         return $pdf->stream('Rekap Ijin Keluar Masuk Tgl '.Carbon::parse($request->mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->sampai_tanggal)->format('d-m-Y'));
     }
 
+    public function b_download_rekap_karyawan(Request $request)
+    {
+        $data['ijin_keluar_masuks'] = $this->ijin_keluar_masuk->select('nik', 
+                                                                DB::raw('count(CASE kategori_izin WHEN "KL" THEN 1 ELSE NULL END) as keluar_masuk'),
+                                                                DB::raw('count(CASE kategori_izin WHEN "PA" THEN 1 ELSE NULL END) as pulang_awal'),
+                                                                DB::raw('count(CASE kategori_izin WHEN "TL" THEN 1 ELSE NULL END) as terlambat'),
+                                                                )
+                                                            ->whereDate('created_at','>=',$request->rekap_karyawan_mulai_tanggal)
+                                                            ->whereDate('created_at','<=',$request->rekap_karyawan_sampai_tanggal)
+                                                            ->groupBy('nik')
+                                                            // ->whereBetween('created_at',["$request->mulai_tanggal", "$request->sampai_tanggal"])
+                                                            ->get();
+                                                            // dd($data);
+        $pdf = PDF::loadView('backend.ijin_keluar_masuk.download_rekap_karyawan',$data);
+        return $pdf->stream();
+    }
+
     public function b_resend_mail($id)
     {
         $data_ijin_keluar_masuk = $this->ijin_keluar_masuk::find($id);
