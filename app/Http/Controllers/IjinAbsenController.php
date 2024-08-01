@@ -633,6 +633,7 @@ class IjinAbsenController extends Controller
     {
         // dd($nik);
         $search_nik = $this->biodata_karyawan->where('nik',explode('|',$nik)[1])->first();
+        // dd($search_nik->posisi);
         // dd($search_nik);
         if (empty($search_nik)) {
             return response()->json([
@@ -649,7 +650,8 @@ class IjinAbsenController extends Controller
                 'nama' => $search_nik->nama,
                 'satuan_kerja' => $search_nik->satuan_kerja,
                 'departemen' => $search_nik->departemen->nama_departemen >= 2 ? $search_nik->departemen->nama_unit : $search_nik->departemen->nama_departemen,
-                'bagian' => $search_nik->posisi->nama_posisi,
+                'bagian' => explode(" ",$search_nik->posisi->nama_posisi)[0],
+                // 'bagian' => $search_nik->posisi->nama_posisi,
             ]
         ]);
     }

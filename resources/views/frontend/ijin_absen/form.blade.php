@@ -487,7 +487,7 @@
                 },
                 success: (result) => {
                     if (result.success == true) {
-                        $('#saksi1_unit_kerja').val(result.data.departemen);
+                        $('#saksi1_unit_kerja').val(result.data.bagian);
                     } else {
 
                     }
@@ -513,7 +513,7 @@
                 },
                 success: (result) => {
                     if (result.success == true) {
-                        $('#saksi2_unit_kerja').val(result.data.departemen);
+                        $('#saksi2_unit_kerja').val(result.data.bagian);
                     } else {
 
                     }
