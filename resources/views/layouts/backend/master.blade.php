@@ -243,10 +243,49 @@
     <script src="{{ url('/') }}/plugins/src/waves/waves.min.js"></script>
     <script src="{{ url('/') }}/layouts/vertical-light-menu/app.js"></script>
     @yield('script')
-    <!-- END GLOBAL MANDATORY SCRIPTS -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        const firebaseConfig = {
+            apiKey: "{{ env('FIREBASE_APIKEY') }}",
+            authDomain: "{{ env('FIREBASE_AUTHDOMAIN') }}",
+            projectId: "{{ env('FIREBASE_PROJECTID') }}",
+            storageBucket: "{{ env('FIREBASE_STORAGEBUCKET') }}",
+            messagingSenderId: "{{ env('FIREBASE_MESSAGINGSENDERID') }}",
+            appId: "{{ env('FIREBASE_APPID') }}"
+        };
+      
+        // Initialize Firebase
+        // const app = initializeApp(firebaseConfig);
+        // console.table(app);
 
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+        firebase.initializeApp(firebaseConfig);
 
-    <!-- BEGIN PAGE LEVEL PLUGINS/CUSTOM SCRIPTS -->
+        const messaging = firebase.messaging();
+
+        function initFirebaseMessagingRegistration() {
+            messaging.requestPermission().then(function () {
+                return messaging.getToken()
+            }).then(function(token) {
+                
+                axios.post("{{ route('register-token') }}",{
+                    _method:"PATCH",
+                    token
+                }).then(({data})=>{
+                    console.log(data)
+                }).catch(({response:{data}})=>{
+                    console.error(data)
+                })
+
+            }).catch(function (err) {
+                console.log(`Token Error :: ${err}`);
+            });
+        }
+
+        initFirebaseMessagingRegistration();
+    
+        messaging.onMessage(function({data:{body,title}}){
+            new Notification(title, {body});
+        });
+    </script>
 </body>
 </html>

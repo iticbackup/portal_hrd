@@ -173,6 +173,20 @@
         });
     </script>
     @yield('script')
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
+        const firebaseConfig = {
+          apiKey: "{{ env('FIREBASE_APIKEY') }}",
+          authDomain: "{{ env('FIREBASE_AUTHDOMAIN') }}",
+          projectId: "{{ env('FIREBASE_PROJECTID') }}",
+          storageBucket: "{{ env('FIREBASE_STORAGEBUCKET') }}",
+          messagingSenderId: "{{ env('FIREBASE_MESSAGINGSENDERID') }}",
+          appId: "{{ env('FIREBASE_APPID') }}"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+    </script>
 </body>
 
 </html>

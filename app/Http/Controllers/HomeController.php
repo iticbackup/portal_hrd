@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\Antrian;
 use App\Models\IjinKeluarMasuk;
 use App\Models\IjinAbsen;
+use App\Models\User;
 use \Carbon\Carbon;
+use Jenssegers\Agent\Facades\Agent;
 
 class HomeController extends Controller
 {
@@ -84,5 +86,69 @@ class HomeController extends Controller
         }
 
         return view('home',$data);
+    }
+
+    public function updateToken(Request $request)
+    {
+        // dd($request->all());
+        // try{
+        //     $request->user()->update(['fcm_token'=>$request->token]);
+        //     return response()->json([
+        //         'success'=>true
+        //     ]);
+        // }catch(\Exception $e){
+        //     report($e);
+        //     return response()->json([
+        //         'success'=>false
+        //     ],500);
+        // }
+        // dd(env('FIREBASE_APIKEY'));
+        // dd(Agent::browser());
+        // $user = User::find(auth()->user()->id);
+        // $user->fcm_token = $request->token;
+        // $user->save();
+        return 'OK';
+    }
+
+    public function sendPushNotification(){
+
+        $credentialsFilePath = "firebase/fcm.json";
+        $client = new \Google_Client();
+        $client->setAuthConfig($credentialsFilePath);
+        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $apiurl = 'https://fcm.googleapis.com/v1/projects/'.env('FIREBASE_PROJECTID').'/messages:send';
+        $client->refreshTokenWithAssertion();
+        $token = $client->getAccessToken();
+        $access_token = $token['access_token'];
+        
+        $headers = [
+             "Authorization: Bearer $access_token",
+             'Content-Type: application/json'
+        ];
+        $test_data = [
+            "title" => "TITLE_HERE",
+            "description" => "DESCRIPTION_HERE",
+        ]; 
+        
+        $data['data'] =  $test_data;
+    
+        $data['token'] = $user['fcm_token']; // Retrive fcm_token from users table
+    
+        $payload['message'] = $data;
+        $payload = json_encode($payload);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $apiurl);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
+        curl_exec($ch);
+        $res = curl_close($ch);
+        if($res){
+            return response()->json([
+                          'message' => 'Notification has been Sent'
+                   ]);
+        }
     }
 }

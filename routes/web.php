@@ -59,6 +59,7 @@ Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::cla
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+        Route::patch('fcm-token', [App\Http\Controllers\HomeController::class, 'updateToken'])->name('register-token');
         // Route::resource('roles', App\Http\Controllers\RoleController::class);
         Route::prefix('antrian')->group(function () {
             Route::get('/', [App\Http\Controllers\AntrianController::class, 'b_index'])->name('b_antrian');
