@@ -296,8 +296,7 @@
                                         </tr>
                                     </table>
                                 </div> --}}
-                                <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonusm apabila dalam kesaksian ini
-                                    saya berbohong.</p>
+                                <p>*Bersedia bersaksi dan dikenakan sanksi apabila dalam kesaksian ini saya berbohong.</p>
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="mb-3">
