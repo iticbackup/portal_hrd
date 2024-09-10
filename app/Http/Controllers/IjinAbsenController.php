@@ -176,11 +176,6 @@ class IjinAbsenController extends Controller
                             $dataAttachment[] = $inputAttachment;
                             $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/').$inputAttachment);
                             File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/'.$filename));
-                            // $this->ijin_absen_attachment->create([
-                            //     'id' => Str::uuid()->toString(),
-                            //     'ijin_absen_id' => $input['id'],
-                            //     'attachment' => $inputAttachment
-                            // ]);
                         }
                     }
                     $save_attachment_written_letter = json_encode($dataAttachment);
@@ -188,6 +183,11 @@ class IjinAbsenController extends Controller
                         'id' => Str::uuid()->toString(),
                         'ijin_absen_id' => $input['id'],
                         'attachment_written_letter' => $save_attachment_written_letter
+                    ]);
+                }else{
+                    $this->ijin_absen_attachment->create([
+                        'id' => Str::uuid()->toString(),
+                        'ijin_absen_id' => $input['id'],
                     ]);
                 }
 
@@ -560,6 +560,31 @@ class IjinAbsenController extends Controller
     {
         // dd($request->file('attachment'));
         $ijin_absen_attachment = $this->ijin_absen_attachment->where('ijin_absen_id',$id)->first();
+        if ($request->hasFile('attachment_written_letter')) {
+            $path_absen = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd'));
+            if(!File::isDirectory($path_absen)){
+                File::makeDirectory($path_absen, 0777, true, true);
+            }
+            $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
+            $files = $request->file('attachment_written_letter');
+            foreach ($files as $file) {
+                $filename = $file->getClientOriginalName();
+                $extension = $file->getClientOriginalExtension();
+                $check=in_array($extension,$allowedfileExtension);
+                if ($check) {
+                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd')),$filename));
+                    $imgAttachment->encode('webp',75);
+                    $inputAttachment = 'SuratTulis_'.$request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
+                    $dataAttachment[] = $inputAttachment;
+                    $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/').$inputAttachment);
+                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/'.$filename));
+                }
+            }
+            $save_attachment_written_letter = json_encode($dataAttachment);
+        }else{
+            $save_attachment_written_letter = null;
+        }
+        
         if ($request->hasFile('attachment')) {
             $path_absen = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd'));
             if(!File::isDirectory($path_absen)){
@@ -583,10 +608,14 @@ class IjinAbsenController extends Controller
                 }
             }
             $save_attachment = json_encode($dataAttachment);
-            $ijin_absen_attachment->update([
-                'attachment' => $save_attachment
-            ]);
+        }else{
+            $save_attachment = null;
         }
+
+        $ijin_absen_attachment->update([
+            'attachment_written_letter' => $save_attachment_written_letter,
+            'attachment' => $save_attachment,
+        ]);
 
         // $ijin_absen = $this->ijin_absen->find($id);
         // if (empty($ijin_absen)) {
@@ -603,9 +632,6 @@ class IjinAbsenController extends Controller
         //     );
         //     return response()->json($array_message); 
         // }
-
-
-        
 
         if ($ijin_absen_attachment) {
             $message_title="Berhasil !";

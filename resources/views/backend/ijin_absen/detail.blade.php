@@ -58,13 +58,17 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <div>Tanggal</div>
-                                    <div style="color: #000">{{ \Carbon\Carbon::create($ijin_absen->tgl_mulai)->isoFormat('DD MMMM YYYY') . ' s/d ' . \Carbon\Carbon::create($ijin_absen->tgl_berakhir)->isoFormat('DD MMMM YYYY') }}</div>
+                                    <div style="color: #000">
+                                        {{ \Carbon\Carbon::create($ijin_absen->tgl_mulai)->isoFormat('DD MMMM YYYY') . ' s/d ' . \Carbon\Carbon::create($ijin_absen->tgl_berakhir)->isoFormat('DD MMMM YYYY') }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
                                 <div class="mb-3">
                                     <div>Kategori Izin</div>
-                                    <div style="color: #000">{{ $ijin_absen->kategori_izin == "IP" ? "Ijin Pulang Awal" : $ijin_absen->kategori_izin == "IS" ? "Ijin Sakit" : $ijin_absen->kategori_izin == "CT" ? "Ijin Cuti" : "-" }}</div>
+                                    <div style="color: #000">
+                                        {{ (($ijin_absen->kategori_izin == 'IP' ? 'Ijin Pulang Awal' : $ijin_absen->kategori_izin == 'IS') ? 'Ijin Sakit' : $ijin_absen->kategori_izin == 'CT') ? 'Ijin Cuti' : '-' }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-2">
@@ -90,7 +94,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div>1. Nama Terang</div>
-                                    <div style="color: #000">{{ $explode_saksi_1[0] . ' (' . $explode_saksi_1[1] . ')' }}</div>
+                                    <div style="color: #000">{{ $explode_saksi_1[0] . ' (' . $explode_saksi_1[1] . ')' }}
+                                    </div>
                                     <div>Unit Kerja</div>
                                     <div style="color: #000">{{ $explode_saksi_1[2] }}</div>
                                 </div>
@@ -98,73 +103,110 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <div>2. Nama Terang</div>
-                                    <div style="color: #000">{{ $explode_saksi_2[0] . ' (' . $explode_saksi_2[1] . ')' }}</div>
+                                    <div style="color: #000">{{ $explode_saksi_2[0] . ' (' . $explode_saksi_2[1] . ')' }}
+                                    </div>
                                     <div>Unit Kerja</div>
                                     <div style="color: #000">{{ $explode_saksi_2[2] }}</div>
                                 </div>
                             </div>
                         </div>
                         <hr>
-                        @if (!empty($ijin_absen->ijin_absen_attachment->attachment_written_letter))
-                            <p>Lampiran Surat Tulis :</p>
-                            <div class="row">
-                                @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment_written_letter) as $key => $attachment_written_letter)
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
-                                    <a href="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment_written_letter) }}" class="defaultGlightbox glightbox-content">
-                                        <img src="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment_written_letter) }}" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" />
-                                    </a>
-                                </div>
-                                @endforeach
-                            </div>
-                        @else
-                        <div class="mb-3 badge bg-info">Lampiran Surat Tulis Belum Tersedia</div>
-                        @endif
-                        @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
-                        <p>Lampiran Swab & Surat Pendukung :</p>
-                            <div class="row">
-                                @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $key => $attachment)
-                                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
-                                    <a href="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment) }}" class="defaultGlightbox glightbox-content">
-                                        <img src="{{ asset('ijin_absensi/'.$ijin_absen->nik.'_'.$ijin_absen->no.'-'.$ijin_absen->created_at->format('Ymd').'/'.$attachment) }}" class="img-fluid" style="width: 300px; height: 300px; object-fit: cover;" />
-                                    </a>
-                                </div>
-                                @endforeach
-                            </div>
-                        @else
-                        <div class="mb-3 badge bg-info">Lampiran Swab & Surat Pendukung Belum Tersedia</div>
-                            @if ($ijin_absen->nik == auth()->user()->nik)
-                            <div class="widget-content widget-content-area mb-3">
-                                <div>Format File Lampiran (jpg/jpeg, png)</div>
-                                <form id="form-attachment" method="POST" enctype="multipart/form-data">
-                                @csrf
+                        <form id="form-attachment" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @if (!empty($ijin_absen->ijin_absen_attachment->attachment_written_letter))
+                                <p>Lampiran Surat Tulis :</p>
                                 <div class="row">
-                                    <div class="col-md-8">
-                                        <div id="formAttachment">
-                                            <input type="file" name="attachment[]" class="form-control" multiple>
+                                    @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment_written_letter) as $key => $attachment_written_letter)
+                                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
+                                            <a href="{{ asset('ijin_absensi/' . $ijin_absen->nik . '_' . $ijin_absen->no . '-' . $ijin_absen->created_at->format('Ymd') . '/' . $attachment_written_letter) }}"
+                                                class="defaultGlightbox glightbox-content">
+                                                <img src="{{ asset('ijin_absensi/' . $ijin_absen->nik . '_' . $ijin_absen->no . '-' . $ijin_absen->created_at->format('Ymd') . '/' . $attachment_written_letter) }}"
+                                                    class="img-fluid"
+                                                    style="width: 300px; height: 300px; object-fit: cover;" />
+                                            </a>
                                         </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="mb-3 mt-3">
-                                            <button type="button" class="btn btn-success add" onclick="add()"><svg
-                                                    xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
-                                                    viewBox="0 0 24 24">
-                                                    <path fill="currentColor" fill-rule="evenodd"
-                                                        d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
-                                                </svg></button>
-                                            <button type="button" class="btn btn-danger remove"
-                                                onclick="remove()"><svg xmlns="http://www.w3.org/2000/svg"
-                                                    width="1em" height="1em" viewBox="0 0 24 24">
-                                                    <path fill="currentColor"
-                                                        d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
-                                                </svg></button>
-                                        </div>
-                                    </div>
+                                    @endforeach
                                 </div>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                                </form>
-                            </div>
+                            @else
+                                <div class="mb-3 badge bg-info">Lampiran Surat Tulis Belum Tersedia</div>
+                                @if ($ijin_absen->nik == auth()->user()->nik)
+                                    <div class="widget-content widget-content-area mb-3">
+                                        <div>Format File Lampiran Surat Tulis (jpg/jpeg, png)</div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="formAttachment1">
+                                                    <input type="file" name="attachment_written_letter[]"
+                                                        class="form-control" multiple>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3 mt-3">
+                                                    <button type="button" class="btn btn-success add1"
+                                                        onclick="add1()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="1em" height="1em" viewBox="0 0 24 24">
+                                                            <path fill="currentColor" fill-rule="evenodd"
+                                                                d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
+                                                        </svg></button>
+                                                    <button type="button" class="btn btn-danger remove1"
+                                                        onclick="remove1()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="1em" height="1em" viewBox="0 0 24 24">
+                                                            <path fill="currentColor"
+                                                                d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
+                                                        </svg></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             @endif
-                        @endif
+                            @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
+                                <p>Lampiran Swab & Surat Pendukung :</p>
+                                <div class="row">
+                                    @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment) as $key => $attachment)
+                                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
+                                            <a href="{{ asset('ijin_absensi/' . $ijin_absen->nik . '_' . $ijin_absen->no . '-' . $ijin_absen->created_at->format('Ymd') . '/' . $attachment) }}"
+                                                class="defaultGlightbox glightbox-content">
+                                                <img src="{{ asset('ijin_absensi/' . $ijin_absen->nik . '_' . $ijin_absen->no . '-' . $ijin_absen->created_at->format('Ymd') . '/' . $attachment) }}"
+                                                    class="img-fluid"
+                                                    style="width: 300px; height: 300px; object-fit: cover;" />
+                                            </a>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <div class="mb-3 badge bg-info">Lampiran Swab & Surat Pendukung Belum Tersedia</div>
+                                @if ($ijin_absen->nik == auth()->user()->nik)
+                                    <div class="widget-content widget-content-area mb-3">
+                                        <div>Format File Lampiran Swab & Surat Pendukung (jpg/jpeg, png)</div>
+                                        <div class="row">
+                                            <div class="col-md-8">
+                                                <div id="formAttachment2">
+                                                    <input type="file" name="attachment[]" class="form-control"
+                                                        multiple>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3 mt-3">
+                                                    <button type="button" class="btn btn-success add2"
+                                                        onclick="add2()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="1em" height="1em" viewBox="0 0 24 24">
+                                                            <path fill="currentColor" fill-rule="evenodd"
+                                                                d="M13 13v7a1 1 0 0 1-2 0v-7H4a1 1 0 0 1 0-2h7V4a1 1 0 0 1 2 0v7h7a1 1 0 0 1 0 2z" />
+                                                        </svg></button>
+                                                    <button type="button" class="btn btn-danger remove2"
+                                                        onclick="remove2()"><svg xmlns="http://www.w3.org/2000/svg"
+                                                            width="1em" height="1em" viewBox="0 0 24 24">
+                                                            <path fill="currentColor"
+                                                                d="M4 5h3V4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1h3a1 1 0 0 1 0 2h-1v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7H4a1 1 0 1 1 0-2m3 2v13h10V7zm2-2h6V4H9zm0 4h2v9H9zm4 0h2v9h-2z" />
+                                                        </svg></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                @endif
+                            @endif
+                        </form>
                         <p>*Bersedia bersaksi dan dikenakan sangsi pemotongan bonus, apabila dalam kesaksian ini saya
                             berbohong.</p>
                         <div class="row mb-3">
@@ -395,20 +437,36 @@
     <script src="{{ asset('plugins/src/glightbox/glightbox.min.js') }}"></script>
     <script src="{{ asset('plugins/src/glightbox/custom-glightbox.min.js') }}"></script>
     <script>
-        var formAttachment = document.getElementById('formAttachment');
+        var formAttachment1 = document.getElementById('formAttachment1');
+        var formAttachment2 = document.getElementById('formAttachment2');
 
-        function add() {
+        function add1() {
+            var newField = document.createElement('input');
+            newField.setAttribute('type', 'file');
+            newField.setAttribute('name', 'attachment_written_letter[]');
+            newField.setAttribute('class', 'form-control mt-2 mb-2');
+            formAttachment1.appendChild(newField);
+        }
+
+        function remove1() {
+            var input_tags = formAttachment1.getElementsByTagName('input');
+            if (input_tags.length > 0) {
+                formAttachment1.removeChild(input_tags[(input_tags.length) - 1]);
+            }
+        }
+
+        function add2() {
             var newField = document.createElement('input');
             newField.setAttribute('type', 'file');
             newField.setAttribute('name', 'attachment[]');
             newField.setAttribute('class', 'form-control mt-2 mb-2');
-            formAttachment.appendChild(newField);
+            formAttachment2.appendChild(newField);
         }
 
-        function remove() {
-            var input_tags = formAttachment.getElementsByTagName('input');
+        function remove2() {
+            var input_tags = formAttachment2.getElementsByTagName('input');
             if (input_tags.length > 0) {
-                formAttachment.removeChild(input_tags[(input_tags.length) - 1]);
+                formAttachment2.removeChild(input_tags[(input_tags.length) - 1]);
             }
         }
 
@@ -433,7 +491,7 @@
                     // });
                     $.ajax({
                         type: 'POST',
-                        url: "{{ route('b_ijin_absen.attachment_simpan',['id' => $ijin_absen->id]) }}",
+                        url: "{{ route('b_ijin_absen.attachment_simpan', ['id' => $ijin_absen->id]) }}",
                         data: formData,
                         contentType: false,
                         processData: false,
