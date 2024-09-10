@@ -96,6 +96,7 @@
                     </a>
                 </li>
             @endcan
+            @can('cto-list')
             <li class="menu menu-heading">
                 <div class="heading">
                     <span>DRIVER</span>
@@ -117,6 +118,7 @@
                     </div>
                 </a>
             </li>
+            @endcan
             {{-- <li class="menu {{ request()->is('antrian*') ? 'active' : '' }}">
                 <a href="#" class="dropdown-toggle">
                     <div class="">
