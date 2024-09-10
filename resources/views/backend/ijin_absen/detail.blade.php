@@ -200,7 +200,7 @@
                                             ];
                                         @endphp
                                         @if ($explode_signature_manager[2] == 'Approved')
-                                            {!! DNS2D::getBarcodeHTML($detail['signature_manager'], 'QRCODE', 2, 2) !!}
+                                            {!! DNS2D::getBarcodePNGPath($detail['signature_manager'], 'QRCODE', 2, 2) !!}
                                         @elseif($explode_signature_manager[2] == 'Rejected')
                                             <span class="badge badge-danger">REJECTED</span>
                                         @endif

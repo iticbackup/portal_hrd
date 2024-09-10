@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IjinKeluarMasuk extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $primaryKey = 'id';
     public $table = 'ijin_keluar_masuk';
     public $incrementing = false;

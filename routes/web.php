@@ -90,6 +90,18 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
             Route::post('{id}/attachment/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_attachment_simpan'])->name('b_ijin_absen.attachment_simpan');
         });
+
+        Route::prefix('cto')->group(function () {
+            Route::get('/', [App\Http\Controllers\CTOController::class, 'index'])->name('b_cto');
+            Route::get('create', [App\Http\Controllers\CTOController::class, 'create'])->name('b_cto.create');
+            Route::post('simpan', [App\Http\Controllers\CTOController::class, 'simpan'])->name('b_cto.simpan');
+            Route::get('{id}', [App\Http\Controllers\CTOController::class, 'detail'])->name('b_cto.detail');
+            Route::get('{id}/edit', [App\Http\Controllers\CTOController::class, 'edit'])->name('b_cto.edit');
+            Route::post('{id}/update', [App\Http\Controllers\CTOController::class, 'update'])->name('b_cto.update');
+            Route::get('{id}/validasi', [App\Http\Controllers\CTOController::class, 'validasi'])->name('b_cto.validasi');
+            Route::post('{id}/validasi/simpan', [App\Http\Controllers\CTOController::class, 'validasi_simpan'])->name('b_cto.validasi_simpan');
+        });
+
         Route::prefix('profiles')->group(function () {
             Route::get('/', [App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
             Route::get('setting', [App\Http\Controllers\ProfileController::class, 'setting'])->name('profile.setting');
