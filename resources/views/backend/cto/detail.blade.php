@@ -31,16 +31,20 @@
                                 @switch($cto->status)
                                     @case('Verifikasi')
                                         <span class="badge bg-warning">Menunggu Verifikasi</span>
-                                        @break
+                                    @break
+
                                     @case('On Going')
                                         <span class="badge bg-info">On Going</span>
-                                        @break
+                                    @break
+
                                     @case('Verified')
                                         <span class="badge bg-success">Verifikasi Berhasil</span>
-                                        @break
+                                    @break
+
                                     @case('Rejected')
                                         <span class="badge bg-danger">Gagal Verifikasi</span>
-                                        @break
+                                    @break
+
                                     @default
                                 @endswitch
                             </h5>
@@ -75,7 +79,9 @@
                                 <div class="col-md-4">
                                     <div class="mb-3">
                                         <div>Jam Rencana Datang</div>
-                                        <p>{!! !$cto->jam_datang_rencana ? '<span class="text-danger">Belum Diinput</span>' : \Carbon\Carbon::create($cto->jam_datang_rencana)->format('H:i') !!}</p>
+                                        <p>{!! !$cto->jam_datang_rencana
+                                            ? '<span class="text-danger">Belum Diinput</span>'
+                                            : \Carbon\Carbon::create($cto->jam_datang_rencana)->format('H:i') !!}</p>
                                     </div>
                                 </div>
                                 {{-- <div class="col-md-3">
@@ -123,11 +129,12 @@
                                         <tr>
                                             <td class="text-center">
                                                 @if (empty($cto->ttd_umum))
-                                                    <select name="verifikasi_hrd" class="form-control" id="">
+                                                    {{-- <select name="verifikasi_hrd" class="form-control" id="">
                                                         <option value="">-- Pilih Status --</option>
                                                         <option value="Y">Setujui</option>
                                                         <option value="T">Tolak</option>
-                                                    </select>
+                                                    </select> --}}
+                                                    <span class="text-danger">Belum Diinput</span>
                                                 @else
                                                     @php
                                                         $detail = [
@@ -211,7 +218,9 @@
                                     <tr>
                                         <td class="text-center">KELUAR</td>
                                         <td class="text-center">
-                                            {!! !$cto->security_jam_keluar ? '<span class="text-danger">Belum Diinput</span>' : \Carbon\Carbon::create($cto->security_jam_keluar)->format('H:i') !!}
+                                            {!! !$cto->security_jam_keluar
+                                                ? '<span class="text-danger">Belum Diinput</span>'
+                                                : \Carbon\Carbon::create($cto->security_jam_keluar)->format('H:i') !!}
                                         </td>
                                         <td class="text-center">{!! !$cto->security_km_keluar ? '<span class="text-danger">Belum Diinput</span>' : $cto->security_km_keluar !!}</td>
                                         <td class="text-center">
@@ -237,12 +246,16 @@
                                                     ];
                                                 @endphp
                                             @endif
-                                            {!! !$cto->security_ttd_keluar ? '<span class="text-danger">Belum Diinput</span>' : DNS2D::getBarcodeHTML($detail['signature_security_keluar'], 'QRCODE', 3, 3) !!}
+                                            {!! !$cto->security_ttd_keluar
+                                                ? '<span class="text-danger">Belum Diinput</span>'
+                                                : DNS2D::getBarcodeHTML($detail['signature_security_keluar'], 'QRCODE', 3, 3) !!}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td class="text-center">MASUK</td>
-                                        <td class="text-center">{!! !$cto->security_jam_masuk ? '<span class="text-danger">Belum Diinput</span>' : \Carbon\Carbon::create($cto->security_jam_masuk)->format('H:i') !!}</td>
+                                        <td class="text-center">{!! !$cto->security_jam_masuk
+                                            ? '<span class="text-danger">Belum Diinput</span>'
+                                            : \Carbon\Carbon::create($cto->security_jam_masuk)->format('H:i') !!}</td>
                                         <td class="text-center">{!! !$cto->security_km_masuk ? '<span class="text-danger">Belum Diinput</span>' : $cto->security_km_masuk !!}</td>
                                         <td class="text-center">
                                             @if (!empty($cto->security_ttd_masuk))
@@ -267,7 +280,9 @@
                                                     ];
                                                 @endphp
                                             @endif
-                                            {!! !$cto->security_ttd_masuk ? '<span class="text-danger">Belum Diinput</span>' : DNS2D::getBarcodeHTML($detail['signature_security_masuk'], 'QRCODE', 3, 3)!!}
+                                            {!! !$cto->security_ttd_masuk
+                                                ? '<span class="text-danger">Belum Diinput</span>'
+                                                : DNS2D::getBarcodeHTML($detail['signature_security_masuk'], 'QRCODE', 3, 3) !!}
                                         </td>
                                     </tr>
                                 </table>
@@ -277,16 +292,18 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
                                     <path fill="currentColor" fill-rule="evenodd" d="m15 4l2 2l-6 6l6 6l-2 2l-8-8z"></path>
                                 </svg>Back</button>
-                            @if ($cto->status != 'Verified')
-                            <button type="button" class="btn btn-primary"
-                                onclick="window.location.href='{{ route('b_cto.validasi', ['id' => $cto->id]) }}'">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 28 28">
-                                    <path fill="currentColor" fill-rule="evenodd"
-                                        d="M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z">
-                                    </path>
-                                </svg>Verifikasi</button>
-                            @endif
-
+                            @can('cto-verifikasi')
+                                @if ($cto->status != 'Verified')
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="window.location.href='{{ route('b_cto.validasi', ['id' => $cto->id]) }}'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em"
+                                            viewBox="0 0 28 28">
+                                            <path fill="currentColor" fill-rule="evenodd"
+                                                d="M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z">
+                                            </path>
+                                        </svg>Verifikasi</button>
+                                @endif
+                            @endcan
                         </div>
                         <div class="card-footer px-4 pt-0 border-0">
                             <span>Tanggal Update : {{ $cto->updated_at->isoFormat('LLLL') }}</span>

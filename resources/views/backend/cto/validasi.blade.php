@@ -109,11 +109,15 @@
                                             <tr>
                                                 <td class="text-center">
                                                     @if (empty($cto->ttd_umum))
+                                                        @if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin')
                                                         <select name="verifikasi_hrd" class="form-control" id="">
                                                             <option value="">-- Pilih Status --</option>
                                                             <option value="Y">Setujui</option>
                                                             <option value="T">Tolak</option>
                                                         </select>
+                                                        @else
+                                                        <span class="text-danger">Belum Diinput</span>
+                                                        @endif
                                                     @else
                                                         @php
                                                             $detail = [
@@ -185,6 +189,7 @@
                                         </table>
                                     </div>
                                 </div>
+                                @if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'Satpam')
                                 <h6>Security</h6>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -229,6 +234,7 @@
                                         @endif
                                     </table>
                                 </div>
+                                @endif
                                 <button type="button" class="btn btn-secondary"
                                     onclick="window.location.href='{{ url()->previous() }}'">Back</button>
                                 <button type="submit" class="btn btn-primary">Submit</button>

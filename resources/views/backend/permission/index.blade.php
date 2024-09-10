@@ -117,7 +117,7 @@
         }
 
         function reload() {
-            table.ajax.reload();
+            table.ajax.reload(null, false);
         }
 
         function edit(id) {
@@ -164,7 +164,7 @@
                             title: result.message_title,
                             text: result.message_content
                         });
-                        table.ajax.reload();
+                        table.ajax.reload(null, false);
                     } else {
                         // alert(result.success+" - "+JSON.stringify(result.error));
                         Swal.fire({

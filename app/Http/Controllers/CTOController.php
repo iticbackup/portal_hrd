@@ -19,12 +19,23 @@ class CTOController extends Controller
     ){
         $this->biodata_karyawan = $biodata_karyawan;
         $this->car_travel_order = $car_travel_order;
+
+        $this->middleware('permission:cto-list', ['only' => ['index']]);
+        $this->middleware('permission:cto-detail', ['only' => ['detail']]);
+        $this->middleware('permission:cto-store', ['only' => ['create','simpan']]);
+        $this->middleware('permission:cto-edit', ['only' => ['edit']]);
+        $this->middleware('permission:cto-update', ['only' => ['update']]);
+        $this->middleware('permission:cto-verifikasi', ['only' => ['validasi','validasi_simpan']]);
     }
 
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = $this->car_travel_order->all();
+            if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Satpam') {
+                $data = $this->car_travel_order->all();
+            }else{
+                $data = $this->car_travel_order->where('ttd_pemakai','LIKE','%'.auth()->user()->nik.'%')->get();
+            }
             return DataTables::of($data)
                             ->addIndexColumn()
                             ->addColumn('tanggal_buat', function($row){
@@ -56,17 +67,23 @@ class CTOController extends Controller
                             })
                             ->addColumn('action', function($row){
                                 $btn = "<div>";
-                                $btn = $btn."<a class='btn btn-success mb-2 me-2' href=".route('b_cto.detail',['id' => $row->id]).">
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                <path fill='currentColor' fill-rule='evenodd' d='M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6' />
-                                            </svg> Detail</a>";
+                                if(auth()->user()->can('cto-detail')){
+                                    $btn = $btn."<a class='btn btn-success mb-2 me-2' href=".route('b_cto.detail',['id' => $row->id]).">
+                                                    <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' fill-rule='evenodd' d='M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6' />
+                                                </svg> Detail</a>";
+                                }
                                 switch ($row->status) {
                                     case 'Verifikasi':
                                     case 'On Going':
-                                        $btn = $btn."<a class='btn btn-primary mb-2 me-2' href=".route('b_cto.validasi',['id' => $row->id]).">
-                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
-                                                    <path fill='currentColor' fill-rule='evenodd' d='M4.252 14H4a2 2 0 1 1 0-4h.252c.189-.734.48-1.427.856-2.064l-.18-.179a2 2 0 1 1 2.83-2.828l.178.179A8 8 0 0 1 10 4.252V4a2 2 0 1 1 4 0v.252c.734.189 1.427.48 2.064.856l.179-.18a2 2 0 1 1 2.828 2.83l-.179.178c.377.637.667 1.33.856 2.064H20a2 2 0 1 1 0 4h-.252a8 8 0 0 1-.856 2.064l.18.179a2 2 0 1 1-2.83 2.828l-.178-.179a8 8 0 0 1-2.064.856V20a2 2 0 1 1-4 0v-.252a8 8 0 0 1-2.064-.856l-.179.18a2 2 0 1 1-2.828-2.83l.179-.178A8 8 0 0 1 4.252 14M9 10l-2 2l4 4l6-6l-2-2l-4 4z' />
-                                                </svg> Verifikasi</a>";
+                                        // if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Satpam') {
+                                        // }
+                                        if(auth()->user()->can('cto-verifikasi')){
+                                            $btn = $btn."<a class='btn btn-primary mb-2 me-2' href=".route('b_cto.validasi',['id' => $row->id]).">
+                                                    <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                        <path fill='currentColor' fill-rule='evenodd' d='M4.252 14H4a2 2 0 1 1 0-4h.252c.189-.734.48-1.427.856-2.064l-.18-.179a2 2 0 1 1 2.83-2.828l.178.179A8 8 0 0 1 10 4.252V4a2 2 0 1 1 4 0v.252c.734.189 1.427.48 2.064.856l.179-.18a2 2 0 1 1 2.828 2.83l-.179.178c.377.637.667 1.33.856 2.064H20a2 2 0 1 1 0 4h-.252a8 8 0 0 1-.856 2.064l.18.179a2 2 0 1 1-2.83 2.828l-.178-.179a8 8 0 0 1-2.064.856V20a2 2 0 1 1-4 0v-.252a8 8 0 0 1-2.064-.856l-.179.18a2 2 0 1 1-2.828-2.83l.179-.178A8 8 0 0 1 4.252 14M9 10l-2 2l4 4l6-6l-2-2l-4 4z' />
+                                                    </svg> Verifikasi</a>";
+                                        }
                                         break;
                                     case 'Verified':
                                         // $btn = $btn."<a class='btn btn-danger mb-2 me-2'>
@@ -138,6 +155,19 @@ class CTOController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->passes()) {
+            $cek_kendaraan = $this->car_travel_order->where('no_polisi',strtoupper($request->plat_nomor_1).'-'.$request->plat_nomor_2.'-'.strtoupper($request->plat_nomor_3))
+                                                    ->where('status','Verified')
+                                                    ->orderBy('created_at','desc')
+                                                    ->first();
+            if ($cek_kendaraan) {
+                $array_message = array(
+                    'success' => false,
+                    'message_title' => 'Gagal',
+                    'error' => 'Kendaraan No. Polisi '.$cek_kendaraan->no_polisi.' Sedang Dalam Perjalanan',
+                );
+                return response()->json($array_message);
+            }
+
             $live_date = Carbon::now()->format('Y-m-d');
             $no_urut = $this->car_travel_order->whereDate('created_at',$live_date)->count();
             if ($no_urut == 0) {
@@ -148,6 +178,8 @@ class CTOController extends Controller
             $input['tanggal_buat'] = $request->tanggal_buat;
             $input['no_polisi'] = strtoupper($request->plat_nomor_1).'-'.$request->plat_nomor_2.'-'.strtoupper($request->plat_nomor_3);
             $input['driver_id'] = $request->driver;
+            $input['jam_berangkat_rencana'] = $request->jam_berangkat_rencana;
+            $input['jam_datang_rencana'] = $request->jam_datang_rencana;
             $input['tujuan_rencana'] = $request->tujuan_rencana;
             $input['tujuan_aktual'] = $request->tujuan_aktual;
             $input['keperluan'] = $request->keperluan;

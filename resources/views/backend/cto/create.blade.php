@@ -72,13 +72,13 @@
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label>Jam Rencana Berangkat</label>
-                                            <input type="date" name="jam_berangkat_rencana" class="form-control" id="">
+                                            <input type="time" name="jam_berangkat_rencana" class="form-control" id="">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="mb-3">
                                             <label>Jam Rencana Datang</label>
-                                            <input type="date" name="jam_datang_rencana" class="form-control" id="">
+                                            <input type="time" name="jam_datang_rencana" class="form-control" id="">
                                         </div>
                                     </div>
                                     <div class="col-md-12">
@@ -189,7 +189,7 @@
                     } else {
                         Swal.fire({
                             icon: 'error',
-                            title: result.success,
+                            title: result.message_title,
                             text: result.error
                         });
                     }

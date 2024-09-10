@@ -80,8 +80,9 @@ class UserController extends Controller
         // }
         $data['users'] = $this->user->all();
         $data['roles'] = $this->role->pluck('name','name')->all();
-        $data['names'] = $this->biodata_karyawan->where('status_karyawan','!=','R')
-                                                ->orWhere('status_karyawan',null)
+        $data['names'] = $this->biodata_karyawan->whereNotIn('nik',['1000001','1000002','1000003'])
+                                                ->where('status_karyawan','!=','R')
+                                                // ->orWhere('status_karyawan',null)
                                                 ->get();
         return view('backend.users.index',$data);
     }
