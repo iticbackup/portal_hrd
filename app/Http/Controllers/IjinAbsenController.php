@@ -572,12 +572,12 @@ class IjinAbsenController extends Controller
                 $extension = $file->getClientOriginalExtension();
                 $check=in_array($extension,$allowedfileExtension);
                 if ($check) {
-                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd')),$filename));
+                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd')),$filename));
                     $imgAttachment->encode('webp',75);
                     $inputAttachment = 'SuratTulis_'.$request->nik.'-'.$request->nama.'-'.rand(100,999).'.webp';
                     $dataAttachment[] = $inputAttachment;
-                    $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/').$inputAttachment);
-                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$input['no'].'-'.Carbon::now()->format('Ymd').'/'.$filename));
+                    $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.Carbon::now()->format('Ymd').'/').$inputAttachment);
+                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.Carbon::now()->format('Ymd').'/'.$filename));
                 }
             }
             $save_attachment_written_letter = json_encode($dataAttachment);
