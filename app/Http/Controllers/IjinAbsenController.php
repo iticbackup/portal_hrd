@@ -561,26 +561,26 @@ class IjinAbsenController extends Controller
         // dd($request->file('attachment'));
         $ijin_absen_attachment = $this->ijin_absen_attachment->where('ijin_absen_id',$id)->first();
         if ($request->hasFile('attachment_written_letter')) {
-            $path_absen = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd'));
-            if(!File::isDirectory($path_absen)){
-                File::makeDirectory($path_absen, 0777, true, true);
+            $path_absenWrittenLetter = public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd'));
+            if(!File::isDirectory($path_absenWrittenLetter)){
+                File::makeDirectory($path_absenWrittenLetter, 0777, true, true);
             }
-            $allowedfileExtension=['jpg','png','jpeg','JPG','PNG','JPEG'];
-            $files = $request->file('attachment_written_letter');
-            foreach ($files as $file) {
-                $filename = $file->getClientOriginalName();
-                $extension = $file->getClientOriginalExtension();
-                $check=in_array($extension,$allowedfileExtension);
+            $allowedfileExtensionWrittenLetter=['jpg','png','jpeg','JPG','PNG','JPEG'];
+            $filesWrittenLetter = $request->file('attachment_written_letter');
+            foreach ($filesWrittenLetter as $fileWL) {
+                $filenameWrittenLetter = $fileWL->getClientOriginalName();
+                $extensionWrittenLetter = $fileWL->getClientOriginalExtension();
+                $check=in_array($extensionWrittenLetter,$allowedfileExtensionWrittenLetter);
                 if ($check) {
-                    $imgAttachment = \Image::make($file->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd')),$filename));
-                    $imgAttachment->encode('webp',75);
-                    $inputAttachment = 'SuratTulis_'.$ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.rand(100,999).'.webp';
-                    $dataAttachment[] = $inputAttachment;
-                    $imgAttachment->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/').$inputAttachment);
-                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/'.$filename));
+                    $imgAttachmentWrittenLetter = \Image::make($fileWL->move(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd')),$filenameWrittenLetter));
+                    $imgAttachmentWrittenLetter->encode('webp',75);
+                    $inputAttachmentWrittenLetter = 'SuratTulis_'.$ijin_absen_attachment->ijin_absen->nik.'-'.$ijin_absen_attachment->ijin_absen->nama.'-'.rand(100,999).'.webp';
+                    $dataAttachmentWrittenLetter[] = $inputAttachmentWrittenLetter;
+                    $imgAttachmentWrittenLetter->save(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/').$inputAttachmentWrittenLetter);
+                    File::delete(public_path('ijin_absensi/'.auth()->user()->nik.'_'.$ijin_absen_attachment->ijin_absen->no.'-'.$ijin_absen_attachment->ijin_absen->created_at->format('Ymd').'/'.$filenameWrittenLetter));
                 }
             }
-            $save_attachment_written_letter = json_encode($dataAttachment);
+            $save_attachment_written_letter = json_encode($dataAttachmentWrittenLetter);
         }else{
             $save_attachment_written_letter = null;
         }
