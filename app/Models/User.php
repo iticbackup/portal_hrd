@@ -19,7 +19,15 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'id_generate','nik','name','email','password','last_seen','departemen','fcm_token'
+        'id_generate',
+        'nik',
+        'name',
+        'email',
+        'password',
+        'no_telp',
+        'last_seen',
+        'departemen',
+        'fcm_token'
     ];
 
     /**
@@ -39,4 +47,9 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function biodata_karyawan()
+    {
+        return $this->belongsTo(\App\Models\BiodataKaryawan::class, 'nik','nik');
+    }
 }

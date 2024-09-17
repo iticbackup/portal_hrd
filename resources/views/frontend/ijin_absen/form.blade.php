@@ -19,6 +19,38 @@
         input[type=number] {
             -moz-appearance: textfield;
         }
+
+        .signature-pad {
+            border: 1px solid black;
+            border-radius: 5px;
+            width: 100%;
+            height: 200px;
+        }
+
+        .signature-pad-form{
+            max-width: 200px;
+            /* margin: 0 auto; */
+        }
+
+        /* .signature-pad-form{
+                    max-width: 300px;
+                    margin: 0 auto;
+                }
+
+                .signature-pad{
+                    border: 2px solid black;
+                    border-radius: 4px;
+                }
+
+                .clear-button{
+                    color: black;
+                }
+
+                @media (pointer: coarse){
+                    body{
+                        overflow: hidden;
+                    }
+                } */
     </style>
 @endsection
 @section('content')
@@ -33,6 +65,7 @@
                         <hr>
                         <form method="post" id="form-simpan" enctype="multipart/form-data">
                             @csrf
+                            {{-- @include('backend.ijin_absen.modalSignature') --}}
                             <div class="col-md-12">
                                 <div class="mb-3">
                                     <label>Yang bertanda tangan di bawah ini :</label>
@@ -42,35 +75,42 @@
                                         <div class="mb-3">
                                             <label>NIK</label>
                                             <input type="text" name="nik" class="form-control" placeholder="NIK"
-                                                    id="nik">
+                                                id="nik"
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->nik }}"
+                                                readonly style="color: black">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Nama Terang</label>
                                             <input type="text" name="nama" class="form-control"
-                                                    placeholder="Nama Terang" readonly id="name" style="color: black">
+                                                placeholder="Nama Terang"
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->nama }}"
+                                                readonly id="name" style="color: black">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Email</label>
                                             <input type="email" name="email" class="form-control"
                                                     placeholder="Email" id="email">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Departemen</label>
                                             <input type="text" name="departemen" class="form-control"
-                                                    placeholder="Departemen" readonly id="departemen" style="color: black">
+                                                placeholder="Departemen"
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
+                                                readonly id="departemen" style="color: black">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Jabatan</label>
-                                            <input type="text" name="jabatan" class="form-control"
-                                                    placeholder="Jabatan" readonly id="jabatan" style="color: black">
+                                            <input type="text" name="jabatan" class="form-control" placeholder="Jabatan"
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}"
+                                                readonly id="jabatan" style="color: black">
                                         </div>
                                     </div>
                                 </div>
@@ -113,7 +153,7 @@
                                 <hr>
                                 <label>Memohon Ijin untuk tidak masuk kerja pada :</label>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Hari</label>
                                             <select name="hari" class="form-control" id="">
@@ -126,8 +166,6 @@
                                                 <option value="Sabtu">Sabtu</option>
                                                 <option value="Minggu">Minggu</option>
                                             </select>
-                                            {{-- <input type="text" name="hari" class="form-control"
-                                                        placeholder="Hari"> --}}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -141,7 +179,7 @@
                                                     placeholder="Tgl Berakhir">
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Selama</label>
@@ -152,13 +190,13 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>Untuk Keperluan</label>
                                             <textarea name="keperluan" class="form-control" id="" cols="30" rows="2"
                                                         placeholder="Untuk Keperluan"></textarea>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 {{-- <div class="table-responsive">
                                     <table class="table">
@@ -211,40 +249,40 @@
                                         <div class="mb-3">
                                             <label>1. Nama Terang</label>
                                             <select name="saksi_1" class="form-control selectsaksi1" required
-                                                    id="saksi_1">
-                                                    <option value="">-- Pilih Saksi 1 --</option>
-                                                    @foreach ($saksis as $biodata_karyawan)
-                                                        <option
-                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
-                                                            {{ $biodata_karyawan->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                id="saksi_1">
+                                                <option value="">-- Pilih Saksi 1 --</option>
+                                                @foreach ($saksis as $biodata_karyawan)
+                                                    <option
+                                                        value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                        {{ $biodata_karyawan->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label>Unit Kerja Saksi 1</label>
                                             <input type="text" name="saksi1_unit_kerja" class="form-control"
-                                                    style="color: black" readonly placeholder="Unit Kerja"
-                                                    id="saksi1_unit_kerja">
+                                                style="color: black" readonly placeholder="Unit Kerja"
+                                                id="saksi1_unit_kerja">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label>2. Nama Terang</label>
                                             <select name="saksi_2" class="form-control selectsaksi2" required
-                                                    id="saksi_2">
-                                                    <option value="">-- Pilih Saksi 2 --</option>
-                                                    @foreach ($saksis as $biodata_karyawan)
-                                                        <option
-                                                            value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
-                                                            {{ $biodata_karyawan->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                id="saksi_2">
+                                                <option value="">-- Pilih Saksi 2 --</option>
+                                                @foreach ($saksis as $biodata_karyawan)
+                                                    <option
+                                                        value="{{ $biodata_karyawan->nama . '|' . $biodata_karyawan->nik }}">
+                                                        {{ $biodata_karyawan->nama }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                         <div class="mb-3">
                                             <label>Unit Kerja Saksi 2</label>
                                             <input type="text" name="saksi2_unit_kerja" class="form-control"
-                                                    style="color: black" readonly placeholder="Unit Kerja"
-                                                    id="saksi2_unit_kerja">
+                                                style="color: black" readonly placeholder="Unit Kerja"
+                                                id="saksi2_unit_kerja">
                                         </div>
                                     </div>
                                 </div>
@@ -312,7 +350,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <div class="mb-3">
                                             <label>Kategori Ijin</label>
                                             <select name="kategori_izin" class="form-control" id="kategori_izin">
@@ -322,9 +360,81 @@
                                                 <option value="IS">Ijin Sakit</option>
                                             </select>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
-                                <div id="kategori_view_ijin" style="display: none">
+                                <hr>
+                                {{-- <div id="preview_ijin"></div> --}}
+                                <p style="color: black">Malang, {!! \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') !!}</p>
+                                <p style="color: black">Kepada Yth. <br> Dept. HRGA PT Indonesian Tobacco Tbk. <br>
+                                    ditempat </p>
+                                <p>Hal <select name='kategori_izin' style="color: black">
+                                        <option>-- Pilih Izin --</option>
+                                        <option value='CT'>Cuti</option>
+                                        <option value='IP'>Izin Kepentingan Pribadi</option>
+                                        <option value='IS'>Izin Sakit</option>
+                                    </select>
+                                </p>
+                                <p style="color: black">Dengan Hormat, </p>
+                                <p style="color: black">Saya yang bertanda tangan di bawah ini: </p>
+                                <table style="color: black">
+                                    <tr>
+                                        <td style="color: black">NIK</td>
+                                        <td style="color: black">:</td>
+                                        <td style="color: black">
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->nik }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: black">Nama</td>
+                                        <td style="color: black">:</td>
+                                        <td style="color: black">
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->nama }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: black">Jabatan</td>
+                                        <td style="color: black">:</td>
+                                        <td style="color: black">
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: black">Dept.</td>
+                                        <td style="color: black">:</td>
+                                        <td style="color: black">
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}
+                                        </td>
+                                    </tr>
+                                </table>
+                                <p>
+                                    Dengan ini memohon izin untuk tidak masuk kerja pada hari
+                                    <select name="hari">
+                                        <option value="">-- Pilih Hari --</option>
+                                        <option value="Senin">Senin</option>
+                                        <option value="Selasa">Selasa</option>
+                                        <option value="Rabu">Rabu</option>
+                                        <option value="Kamis">Kamis</option>
+                                        <option value="Jumat">Jumat</option>
+                                        <option value="Sabtu">Sabtu</option>
+                                        <option value="Minggu">Minggu</option>
+                                    </select>
+                                    tanggal <input type='date' name='tgl_mulai'> sampai dengan <input type='date'
+                                        name='tgl_berakhir'> dengan alasan <input type='text' name='keperluan'>
+                                </p>
+                                <p>Dengan surat permohonan izin ini saya sampaikan. Atas perhatian dan kerja sama yang
+                                    diberikan saya ucapkan terimakasih.</p>
+                                <p>Hormat Saya,</p>
+                                <div class="signature-pad-form">
+                                    <canvas height='100' width='300' id='signature-pad' class='signature-pad'></canvas>
+                                </div>
+                                <input type="text" name="signature_result" id="signature-result">
+                                {{-- <button type="button" onclick="$('#modalSignature').modal('show')" class="btn btn-success">Signature</button> --}}
+                                <p>
+                                    <a href='javascript:void' class='btn btn-sm btn-danger' id='clear'>Clear</a> 
+                                    <a href='javascript:void' class='btn btn-sm btn-info' id='undo'>Undo</a>
+                                    <a href='javascript:void' class='btn btn-sm btn-success' id='apply'>Apply</a>
+                                </p>
+                                {{-- <div id="kategori_view_ijin" style="display: none">
                                     <label>*Upload Lampiran Surat Ijin Tertulis:</label>
                                     <span>Format file (jpg/jpeg, png)</span>
                                     <div class="row">
@@ -350,7 +460,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 {{-- <div id="kategori_view_ijin" style="display: block">
                                     <label>*Lampiran :</label>
                                     <span>Format file (jpg/jpeg, png)</span>
@@ -404,6 +514,9 @@
     <script src="{{ asset('assets/js/custom.js') }}"></script>
     <script src="{{ asset('plugins/src/tomSelect/tom-select.base.js') }}"></script>
     <script src="{{ asset('plugins/src/tomSelect/custom-tom-select.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js" integrity="sha512-Mtr2f9aMp/TVEdDWcRlcREy9NfgsvXvApdxrm3/gK8lAMWnXrFsYaoW01B5eJhrUpBT7hmIjLeaQe0hnL7Oh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
         var formAttachmentWrittenLetter = document.getElementById('formAttachmentWrittenLetter');
 
@@ -423,6 +536,109 @@
         }
     </script>
     <script>
+        $(document).ready(function() {
+
+            var canvas = document.getElementById('signature-pad');
+
+            function resizeCanvas() {
+                // When zoomed out to less than 100%, for some very strange reason,
+                // some browsers report devicePixelRatio as less than 1
+                // and only part of the canvas is cleared then.
+                // var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+                var ratio = Math.max(window.devicePixelRatio);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                // canvas.width = 500;
+                // canvas.height = 500;
+                canvas.getContext("2d").scale(ratio, ratio);
+            }
+
+            window.onresize = resizeCanvas;
+            resizeCanvas();
+
+            var signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
+            });
+
+            document.getElementById('clear').addEventListener('click', function() {
+                signaturePad.clear();
+            });
+
+            document.getElementById('undo').addEventListener('click', function() {
+                var data = signaturePad.toData();
+                if (data) {
+                    data.pop(); // remove the last dot or line
+                    signaturePad.fromData(data);
+                }
+            });
+
+            document.getElementById('apply').addEventListener('click', function() {
+                var imageData = signaturePad.toDataURL('image/png');
+                $('#signature-result').val(imageData);
+                // $('#signature-img-result').attr('src',"data:"+imageData);
+            });
+
+            function getSignaturePad() {
+                var imageData = signaturePad.toDataURL('image/png');
+                // alert(imageData);
+                $('#signature-result').val(imageData);
+                // $('#signature-result').attr('src',"data:"+imageData);
+                // $('#signature-img-result').attr('src',"data:"+imageData);
+            }
+
+
+
+            // $('#form-simpan').submit(function() {
+            //     getSignaturePad();
+            //     return false;
+            // });
+
+            // const canvas = document.querySelector('canvas');
+            // const form = document.querySelector('.signature-pad-form');
+            // const clearButton = document.querySelector('.clear-button');
+            // const ctx = canvas.getContext('2d');
+            // let writingMode = false;
+
+            // const clearPad = () => {
+            //     ctx.clearRect(0,0, canvas.width, canvas.height);
+            // }
+
+            // clearButton.addEventListener('click', (event) => {
+            //     event.preventDefault();
+            //     clearPad();
+            // })
+
+            // const getTargetPosition = (event) => {
+            //     positionX = event.clientX - event.target.getBoundingClientRect().x;
+            //     positionY = event.clientY - event.target.getBoundingClientRect().y;
+
+            //     return [positionX, positionY];
+            // }
+
+            // const handlePointerMove = (event) => {
+            //     if (!writingMode) return
+
+            //     const [positionX, positionY] = getTargetPosition(event);
+            //     ctx.lineTo(positionX,positionY);
+            //     ctx.stroke();
+            // }
+
+            // const handlePointerUp = () => {
+            //     writingMode = false;
+            // }
+
+            // const handlePointerDown = (event) => {
+            //     writingMode = true;
+            //     ctx.beginPath();
+
+            //     const [positionX, positionY] = getTargetPosition(event);
+            //     ctx.moveTo(positionX, positionY);
+            // }
+
+            // ctx.lineWidth = 3;
+            // ctx.lineJoin = ctx.lineCap = 'round';
+        });
+
         $('#nik').on('change', function() {
             $.ajax({
                 type: 'GET',
@@ -458,6 +674,167 @@
                             "<td>" + result.data.bagian + "</td>" +
                             "</tr>" +
                             "</table>";
+
+                        var txt = "<p>Malang, {!! \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') !!}</p>";
+                        txt = txt +
+                            "<p>Kepada Yth. <br> Dept. HRGA PT Indonesian Tobacco Tbk. <br> ditempat </p>";
+                        // txt = txt+"<div class=input-group input-group-sm mb-3'>";
+                        // txt = txt+  "<span class='input-group-text'>Hal</span>";
+                        // txt = txt+  "<select><option>-- Pilih Kategori --</option><option value='CT'>Cuti</option><option value='IP'>Izin Kepentingan Pribadi</option><option value='IS'>Izin Sakit</option></select>";
+                        // txt = txt+"</div>";
+                        txt = txt +
+                            "<p>Hal <select name='kategori_izin'><option>-- Pilih Izin --</option><option value='CT'>Cuti</option><option value='IP'>Izin Kepentingan Pribadi</option><option value='IS'>Izin Sakit</option></select></p>";
+                        txt = txt + "<p>Dengan Hormat, </p>";
+                        txt = txt + "<p>Saya yang bertanda tangan di bawah ini: </p>";
+                        txt = txt + "<table>";
+                        txt = txt + "<tr>";
+                        txt = txt + "<td style='color: black'>NIK</td>";
+                        txt = txt + "<td style='color: black'>:</td>";
+                        txt = txt + "<td style='color: black'>" + result.data.nik + "</td>";
+                        txt = txt + "</tr>";
+                        txt = txt + "<tr>";
+                        txt = txt + "<td style='color: black'>Nama</td>";
+                        txt = txt + "<td style='color: black'>:</td>";
+                        txt = txt + "<td style='color: black'>" + result.data.nama + "</td>";
+                        txt = txt + "</tr>";
+                        txt = txt + "<tr>";
+                        txt = txt + "<td style='color: black'>Jabatan</td>";
+                        txt = txt + "<td style='color: black'>:</td>";
+                        txt = txt + "<td style='color: black'>" + result.data.bagian + "</td>";
+                        txt = txt + "</tr>";
+                        txt = txt + "<tr>";
+                        txt = txt + "<td style='color: black'>Dept.</td>";
+                        txt = txt + "<td style='color: black'>:</td>";
+                        txt = txt + "<td style='color: black'>" + result.data.departemen + "</td>";
+                        txt = txt + "</tr>";
+                        txt = txt + "</table>";
+                        txt = txt + "<p>";
+                        txt = txt + "Dengan ini memohon izin untuk tidak masuk kerja pada hari ";
+                        txt = txt + "<select name='hari'>";
+                        txt = txt + "<option>-- Pilih Hari --</option>";
+                        txt = txt + "<option>Senin</option>";
+                        txt = txt + "<option>Selasa</option>";
+                        txt = txt + "<option>Rabu</option>";
+                        txt = txt + "<option>Kamis</option>";
+                        txt = txt + "<option>Jumat</option>";
+                        txt = txt + "<option>Sabtu</option>";
+                        txt = txt + "<option>Minggu</option>";
+                        txt = txt + "</select>";
+                        txt = txt + " tanggal ";
+                        txt = txt +
+                            " <input type='date' name='tgl_mulai'> sampai dengan <input type='date' name='tgl_berakhir'>";
+                        txt = txt + " dengan alasan <input type='text' name='keperluan'>";
+                        txt = txt + "</p>";
+                        txt = txt +
+                            "<p>Dengan surat permohonan izin ini saya sampaikan. Atas perhatian dan kerja sama yang diberikan saya ucapkan terimakasih.</p>";
+                        txt = txt + "<p>Hormat Saya,</p>";
+                        txt = txt +
+                            "<canvas height='100' width='300' id='signature-pad' class='signature-pad'></canvas>";
+                        txt = txt +
+                            "<p><a href='javascript:void' class='btn btn-sm btn-danger' id='clear'>Clear</a> <a href='javascript:void' class='btn btn-sm btn-info' id='undo'>Undo</a></p>";
+                        txt = txt + "<p>" + result.data.nik + "</p>";
+                        // txt = txt+"<div class=input-group input-group-sm mb-3'>";
+                        // txt = txt+  "<span class='input-group-text'>NIK</span>";
+                        // txt = txt+  "<input type='text' class='form-control' placeholder='NIK' value="+result.data.nik+" readonly style='color: black'>";
+                        // txt = txt+"</div>";
+                        // txt = txt+"<div class=input-group input-group-sm mb-3'>";
+                        // txt = txt+  "<span class='input-group-text'>Nama</span>";
+                        // txt = txt+  "<input type='text' class='form-control' placeholder='Nama' value="+result.data.nama+" readonly style='color: black'>";
+                        // txt = txt+"</div>";
+                        document.getElementById('preview_ijin').innerHTML = txt;
+
+                        // const canvas = document.querySelector('canvas');
+                        // const form = document.querySelector('.signature-pad-form');
+                        // const clearButton = document.querySelector('.clear-button');
+                        // const ctx = canvas.getContext('2d');
+                        // let writingMode = false;
+
+                        // const clearPad = () => {
+                        //     ctx.clearRect(0,0, canvas.width, canvas.height);
+                        // }
+
+                        // clearButton.addEventListener('click', (event) => {
+                        //     event.preventDefault();
+                        //     clearPad();
+                        // })
+
+                        // const getTargetPosition = (event) => {
+                        //     positionX = event.clientX - event.target.getBoundingClientRect().x;
+                        //     positionY = event.clientY - event.target.getBoundingClientRect().y;
+
+                        //     return [positionX, positionY];
+                        // }
+
+                        // const handlePointerMove = (event) => {
+                        //     if (!writingMode) return
+
+                        //     const [positionX, positionY] = getTargetPosition(event);
+                        //     ctx.lineTo(positionX,positionY);
+                        //     ctx.stroke();
+                        // }
+
+                        // const handlePointerUp = () => {
+                        //     writingMode = false;
+                        // }
+
+                        // const handlePointerDown = (event) => {
+                        //     writingMode = true;
+                        //     ctx.beginPath();
+
+                        //     const [positionX, positionY] = getTargetPosition(event);
+                        //     ctx.moveTo(positionX, positionY);
+                        // }
+
+                        // ctx.lineWidth = 3;
+                        // ctx.lineJoin = ctx.lineCap = 'round';
+
+                        var canvas = document.getElementById('signature-pad');
+
+                        function resizeCanvas() {
+                            // When zoomed out to less than 100%, for some very strange reason,
+                            // some browsers report devicePixelRatio as less than 1
+                            // and only part of the canvas is cleared then.
+                            // var ratio =  Math.max(window.devicePixelRatio || 1, 1);
+                            var ratio = Math.max(window.devicePixelRatio);
+                            canvas.width = canvas.offsetWidth * ratio;
+                            canvas.height = canvas.offsetHeight * ratio;
+                            // canvas.width = 500;
+                            // canvas.height = 500;
+                            canvas.getContext("2d").scale(ratio, ratio);
+                        }
+
+                        window.onresize = resizeCanvas;
+                        resizeCanvas();
+
+                        var signaturePad = new SignaturePad(canvas, {
+                            backgroundColor: 'rgb(255, 255, 255)' // necessary for saving image as JPEG; can be removed is only saving as PNG or SVG
+                        });
+
+                        document.getElementById('clear').addEventListener('click', function() {
+                            signaturePad.clear();
+                        });
+
+                        document.getElementById('undo').addEventListener('click', function() {
+                            var data = signaturePad.toData();
+                            if (data) {
+                                data.pop(); // remove the last dot or line
+                                signaturePad.fromData(data);
+                            }
+                        });
+
+                        function getSignaturePad() {
+                            var imageData = signaturePad.toDataURL('image/png');
+                            // alert(imageData);
+                            $('#signature-result').val(imageData);
+                            // $('#signature-result').attr('src',"data:"+imageData);
+                            // $('#signature-img-result').attr('src',"data:"+imageData);
+                        }
+
+                        $('#form-simpan').submit(function() {
+                            getSignaturePad();
+                            return false;
+                        });
+
                     } else {
 
                     }
@@ -528,11 +905,31 @@
         });
 
         $('#kategori_izin').on('change', function() {
-            if ($('#kategori_izin').val() == 'CT' || $('#kategori_izin').val() == 'IP') {
-                document.getElementById('kategori_view_ijin').style.display = 'block';
-            }else{
-                document.getElementById('kategori_view_ijin').style.display = 'none';
-            }
+            // if ($('#kategori_izin').val() == 'CT' || $('#kategori_izin').val() == 'IP') {
+            //     document.getElementById('kategori_view_ijin').style.display = 'block';
+            // }else{
+            //     document.getElementById('kategori_view_ijin').style.display = 'none';
+            // }
+            var txt = "<p>Malang, {!! \Carbon\Carbon::now()->isoFormat('DD MMMM YYYY') !!}</p>";
+            txt = txt + "<p>Kepada Yth. <br> Dept. HRGA PT Indonesian Tobacco Tbk. <br> ditempat </p>";
+            txt = txt + "<div class=input-group input-group-sm mb-3'>";
+            txt = txt + "<span class='input-group-text'>Hal</span>";
+            txt = txt +
+                "<select class='form-control' aria-describedby='inputGroup-sizing-sm'><option>-- Pilih Kategori --</option><option value='CT'>Cuti</option><option value='IP'>Izin Kepentingan Pribadi</option><option value='IS'>Izin Sakit</option></select>";
+            txt = txt + "</div>";
+            // txt = txt+"<p>Hal <select class='form-control'><option>-- Pilih Kategori --</option><option value='CT'>Cuti</option><option value='IP'>Izin Kepentingan Pribadi</option><option value='IS'>Izin Sakit</option></select></p>";
+            txt = txt + "<p>Dengan Hormat, </p>";
+            txt = txt + "<p>Saya yang bertanda tangan di bawah ini: </p>";
+            txt = txt + "<div class=input-group input-group-sm mb-3'>";
+            txt = txt + "<span class='input-group-text'>NIK</span>";
+            txt = txt +
+                "<input type='text' class='form-control' placeholder='NIK' value='{!! auth()->user()->nik !!}' readonly style='color: black'>";
+            txt = txt + "</div>";
+            txt = txt + "<div class=input-group input-group-sm mb-3'>";
+            txt = txt + "<span class='input-group-text'>Nama</span>";
+            txt = txt + "<input type='text' class='form-control' placeholder='Nama' readonly style='color: black'>";
+            txt = txt + "</div>";
+            document.getElementById('preview_ijin').innerHTML = txt;
         });
 
         $(document).ready(function() {

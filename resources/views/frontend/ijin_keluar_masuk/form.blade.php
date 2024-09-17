@@ -26,36 +26,28 @@
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>NIK</label>
-                                        <input type="text" name="nik" class="form-control" placeholder="NIK"
+                                        <input type="text" name="nik" value="{{ auth()->user()->nik }}" readonly class="form-control" style="color: #000" placeholder="NIK"
                                             id="nik">
                                     </div>
                                 </div>
                                 <div class="col-xl-4">
                                     <div class="mb-3">
                                         <label>Nama</label>
-                                        <input type="text" name="nama" class="form-control" placeholder="Nama"
+                                        <input type="text" name="nama" value="{{ auth()->user()->name }}" class="form-control" placeholder="Nama"
                                             readonly id="name" style="color: #000">
-                                    </div>
-                                </div>
-                                <div class="col-xl-5">
-                                    <div class="mb-3">
-                                        <label>Email</label>
-                                        <input type="email" name="email" class="form-control" placeholder="Email"
-                                            id="email">
-                                        <span>* Email ini untuk pemberitahuan notifikasi</span>
                                     </div>
                                 </div>
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Departemen</label>
-                                        <input type="text" name="departemen" class="form-control"
+                                        <input type="text" name="departemen" class="form-control" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
                                             placeholder="Departemen" readonly id="departemen" style="color: #000">
                                     </div>
                                 </div>
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian"
+                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}"
                                             readonly id="jabatan" style="color: #000">
                                     </div>
                                 </div>
@@ -69,7 +61,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xl-3">
+                                <div class="col-xl-4">
                                     <div class="mb-3">
                                         <label>Mengetahui Manager Bagian</label>
                                         <select name="mengetahui_manager_bagian" class="form-control select2" required id="">
@@ -157,59 +149,59 @@
     <script src="{{ asset('plugins/src/tomSelect/tom-select.base.js') }}"></script>
     <script src="{{ asset('plugins/src/tomSelect/custom-tom-select.js') }}"></script>
     <script>
-        $('#nik').on('change', function() {
-            $.ajax({
-                type: 'GET',
-                url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
-                contentType: "application/json;  charset=utf-8",
-                cache: false,
-                success: (result) => {
-                    if (result.success == true) {
-                        $('#name').val(result.data.nama);
-                        $('#departemen').val(result.data.departemen);
-                        $('#jabatan').val(result.data.bagian);
+        // $('#nik').on('change', function() {
+        //     $.ajax({
+        //         type: 'GET',
+        //         url: "{{ url('formulir_antrian/search_nik/') }}" + "/" + $('#nik').val(),
+        //         contentType: "application/json;  charset=utf-8",
+        //         cache: false,
+        //         success: (result) => {
+        //             if (result.success == true) {
+        //                 $('#name').val(result.data.nama);
+        //                 $('#departemen').val(result.data.departemen);
+        //                 $('#jabatan').val(result.data.bagian);
 
-                        document.getElementById('detail_ijin_keluar_masuk').innerHTML =
-                            "<table class='table table-responsive table-striped'>" +
-                            "<tr>" +
-                            "<td>" + "NIK" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + $('#nik').val() + "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td>" + "Nama" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + result.data.nama + "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td>" + "Email" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + $('#nik').val() + "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td>" + "Departemen" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + result.data.departemen + "</td>" +
-                            "</tr>" +
-                            "<tr>" +
-                            "<td>" + "Bagian" + "</td>" +
-                            "<td>" + ":" + "</td>" +
-                            "<td>" + result.data.bagian + "</td>" +
-                            "</tr>" +
-                            "</table>";
-                    } else {
+        //                 document.getElementById('detail_ijin_keluar_masuk').innerHTML =
+        //                     "<table class='table table-responsive table-striped'>" +
+        //                     "<tr>" +
+        //                     "<td>" + "NIK" + "</td>" +
+        //                     "<td>" + ":" + "</td>" +
+        //                     "<td>" + $('#nik').val() + "</td>" +
+        //                     "</tr>" +
+        //                     "<tr>" +
+        //                     "<td>" + "Nama" + "</td>" +
+        //                     "<td>" + ":" + "</td>" +
+        //                     "<td>" + result.data.nama + "</td>" +
+        //                     "</tr>" +
+        //                     "<tr>" +
+        //                     "<td>" + "Email" + "</td>" +
+        //                     "<td>" + ":" + "</td>" +
+        //                     "<td>" + $('#nik').val() + "</td>" +
+        //                     "</tr>" +
+        //                     "<tr>" +
+        //                     "<td>" + "Departemen" + "</td>" +
+        //                     "<td>" + ":" + "</td>" +
+        //                     "<td>" + result.data.departemen + "</td>" +
+        //                     "</tr>" +
+        //                     "<tr>" +
+        //                     "<td>" + "Bagian" + "</td>" +
+        //                     "<td>" + ":" + "</td>" +
+        //                     "<td>" + result.data.bagian + "</td>" +
+        //                     "</tr>" +
+        //                     "</table>";
+        //             } else {
 
-                    }
-                },
-                error: function(request, status, error) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error
-                    });
-                }
-            });
-        });
+        //             }
+        //         },
+        //         error: function(request, status, error) {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'Error',
+        //                 text: error
+        //             });
+        //         }
+        //     });
+        // });
 
         $(document).ready(function(){
             new TomSelect(".select2",{

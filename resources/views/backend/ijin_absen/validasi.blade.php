@@ -178,7 +178,7 @@
                                         <div style="color: #000">{{ $explode_saksi_2[2] }}</div>
                                     </div>
                                     <div class="mb-3">
-                                        <div>Saksi 1</div>
+                                        <div>Saksi 2</div>
                                         @if (empty($ijin_absen->ijin_absen_ttd->signature_saksi_2))
                                             <select name="saksi_2" class="form-control" id="">
                                                 <option value="">-- Pilih Status --</option>

@@ -30,6 +30,10 @@ class CTOController extends Controller
 
     public function index(Request $request)
     {
+        if (auth()->user()->no_telp == null) {
+            return redirect()->route('profile.setting');
+        }
+        
         if ($request->ajax()) {
             if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin' || auth()->user()->getRoleNames()[0] == 'Satpam') {
                 $data = $this->car_travel_order->all();
@@ -86,12 +90,13 @@ class CTOController extends Controller
                                         }
                                         break;
                                     case 'Verified':
-                                        // $btn = $btn."<a class='btn btn-danger mb-2 me-2'>
-                                        //         <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 512 512'>
-                                        //             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='m432 144l-28.67 275.74A32 32 0 0 1 371.55 448H140.46a32 32 0 0 1-31.78-28.26L80 144' />
-                                        //             <rect width='448' height='80' x='32' y='64' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' rx='16' ry='16' />
-                                        //             <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M312 240L200 352m112 0L200 240' />
-                                        //         </svg> Delete</a>";
+                                        $btn = $btn."<a class='btn btn-dark mb-2 me-2'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 512 512'>
+                                                    <path fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' d='M384 368h24a40.12 40.12 0 0 0 40-40V168a40.12 40.12 0 0 0-40-40H104a40.12 40.12 0 0 0-40 40v160a40.12 40.12 0 0 0 40 40h24' />
+                                                    <rect width='256' height='208' x='128' y='240' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' rx='24.32' ry='24.32' />
+                                                    <path fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' d='M384 128v-24a40.12 40.12 0 0 0-40-40H168a40.12 40.12 0 0 0-40 40v24' />
+                                                    <circle cx='392' cy='184' r='24' fill='currentColor' />
+                                                </svg> Cetak</a>";
                                         break;
                                     case 'Rejected':
                                         $btn = $btn."<a class='btn btn-warning mb-2 me-2' href=".route('b_cto.edit',['id' => $row->id]).">

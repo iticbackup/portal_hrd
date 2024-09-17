@@ -16,6 +16,7 @@ class IjinAbsenAttachment extends Model
         'id',
         'ijin_absen_id',
         'attachment_written_letter',
+        'ttd_written_letter',
         'attachment',
     ];
 

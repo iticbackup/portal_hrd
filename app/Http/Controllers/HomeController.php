@@ -37,6 +37,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        if (auth()->user()->no_telp == null) {
+            return redirect()->route('profile.setting');
+        }
+        
         $live_date = Carbon::now()->addDay($this->addDay);
         $data['antrian'] = $this->antrian->select('no_urut')
                                         // ->where('status','Waiting')
@@ -79,10 +83,17 @@ class HomeController extends Controller
 
         for ($i=$start_year_now; $i <= $end_year_now; $i++) { 
             $data['periode'][] = Carbon::create($i)->isoFormat('MMMM YYYY');
-            $data['total_ijin_terlambat'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','TL')->count();
-            $data['total_ijin_keluar_masuk'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','KL')->count();
-            $data['total_ijin_pulang_awal'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','PA')->count();
-            $data['total_ijin_absen'][] = $this->ijin_absen->where('created_at','LIKE','%'.$i.'%')->count();
+            if (auth()->user()->departemen == 'Administrator') {
+                $data['total_ijin_terlambat'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','TL')->count();
+                $data['total_ijin_keluar_masuk'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','KL')->count();
+                $data['total_ijin_pulang_awal'][] = $this->ijin_keluar_masuk->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','PA')->count();
+                $data['total_ijin_absen'][] = $this->ijin_absen->where('created_at','LIKE','%'.$i.'%')->count();
+            }else{
+                $data['total_ijin_terlambat'][] = $this->ijin_keluar_masuk->where('nik',auth()->user()->nik)->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','TL')->count();
+                $data['total_ijin_keluar_masuk'][] = $this->ijin_keluar_masuk->where('nik',auth()->user()->nik)->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','KL')->count();
+                $data['total_ijin_pulang_awal'][] = $this->ijin_keluar_masuk->where('nik',auth()->user()->nik)->where('created_at','LIKE','%'.$i.'%')->where('kategori_izin','PA')->count();
+                $data['total_ijin_absen'][] = $this->ijin_absen->where('nik',auth()->user()->nik)->where('created_at','LIKE','%'.$i.'%')->count();
+            }
         }
 
         return view('home',$data);

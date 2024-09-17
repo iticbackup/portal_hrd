@@ -113,7 +113,7 @@
                         <hr>
                         <form id="form-attachment" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @if (!empty($ijin_absen->ijin_absen_attachment->attachment_written_letter))
+                            {{-- @if (!empty($ijin_absen->ijin_absen_attachment->attachment_written_letter))
                                 <p>Lampiran Surat Tulis :</p>
                                 <div class="row">
                                     @foreach (json_decode($ijin_absen->ijin_absen_attachment->attachment_written_letter) as $key => $attachment_written_letter)
@@ -158,7 +158,63 @@
                                         </div>
                                     </div>
                                 @endif
-                            @endif
+                            @endif --}}
+                            <div>
+                                <p>Malang, {{ $ijin_absen->created_at->isoFormat('DD MMMM YYYY') }}</p>
+                                <p>
+                                    Kepada Yth. <br>
+                                    Dept. HRGA PT Indonesian Tobacco Tbk. <br>
+                                    ditempat,
+                                </p>
+                                <p>
+                                    Hal :
+                                    @switch($ijin_absen->kategori_izin)
+                                        @case('CT')
+                                            Cuti
+                                            @break
+                                        @case('IP')
+                                            Izin Kepentingan Pribadi
+                                            @break
+                                        @case('IS')
+                                            Izin Sakit
+                                            @break
+                                        @default
+                                            
+                                    @endswitch
+                                </p>
+                                <p>Dengan Hormat,</p>
+                                <p>Saya yang bertanda tangan di bawah ini :</p>
+                                <table style="color: #515365" class="mb-2">
+                                    <tr>
+                                        <td>NIK</td>
+                                        <td>:</td>
+                                        <td>{{ $ijin_absen->nik }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nama</td>
+                                        <td>:</td>
+                                        <td>{{ $ijin_absen->nama }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jabatan</td>
+                                        <td>:</td>
+                                        <td>{{ $ijin_absen->jabatan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dept.</td>
+                                        <td>:</td>
+                                        <td>{{ $ijin_absen->unit_kerja }}</td>
+                                    </tr>
+                                </table>
+                                <p>Dengan ini memohon izin untuk tidak masuk kerja pada hari {{ $ijin_absen->hari }} tanggal {{ \Carbon\Carbon::create($ijin_absen->tgl_mulai)->isoFormat('DD MMMM YYYY') }} sampai {{ \Carbon\Carbon::create($ijin_absen->tgl_berakhir)->isoFormat('DD MMMM YYYY') }} dengan alasan {{ $ijin_absen->keperluan }}. </p>
+                                <p>Demikian surat permohonan izin ini saya sampaikan. Atas perhatian dan kerja sama yang diberikan saya ucapkan terima kasih.</p>
+                                <p>Hormat Saya,</p>
+                                <p>
+                                    <img src="{{ $ijin_absen->ijin_absen_attachment->ttd_written_letter }}" style="width: 200px;height: 200px;object-fit: cover;">
+                                </p>
+                                <p>{{ $ijin_absen->nik.' '.$ijin_absen->nama }}</p>
+                            </div>
+                            <hr>
                             @if (!empty($ijin_absen->ijin_absen_attachment->attachment))
                                 <p>Lampiran Swab & Surat Pendukung :</p>
                                 <div class="row">
@@ -215,9 +271,10 @@
                                 <div>
                                     @if (empty($ijin_absen->ijin_absen_ttd->signature_manager))
                                         <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                        <div class="mt-3" style="color: #000">Team HRD</div>
                                     @else
                                         @php
-                                            $explode_signature_manager = explode(
+                                            $explode_signature_personalia = explode(
                                                 '|',
                                                 $ijin_absen->ijin_absen_ttd->signature_manager,
                                             );
@@ -232,18 +289,18 @@
                                                     $ijin_absen->created_at->format('Ymd') .
                                                     "\n" .
                                                     'Signature: ' .
-                                                    $explode_signature_manager[0] .
+                                                    $explode_signature_personalia[0] .
                                                     ' (' .
-                                                    $explode_signature_manager[1] .
+                                                    $explode_signature_personalia[1] .
                                                     ')' .
                                                     "\n" .
                                                     'Tanggal Formulir: ' .
                                                     $ijin_absen->created_at->isoFormat('LL'),
                                             ];
                                         @endphp
-                                        @if ($explode_signature_manager[2] == 'Approved')
-                                            {!! DNS2D::getBarcodePNGPath($detail['signature_manager'], 'QRCODE', 2, 2) !!}
-                                        @elseif($explode_signature_manager[2] == 'Rejected')
+                                        @if ($explode_signature_personalia[2] == 'Approved')
+                                            {!! DNS2D::getBarcodeHTML($detail['signature_manager'], 'QRCODE', 2, 2) !!}
+                                        @elseif($explode_signature_personalia[2] == 'Rejected')
                                             <span class="badge badge-danger">REJECTED</span>
                                         @endif
                                     @endif
@@ -284,8 +341,10 @@
                                             {!! DNS2D::getBarcodeHTML($detail['signature_bersangkutan'], 'QRCODE', 2, 2) !!}
                                         @elseif($explode_signature_bersangkutan[2] == 'Rejected')
                                             <span class="badge badge-danger">REJECTED</span>
+                                            <div class="mt-3" style="color: #000">{{ explode('|',$ijin_absen->ijin_absen_ttd->signature_bersangkutan)[0] }}</div>
                                         @elseif($explode_signature_bersangkutan[2] == 'Waiting')
                                             <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            <div class="mt-3" style="color: #000">{{ explode('|',$ijin_absen->ijin_absen_ttd->signature_bersangkutan)[0] }}</div>
                                         @endif
                                     @endif
                                 </div>
@@ -354,6 +413,7 @@
                                             <span class="badge badge-danger">REJECTED</span>
                                         @elseif($explode_signature_saksi_1[2] == 'Waiting')
                                             <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            <div class="mt-3" style="color: #000">{{ $explode_saksi_1[0] }}</div>
                                         @endif
                                     @endif
                                 </div>
@@ -395,6 +455,7 @@
                                             <span class="badge badge-danger">REJECTED</span>
                                         @elseif($explode_signature_saksi_2[2] == 'Waiting')
                                             <span class="badge badge-warning">Menunggu Persetujuan</span>
+                                            <div class="mt-3" style="color: #000">{{ $explode_saksi_2[0] }}</div>
                                         @endif
                                     @endif
                                 </div>
@@ -407,6 +468,12 @@
                             </svg>
                             Back
                         </button>
+                        <a href="{{ route('b_ijin_absen.download_surat', ['id' => $ijin_absen->id]) }}" class="btn btn-danger mb-2 me-2" style="text-transform: uppercase" target="_blank">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                <path fill="currentColor" d="M64 464h48v48H64c-35.3 0-64-28.7-64-64V64C0 28.7 28.7 0 64 0h165.5c17 0 33.3 6.7 45.3 18.7l90.5 90.5c12 12 18.7 28.3 18.7 45.3V304h-48V160h-80c-17.7 0-32-14.3-32-32V48H64c-8.8 0-16 7.2-16 16v384c0 8.8 7.2 16 16 16m112-112h32c30.9 0 56 25.1 56 56s-25.1 56-56 56h-16v32c0 8.8-7.2 16-16 16s-16-7.2-16-16V368c0-8.8 7.2-16 16-16m32 80c13.3 0 24-10.7 24-24s-10.7-24-24-24h-16v48zm96-80h32c26.5 0 48 21.5 48 48v64c0 26.5-21.5 48-48 48h-32c-8.8 0-16-7.2-16-16V368c0-8.8 7.2-16 16-16m32 128c8.8 0 16-7.2 16-16v-64c0-8.8-7.2-16-16-16h-16v96zm80-112c0-8.8 7.2-16 16-16h48c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v32h32c8.8 0 16 7.2 16 16s-7.2 16-16 16h-32v48c0 8.8-7.2 16-16 16s-16-7.2-16-16z" />
+                            </svg>
+                            Download Surat Tulis
+                        </a>
                         @can('ijinabsen-verifikasi')
                             @if (empty($ijin_absen->ijin_absen_ttd->tgl_signature_manager) ||
                                     empty($ijin_absen->ijin_absen_ttd->tgl_signature_bersangkutan) ||

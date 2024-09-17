@@ -45,4 +45,9 @@ class IjinKeluarMasuk extends Model
     {
         return $this->belongsTo(\App\Models\IjinKeluarMasukTTD::class, 'id','ijin_keluar_masuk_id');
     }
+
+    public function telepon()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'nik','nik');
+    }
 }

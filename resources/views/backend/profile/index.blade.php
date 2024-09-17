@@ -22,9 +22,10 @@
                         </div>
                         <div class="text-center user-info">
                             <p class="">{{ $user->name }}</p>
-                            <div>{{ $user->nik }}</div>
+                            <div>NIK : {{ $user->nik }}</div>
+                            <div>No.Telp : {{ $user->no_telp }}</div>
                         </div>
-                        <div class="user-info-list">
+                        {{-- <div class="user-info-list">
                             <div class="">
                                 <ul class="contacts-block list-unstyled">
                                     <li class="contacts-block__item">
@@ -35,7 +36,7 @@
                                     </li>
                                 </ul>
                             </div>                                    
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

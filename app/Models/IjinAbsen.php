@@ -52,4 +52,9 @@ class IjinAbsen extends Model
     {
         return $this->belongsTo(\App\Models\IjinAbsenAttachment::class, 'id','ijin_absen_id');
     }
+
+    public function telepon()
+    {
+        return $this->belongsTo(\App\Models\User::class, 'nik','nik');
+    }
 }

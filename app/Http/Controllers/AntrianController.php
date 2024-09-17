@@ -56,6 +56,10 @@ class AntrianController extends Controller
 
     public function index()
     {
+        // if (auth()->user()->no_telp == null) {
+        //     return redirect()->route('profile.setting');
+        // }
+
         $live_date = Carbon::now()->addDay($this->addDay);
         $data['antrian'] = $this->antrian->select('no_urut')
                                         // ->where('status','Terpanggil')
@@ -83,6 +87,10 @@ class AntrianController extends Controller
 
     public function formulir_antrian()
     {
+        if (auth()->user()->no_telp == null) {
+            return redirect()->route('profile.setting');
+        }
+
         return view('frontend.formulir_antrian');
     }
 
@@ -243,6 +251,10 @@ class AntrianController extends Controller
 
     public function b_index(Request $request)
     {
+        if (auth()->user()->no_telp == null) {
+            return redirect()->route('profile.setting');
+        }
+        
         if (auth()->user()->getRoleNames()[0] == 'Administrator') {
             if ($request->ajax()) {
                 $live_date = Carbon::now()->addDay($this->addDay);

@@ -51,6 +51,7 @@ class CreateIjinAbsenTable extends Migration
             $table->uuid('id')->primary();
             $table->uuid('ijin_absen_id');
             $table->text('attachment_written_letter')->nullable();
+            $table->text('ttd_written_letter')->nullable();
             $table->text('attachment')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -56,6 +56,55 @@ Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class,
 Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
 Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::class, 'testing_mail_markdown']);
 
+Route::get('testing_wa', function(){
+    // $curl = curl_init();
+    // curl_setopt_array($curl, [
+    //     CURLOPT_FRESH_CONNECT  => true,
+    //     CURLOPT_URL            => env('WA_URL').'/send-message',
+    //     CURLOPT_RETURNTRANSFER => true,
+    //     CURLOPT_HEADER         => false,
+    //     // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+    //     CURLOPT_FAILONERROR    => false,
+    //     CURLOPT_POST           => true,
+    //     CURLOPT_POSTFIELDS     => http_build_query([
+    //         'api_key' => env('WA_API_KEY'),
+    //         'sender' => env('WA_SENDER'),
+    //         'number' => '6282233684670',
+    //         // 'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
+    //         //             'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih. Hormat Kami Team HRD'
+    //         'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
+    //                     'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+    //                     'No ID : 001-20240801'."\n".
+    //                     'NIK : 2103484'."\n".
+    //                     'Nama : Rio Anugrah Adam Saputra'."\n".
+    //                     'Jabatan : Staff Junior'."\n".
+    //                     'Unit Kerja : IT'."\n".
+    //                     'Jenis Keperluan : Pribadi'."\n".
+    //                     'Keperluan : Tambal Ban'."\n".
+    //                     'Kendaraan : Pribadi'."\n".
+    //                     'Jenis Izin : Terlambat'."\n".
+    //                     'Jam Kerja : 08:00'."\n".
+    //                     'Jam Datang : 09:00'."\n".
+    //                     'Status : *Approved*'."\n\n".
+    //                     'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+    //                     'Hormat Kami,'."\n".
+    //                     'Team HRD PT Indonesian Tobacco Tbk.'
+    //     ]),
+    //     CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+    // ]);
+
+    // $response = curl_exec($curl);
+    // $error = curl_error($curl);
+
+    // curl_close($curl);
+
+    // return $response;
+
+    // return sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
+    // return explode('-',auth()->user()->no_telp)[0].explode('-',auth()->user()->no_telp)[1].explode('-',auth()->user()->no_telp)[2].explode('-',auth()->user()->no_telp)[3];
+
+});
+
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::group(['middleware' => 'auth'], function () {
         Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -68,6 +117,10 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}', [App\Http\Controllers\AntrianController::class, 'b_detail'])->name('b_antrian.detail');
             Route::get('{id}/resend_mail', [App\Http\Controllers\AntrianController::class, 'b_resend_mail'])->name('b_antrian.resend_mail');
             Route::get('{id}/panggilan', [App\Http\Controllers\AntrianController::class, 'b_panggilan'])->name('b_antrian.panggilan');
+        });
+        Route::prefix('kategori_izin')->group(function () {
+            Route::get('/', [App\Http\Controllers\KategoriIzinController::class, 'index'])->name('b_kategori_izin');
+            Route::get('create', [App\Http\Controllers\KategoriIzinController::class, 'create'])->name('b_kategori_izin.create');
         });
         Route::prefix('ijin_keluar_masuk')->group(function () {
             Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_index'])->name('b_ijin_keluar_masuk');
@@ -88,6 +141,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/validasi', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi'])->name('b_ijin_absen.validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi_simpan'])->name('b_ijin_absen.b_validasi_simpan');
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
+            Route::get('{id}/download_surat', [App\Http\Controllers\IjinAbsenController::class, 'download_surat'])->name('b_ijin_absen.download_surat');
             Route::post('{id}/attachment/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_attachment_simpan'])->name('b_ijin_absen.attachment_simpan');
         });
 
