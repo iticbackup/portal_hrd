@@ -43,7 +43,7 @@ class IjinAbsenController extends Controller
 
     public function f_index()
     {
-        if (auth()->user()->no_telp == null) {
+        if (auth()->user()->no_telp == null || auth()->user()->email == null) {
             return redirect()->route('profile.setting');
         }
 
@@ -98,7 +98,7 @@ class IjinAbsenController extends Controller
             $input['id'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
             $input['nama'] = $request->nama;
-            // $input['email'] = $request->email;
+            $input['email'] = auth()->user()->email;
             $input['jabatan'] = $request->jabatan;
             $input['unit_kerja'] = $request->departemen;
             $input['hari'] = $request->hari;
@@ -332,7 +332,7 @@ class IjinAbsenController extends Controller
         // $user = request()->user()->roles;
         // $user = \App\Models\User::with('roles')->where('id',auth()->user()->id)->first();
         // dd($user);
-        if (auth()->user()->no_telp == null) {
+        if (auth()->user()->no_telp == null || auth()->user()->email == null) {
             return redirect()->route('profile.setting');
         }
         

@@ -35,7 +35,7 @@
                                 <h4>Profile</h4>
                                 <hr>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="fullName">Nama</label>
                                             <input type="text" class="form-control mb-3" placeholder="Nama"
@@ -43,7 +43,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="profession">Departemen</label>
                                             <input type="text" class="form-control mb-3" placeholder="Departemen"
@@ -51,7 +51,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         {{-- <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control mb-3" name="email" placeholder="Email" style="color: black" value="{{ $user->email }}" {{ empty($user->email) ? null : 'readonly' }}>
@@ -63,6 +63,14 @@
                                                 {{ $user->no_telp ? 'readonly' : null }} class="form-control"
                                                 style="color: black" placeholder="08xxxx">
                                             <span>*Nomor Telepon ini untuk pemberitahuan notifikasi</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control mb-3" name="email" placeholder="Email" style="color: black" value="{{ $user->email }}" {{ empty($user->email) ? null : 'readonly' }}>
+                                            <span>*Email ini untuk pemberitahuan notifikasi</span>
                                         </div>
                                     </div>
 

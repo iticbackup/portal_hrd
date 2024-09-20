@@ -30,7 +30,7 @@ class CTOController extends Controller
 
     public function index(Request $request)
     {
-        if (auth()->user()->no_telp == null) {
+        if (auth()->user()->no_telp == null || auth()->user()->email == null) {
             return redirect()->route('profile.setting');
         }
         

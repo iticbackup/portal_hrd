@@ -31,12 +31,17 @@ class ProfileController extends Controller
     {
         $rules = [
             'no_telp' => 'required',
+            'email' => 'required',
             // 'password' => 'required',
             // 'password_confirmation' => 'required',
         ];
 
         $messages = [
             'no_telp.required' => 'No Telp wajib diisi',
+            // 'no_telp.unique' => 'No Telp sudah ada',
+            'email.required' => 'Email wajib diisi',
+            // 'email.unique' => 'Email sudah ada',
+            
             // 'password.required' => 'Password wajib diisi',
             // 'password_confirmation.required' => 'Konfirmasi Password wajib diisi',
         ];
@@ -50,10 +55,12 @@ class ProfileController extends Controller
             if ($request->password && $request->password_confirmation) {
                 $user->update([
                     'no_telp' => $request->no_telp,
+                    'email' => $request->email,
                     'password' => Hash::make($request->password)
                 ]);
             }else{
                 $user->update([
+                    'email' => $request->email,
                     'no_telp' => $request->no_telp,
                 ]);
             }

@@ -40,7 +40,7 @@ class IjinKeluarMasukController extends Controller
 
     public function f_index()
     {
-        if (auth()->user()->no_telp == null) {
+        if (auth()->user()->no_telp == null || auth()->user()->email == null) {
             return redirect()->route('profile.setting');
         }
 
@@ -172,7 +172,7 @@ class IjinKeluarMasukController extends Controller
             $input['id'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
             $input['nama'] = $request->nama;
-            // $input['email'] = $request->email;
+            $input['email'] = auth()->user()->email;
             $input['jabatan'] = $request->jabatan;
             $input['unit_kerja'] = $request->departemen;
             $input['kategori_keperluan'] = $request->kategori_keperluan;
@@ -346,7 +346,7 @@ class IjinKeluarMasukController extends Controller
     public function b_index(Request $request)
     {
         // dd(auth()->user()->getRoleNames()[0]);
-        if (auth()->user()->no_telp == null) {
+        if (auth()->user()->no_telp == null || auth()->user()->email == null) {
             return redirect()->route('profile.setting');
         }
         
@@ -598,10 +598,19 @@ class IjinKeluarMasukController extends Controller
                                                             </g>
                                                         </svg> Cetak Surat</a>";
                                         }
-                                        $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
-                                                        <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 512 512'>
-                                                            <path fill='currentColor' fill-rule='evenodd' d='M414.73 97.1A222.14 222.14 0 0 0 256.94 32C134 32 33.92 131.58 33.87 254a220.6 220.6 0 0 0 29.78 111L32 480l118.25-30.87a223.6 223.6 0 0 0 106.6 27h.09c122.93 0 223-99.59 223.06-222A220.18 220.18 0 0 0 414.73 97.1M256.94 438.66h-.08a185.75 185.75 0 0 1-94.36-25.72l-6.77-4l-70.17 18.32l18.73-68.09l-4.41-7A183.46 183.46 0 0 1 71.53 254c0-101.73 83.21-184.5 185.48-184.5a185 185 0 0 1 185.33 184.64c-.04 101.74-83.21 184.52-185.4 184.52m101.69-138.19c-5.57-2.78-33-16.2-38.08-18.05s-8.83-2.78-12.54 2.78s-14.4 18-17.65 21.75s-6.5 4.16-12.07 1.38s-23.54-8.63-44.83-27.53c-16.57-14.71-27.75-32.87-31-38.42s-.35-8.56 2.44-11.32c2.51-2.49 5.57-6.48 8.36-9.72s3.72-5.56 5.57-9.26s.93-6.94-.46-9.71s-12.54-30.08-17.18-41.19c-4.53-10.82-9.12-9.35-12.54-9.52c-3.25-.16-7-.2-10.69-.2a20.53 20.53 0 0 0-14.86 6.94c-5.11 5.56-19.51 19-19.51 46.28s20 53.68 22.76 57.38s39.3 59.73 95.21 83.76a323 323 0 0 0 31.78 11.68c13.35 4.22 25.5 3.63 35.1 2.2c10.71-1.59 33-13.42 37.63-26.38s4.64-24.06 3.25-26.37s-5.11-3.71-10.69-6.48' />
-                                                        </svg> Kirim Whatsapp</a>";
+
+                                        if (env('WA_STATUS') == true) {
+                                            $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                            <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                                <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                            </svg> Kirim Whatsapp</a>";
+                                        }else{
+                                            $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                            <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                                <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                            </svg> Kirim Email</a>";
+                                        }
+
                                         $btn = $btn."</div>";
     
                                         return $btn;
@@ -936,7 +945,7 @@ class IjinKeluarMasukController extends Controller
                         ]);
                     }
                 }else{
-                    Mail::to($data_ijin_keluar_masuk->email)
+                    Mail::to(empty($data_ijin_keluar_masuk->email) ? auth()->user()->email : $data_ijin_keluar_masuk->email )
                         ->send(new IjinKeluarMasukNotifV1(
                             'Konfirmasi Ijin Keluar Masuk',
                             $data_ijin_keluar_masuk->nama,
@@ -1041,7 +1050,7 @@ class IjinKeluarMasukController extends Controller
                         ]);
                     }
                 }else{
-                    Mail::to($data_ijin_keluar_masuk->email)
+                    Mail::to(empty($data_ijin_keluar_masuk->email) ? auth()->user()->email : $data_ijin_keluar_masuk->email)
                         ->send(new IjinKeluarMasukNotifV1(
                             'Konfirmasi Ijin Keluar Masuk',
                             $data_ijin_keluar_masuk->nama,
@@ -1146,7 +1155,7 @@ class IjinKeluarMasukController extends Controller
                         ]);
                     }
                 }else{
-                    Mail::to($data_ijin_keluar_masuk->email)
+                    Mail::to(empty($data_ijin_keluar_masuk->email) ? auth()->user()->email : $data_ijin_keluar_masuk->email)
                         ->send(new IjinKeluarMasukNotifV1(
                             'Konfirmasi Ijin Keluar Masuk',
                             $data_ijin_keluar_masuk->nama,
@@ -1251,7 +1260,7 @@ class IjinKeluarMasukController extends Controller
                         ]);
                     }
                 }else{
-                    Mail::to($data_ijin_keluar_masuk->email)
+                    Mail::to(empty($data_ijin_keluar_masuk->email) ? auth()->user()->email : $data_ijin_keluar_masuk->email)
                         ->send(new IjinKeluarMasukNotifV1(
                             'Konfirmasi Ijin Keluar Masuk',
                             $data_ijin_keluar_masuk->nama,
@@ -1453,7 +1462,7 @@ class IjinKeluarMasukController extends Controller
             return response()->json($array_message);
 
         }else{
-            Mail::to($data_ijin_keluar_masuk->email)
+            Mail::to(empty($data_ijin_keluar_masuk->email) ? auth()->user()->email : $data_ijin_keluar_masuk->email)
                 ->send(new IjinKeluarMasukNotifV1(
                     'Konfirmasi Ijin Keluar Masuk',
                     $data_ijin_keluar_masuk->nama,
