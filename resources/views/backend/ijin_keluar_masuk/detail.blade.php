@@ -265,7 +265,7 @@
                                     </div>
                                 </div>
                                 @break
-                            @case('TL')
+                            @case('PA')
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Jam Rencana Keluar</div>
