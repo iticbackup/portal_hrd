@@ -370,8 +370,12 @@ class IjinAbsenController extends Controller
                             ->addColumn('no', function($row){
                                 return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
                             })
+                            ->addColumn('created_at', function($row){
+                                return $row->created_at->format('Y-m-d H:i:s');
+                            })
                             ->addColumn('nama', function($row){
-                                return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at.'</span>';
+                                return $row->nama;
+                                // return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at.'</span>';
                             })
                             ->addColumn('status', function($row){
                                 switch ($row->status) {
@@ -433,6 +437,14 @@ class IjinAbsenController extends Controller
                                                     <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
                                                 </svg> Kirim Email</a>";
                                 }
+
+                                if (auth()->user()->getRoleNames()[0] == 'Administrator') {
+                                    $btn = $btn."<a class='btn btn-danger mb-2 me-2' href='javascript:void(0)' onclick='hapus(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3zM7 6h10v13H7zm2 2v9h2V8zm4 0v9h2V8z' />
+                                                </svg> Delete</a>";
+                                }
+                                
                                 $btn = $btn."</div>";
     
                                 return $btn;
@@ -1285,5 +1297,52 @@ class IjinAbsenController extends Controller
             return response()->json($array_message);
         }
 
+    }
+
+    public function destroy($id)
+    {
+        $data_ijin_absen = $this->ijin_absen->find($id);
+        
+        if (empty($data_ijin_absen)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal',
+                'message_content' => 'Data Ijin Absen Tidak Ditemukan'
+            ]);
+        }
+
+        $data_ijin_absen->delete();
+        $data_ijin_absen->ijin_absen_attachment->delete();
+        $data_ijin_absen->ijin_absen_ttd->delete();
+
+        if ($data_ijin_absen) {
+            $message_title="Berhasil !";
+            $message_content="Data ".$data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd')." Berhasil Dihapus";
+            $message_type="success";
+            $message_succes = true;
+    
+            $array_message = array(
+                'success' => $message_succes,
+                'message_title' => $message_title,
+                'message_content' => $message_content,
+                'message_type' => $message_type,
+            );
+
+            return response()->json($array_message);
+        }else{
+            $message_title="Gagal !";
+            $message_content="Data ".$data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd')." Gagal Dihapus";
+            $message_type="error";
+            $message_succes = false;
+    
+            $array_message = array(
+                'success' => $message_succes,
+                'message_title' => $message_title,
+                'message_content' => $message_content,
+                'message_type' => $message_type,
+            );
+
+            return response()->json($array_message);
+        }
     }
 }

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class CarTravelOrder extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $connection= 'portal_office';
+    
     protected $primaryKey = 'id';
     public $table = 'car_travel_order';
     // public $timestamps = false;

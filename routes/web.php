@@ -144,6 +144,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
             Route::get('{id}/download_surat', [App\Http\Controllers\IjinAbsenController::class, 'download_surat'])->name('b_ijin_absen.download_surat');
             Route::post('{id}/attachment/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_attachment_simpan'])->name('b_ijin_absen.attachment_simpan');
+            Route::get('{id}/destroy', [App\Http\Controllers\IjinAbsenController::class, 'destroy'])->name('b_ijin_absen.destroy');
         });
 
         Route::prefix('cto')->group(function () {

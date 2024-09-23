@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Antrian extends Model
 {
     use HasFactory;
+    protected $connection= 'portal_office';
+
     protected $primaryKey = 'id';
     public $table = 'antrian';
     // public $timestamps = false;

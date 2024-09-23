@@ -48,7 +48,8 @@
                         <table class="table dt-table-hover" id="datatable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
+                                    <th>ID</th>
+                                    <th>Tanggal Dibuat</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
                                     <th>Unit Kerja</th>
@@ -84,6 +85,10 @@
                 {
                     data: 'no',
                     name: 'no'
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at'
                 },
                 {
                     data: 'nama',
@@ -124,12 +129,12 @@
             "stripeClasses": [],
             "lengthMenu": [7, 10, 20, 50],
             "pageLength": 10,
-            order: [[0, 'desc']]
+            order: [[1, 'desc']]
         });
 
         function reload()
         {
-            table.ajax.reload();
+            table.ajax.reload(null,false);
         }
 
         function download_rekap()
@@ -159,7 +164,7 @@
                             title: result.message_title,
                             text: result.message_content
                         });
-                        table.ajax.reload();
+                        table.ajax.reload(null,false);
                     }else{
                         Swal.fire({
                             icon: 'error',
@@ -177,5 +182,65 @@
                 }
             });
         }
+
+        function hapus(id)
+        {
+            Swal.fire({
+                title: "Apakah anda yakin?",
+                text: "Anda tidak akan dapat mengembalikan ini!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, Delete!"
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    // Swal.fire({
+                    // title: "Deleted!",
+                    // text: "Your file has been deleted.",
+                    // icon: "success"
+                    // });
+
+                    $.ajax({
+                        type:'GET',
+                        url: "{{ url('ijin_absen/') }}"+'/'+id+'/destroy',
+                        contentType: "application/json;  charset=utf-8",
+                        cache: false,
+                        beforeSend: function(){
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Waiting',
+                                text: 'Sedang Proses',
+                                showConfirmButton: false,
+                            });
+                        },
+                        success: (result) => {
+                            if(result.success == true){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: result.message_title,
+                                    text: result.message_content
+                                });
+                                table.ajax.reload(null,false);
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: result.success,
+                                    text: result.error
+                                });
+                            }
+                        },
+                        error: function (request, status, error) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error',
+                                text: error
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
     </script>
 @endsection

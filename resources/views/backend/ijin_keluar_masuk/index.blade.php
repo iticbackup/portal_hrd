@@ -67,8 +67,8 @@
                         <table class="table dt-table-hover" id="datatable" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th>No</th>
-                                    <th>Tanggal Buat</th>
+                                    <th>ID</th>
+                                    <th>Tanggal Dibuat</th>
                                     <th>Nama</th>
                                     <th>Jabatan</th>
                                     <th>Unit Kerja</th>

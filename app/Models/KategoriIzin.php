@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class KategoriIzin extends Model
 {
     use HasFactory,SoftDeletes;
+    protected $connection= 'portal_office';
     
     public $table = 'kategori_izin';
     // public $timestamps = false;

@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class IjinKeluarMasuk extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $connection= 'portal_office';
+    
     protected $primaryKey = 'id';
     public $table = 'ijin_keluar_masuk';
     public $incrementing = false;

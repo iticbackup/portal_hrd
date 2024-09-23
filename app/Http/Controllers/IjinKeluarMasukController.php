@@ -388,7 +388,8 @@ class IjinKeluarMasukController extends Controller
                                         //         # code...
                                         //         break;
                                         // }
-                                        return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at->isoFormat('LLL').'</span>';
+                                        return $row->nama;
+                                        // return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at->isoFormat('LLL').'</span>';
                                     })
                                     ->addColumn('status', function($row){
                                         // switch ($row->status) {
@@ -1338,10 +1339,11 @@ class IjinKeluarMasukController extends Controller
                                                             ->whereDate('created_at','>=',$request->rekap_karyawan_mulai_tanggal)
                                                             ->whereDate('created_at','<=',$request->rekap_karyawan_sampai_tanggal)
                                                             ->groupBy('nik')
-                                                            // ->whereBetween('created_at',["$request->mulai_tanggal", "$request->sampai_tanggal"])
+                                                            // ->whereBetween('created_at',[$request->mulai_tanggal, $request->sampai_tanggal])
                                                             ->get();
                                                             // dd($data);
         $pdf = PDF::loadView('backend.ijin_keluar_masuk.download_rekap_karyawan',$data);
+        $pdf->setPaper('A4', 'landscape');
         return $pdf->stream('Laporan Ijin Keluar Masuk Tgl '.Carbon::parse($request->rekap_karyawan_mulai_tanggal)->format('d-m-Y').' sd '.Carbon::parse($request->rekap_karyawan_sampai_tanggal)->format('d-m-Y').'.pdf');
     }
 

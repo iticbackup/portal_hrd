@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class IjinAbsenTTD extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+    protected $connection= 'portal_office';
+    
     protected $primaryKey = 'id';
     public $table = 'ijin_absen_ttd';
     public $incrementing = false;

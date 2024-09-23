@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class IjinKeluarMasukTTD extends Model
 {
     use HasFactory;
+    protected $connection= 'portal_office';
+    
     protected $primaryKey = 'id';
     public $table = 'ijin_keluar_masuk_ttd';
     public $incrementing = false;

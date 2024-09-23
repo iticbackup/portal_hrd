@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class IjinAbsen extends Model
 {
     use HasFactory, SoftDeletes;
+    protected $connection= 'portal_office';
+    
     protected $primaryKey = 'id';
     public $table = 'ijin_absen';
     public $incrementing = false;
