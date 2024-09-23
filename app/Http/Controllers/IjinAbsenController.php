@@ -254,14 +254,14 @@ class IjinAbsenController extends Controller
                             'ttd_written_letter' => $request->signature_result
                         ]);
         
-                        // Mail::to($input['email'])
+                        // Mail::to(auth()->user()->email)
                         //     ->send(new IjinAbsenNotif(
                         //         'Konfirmasi Ijin Absen',
                         //         $input['no'].'-'.$live_date->format('Ymd'),
                         //         $input['nama'],
                         //         $input['jabatan'],
                         //         $input['unit_kerja'],
-                        //         $input['email'],
+                        //         auth()->user()->email,
                         //         $input['hari'],
                         //         $input['tgl_mulai'],
                         //         $input['tgl_berakhir'],
@@ -300,6 +300,22 @@ class IjinAbsenController extends Controller
                         'ijin_absen_id' => $input['id'],
                         'ttd_written_letter' => $request->signature_result
                     ]);
+
+                    Mail::to($input['email'])
+                        ->send(new IjinAbsenNotif(
+                            'Konfirmasi Ijin Absen',
+                            $input['no'].'-'.$live_date->format('Ymd'),
+                            $input['nama'],
+                            $input['jabatan'],
+                            $input['unit_kerja'],
+                            $input['email'],
+                            $input['hari'],
+                            $input['tgl_mulai'],
+                            $input['tgl_berakhir'],
+                            $input['selama'],
+                            $input['keperluan'],
+                            $input['status']
+                    ));
 
                     $message_title="Berhasil !";
                     $message_content="Formulir Ijin Absen Berhasil Dibuat, Silahkan cek notifikasi Email Anda secara berkala.";

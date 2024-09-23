@@ -9,6 +9,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/src/tomSelect/tom-select.default.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/light/tomSelect/custom-tomSelect.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('plugins/css/dark/tomSelect/custom-tomSelect.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/iziToast.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/iziToast.min.css') }}">
     <style>
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
@@ -427,7 +429,7 @@
                                 <div class="signature-pad-form">
                                     <canvas height='100' width='300' id='signature-pad' class='signature-pad'></canvas>
                                 </div>
-                                <input type="text" name="signature_result" id="signature-result">
+                                <input type="hidden" name="signature_result" id="signature-result">
                                 {{-- <button type="button" onclick="$('#modalSignature').modal('show')" class="btn btn-success">Signature</button> --}}
                                 <p>
                                     <a href='javascript:void' class='btn btn-sm btn-danger' id='clear'>Clear</a> 
@@ -515,6 +517,8 @@
     <script src="{{ asset('plugins/src/tomSelect/tom-select.base.js') }}"></script>
     <script src="{{ asset('plugins/src/tomSelect/custom-tom-select.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+    <script src="{{ asset('assets/js/iziToast.js') }}"></script>
+    <script src="{{ asset('assets/js/iziToast.min.js') }}"></script>
     {{-- <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script> --}}
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js" integrity="sha512-Mtr2f9aMp/TVEdDWcRlcREy9NfgsvXvApdxrm3/gK8lAMWnXrFsYaoW01B5eJhrUpBT7hmIjLeaQe0hnL7Oh1w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
     <script>
@@ -575,6 +579,11 @@
             document.getElementById('apply').addEventListener('click', function() {
                 var imageData = signaturePad.toDataURL('image/png');
                 $('#signature-result').val(imageData);
+                iziToast.success({
+                    title: 'Berhasil',
+                    message: 'Tanda Tangan Berhasil Diinput',
+                    position: 'topRight',
+                });
                 // $('#signature-img-result').attr('src',"data:"+imageData);
             });
 
