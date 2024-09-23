@@ -1347,7 +1347,7 @@ class IjinKeluarMasukController extends Controller
 
     public function b_resend_mail($id)
     {
-        $data_ijin_keluar_masuk = $this->ijin_keluar_masuk::find($id);
+        $data_ijin_keluar_masuk = $this->ijin_keluar_masuk->find($id);
         if (empty($data_ijin_keluar_masuk)) {
             return response()->json([
                 'success' => false,

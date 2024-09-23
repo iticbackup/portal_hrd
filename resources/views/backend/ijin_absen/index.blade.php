@@ -136,5 +136,46 @@
         {
             $('#download_rekap').modal('show');
         }
+
+        function resend_mail(id)
+        {
+            $.ajax({
+                type:'GET',
+                url: "{{ url('ijin_absen/') }}"+'/'+id+'/resend_mail',
+                contentType: "application/json;  charset=utf-8",
+                cache: false,
+                beforeSend: function(){
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Waiting',
+                        text: 'Sedang Proses',
+                        showConfirmButton: false,
+                    });
+                },
+                success: (result) => {
+                    if(result.success == true){
+                        Swal.fire({
+                            icon: 'success',
+                            title: result.message_title,
+                            text: result.message_content
+                        });
+                        table.ajax.reload();
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: result.success,
+                            text: result.error
+                        });
+                    }
+                },
+                error: function (request, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                }
+            });
+        }
     </script>
 @endsection

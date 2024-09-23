@@ -422,6 +422,17 @@ class IjinAbsenController extends Controller
                                                 </svg>
                                             </svg> Cetak Surat</a>";
                                 }
+                                if (env('WA_STATUS') == true) {
+                                    $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                </svg> Kirim Whatsapp</a>";
+                                }else{
+                                    $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                </svg> Kirim Email</a>";
+                                }
                                 $btn = $btn."</div>";
     
                                 return $btn;
@@ -1125,5 +1136,154 @@ class IjinAbsenController extends Controller
                 // 'bagian' => $search_nik->posisi->nama_posisi,
             ]
         ]);
+    }
+
+    public function b_resend_mail($id)
+    {
+        // $data_ijin_absen = $this->ijin_absen->where('id',$id)->first();
+        $data_ijin_absen = $this->ijin_absen->find($id);
+        if (empty($data_ijin_absen)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal',
+                'message_content' => 'Data Ijin Absen Tidak Ditemukan'
+            ]);
+        }
+
+        if (env('WA_STATUS') == true) {
+            $no_telp_user = sprintf((int)substr('628', 0, 3)).sprintf((int)substr($data_ijin_absen->telepon->no_telp, 2, 13));
+
+            switch ($data_ijin_absen->kategori_izin) {
+                case 'CT':
+                    $kategori_izin = 'Cuti';
+                    break;
+
+                case 'IP':
+                    $kategori_izin = 'Izin Pribadi';
+                    break;
+
+                case 'IS':
+                    $kategori_izin = 'Izin Sakit';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+            switch ($data_ijin_absen->status) {
+                case 'Waiting':
+                    $status_absen = 'Menunggu Verifikasi';
+                    break;
+
+                case 'Rejected':
+                    $status_absen = 'Ditolak';
+                    break;
+
+                case 'Approved':
+                    $status_absen = 'Disetujui';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+
+            $curl = curl_init();
+            curl_setopt_array($curl, [
+                CURLOPT_FRESH_CONNECT  => true,
+                CURLOPT_URL            => env('WA_URL').'/send-message',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_HEADER         => false,
+                // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                CURLOPT_FAILONERROR    => false,
+                CURLOPT_POST           => true,
+                CURLOPT_POSTFIELDS     => http_build_query([
+                    'api_key' => env('WA_API_KEY'),
+                    'sender' => env('WA_SENDER'),
+                    'number' => $no_telp_user,
+                    'message' => 'Kepada Yth. *'.$data_ijin_absen->nama.'*,'."\n".
+                                'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+                                'ID : '.$data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd')."\n".
+                                'NIK : '.$data_ijin_absen->nik."\n".
+                                'Nama : '.$data_ijin_absen->nama."\n".
+                                'Jabatan : '.$data_ijin_absen->jabatan."\n".
+                                'Unit Kerja : '.$data_ijin_absen->unit_kerja."\n".
+                                'Keperluan : '.$data_ijin_absen->keperluan."\n".
+                                'Jenis Izin : '.$kategori_izin."\n".
+                                'Selama : '.$data_ijin_absen->selama.' Hari'."\n".
+                                'Status : *'.$status_absen.'*'."\n\n".
+                                'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+                                'Hormat Kami,'."\n".
+                                'Team HRD PT Indonesian Tobacco Tbk.',
+                ]),
+                CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+            ]);
+
+            $response = curl_exec($curl);
+            $error = curl_error($curl);
+
+            curl_close($curl);
+
+            if (json_decode($response)->status == true) {
+                $message_title="Berhasil !";
+                $message_content="Data ".$data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd')." Berhasil Dikirim";
+                $message_type="success";
+                $message_succes = true;
+        
+                $array_message = array(
+                    'success' => $message_succes,
+                    'message_title' => $message_title,
+                    'message_content' => $message_content,
+                    'message_type' => $message_type,
+                );
+            }else{
+                $message_title="Gagal !";
+                $message_content="Data Gagal Dikirim";
+                $message_type="success";
+                $message_succes = true;
+        
+                $array_message = array(
+                    'success' => $message_succes,
+                    'message_title' => $message_title,
+                    'message_content' => $message_content,
+                    'message_type' => $message_type,
+                );
+            }
+
+            return response()->json($array_message);
+
+        }else{
+            Mail::to($data_ijin_absen->email)
+                ->send(new IjinAbsenNotif(
+                    'Konfirmasi Ijin Absen',
+                    $data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd'),
+                    $data_ijin_absen->nama,
+                    $data_ijin_absen->jabatan,
+                    $data_ijin_absen->unit_kerja,
+                    $data_ijin_absen->email,
+                    $data_ijin_absen->hari,
+                    $data_ijin_absen->tgl_mulai,
+                    $data_ijin_absen->tgl_berakhir,
+                    $data_ijin_absen->selama,
+                    $data_ijin_absen->keperluan,
+                    'Disetujui'
+            ));
+
+            $message_title="Berhasil !";
+            $message_content="Data ".$data_ijin_absen->no.'-'.$data_ijin_absen->created_at->format('Ymd')." Berhasil Dikirim";
+            $message_type="success";
+            $message_succes = true;
+    
+            $array_message = array(
+                'success' => $message_succes,
+                'message_title' => $message_title,
+                'message_content' => $message_content,
+                'message_type' => $message_type,
+            );
+
+            return response()->json($array_message);
+        }
+
     }
 }

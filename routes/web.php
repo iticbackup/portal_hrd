@@ -138,6 +138,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'b_index'])->name('b_ijin_absen');
             Route::get('download_rekap', [App\Http\Controllers\IjinAbsenController::class, 'b_download_rekap'])->name('b_ijin_absen.b_download_rekap');
             Route::get('{id}', [App\Http\Controllers\IjinAbsenController::class, 'b_detail'])->name('b_ijin_absen.detail');
+            Route::get('{id}/resend_mail', [App\Http\Controllers\IjinAbsenController::class, 'b_resend_mail'])->name('b_ijin_absen.b_resend_mail');
             Route::get('{id}/validasi', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi'])->name('b_ijin_absen.validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinAbsenController::class, 'b_validasi_simpan'])->name('b_ijin_absen.b_validasi_simpan');
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinAbsenController::class, 'cetak_surat'])->name('b_ijin_absen.cetak_surat');
