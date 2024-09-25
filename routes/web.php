@@ -154,6 +154,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{id}', [App\Http\Controllers\CTOController::class, 'detail'])->name('b_cto.detail');
             Route::get('{id}/edit', [App\Http\Controllers\CTOController::class, 'edit'])->name('b_cto.edit');
             Route::post('{id}/update', [App\Http\Controllers\CTOController::class, 'update'])->name('b_cto.update');
+            Route::get('{id}/cetak', [App\Http\Controllers\CTOController::class, 'cetak'])->name('b_cto.cetak');
             Route::get('{id}/validasi', [App\Http\Controllers\CTOController::class, 'validasi'])->name('b_cto.validasi');
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\CTOController::class, 'validasi_simpan'])->name('b_cto.validasi_simpan');
         });

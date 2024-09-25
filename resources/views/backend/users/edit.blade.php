@@ -36,13 +36,25 @@
                     <div class="mb-3">
                         <div class="form-group">
                             <label>NIK</label>
-                            <input type="text" name="nik" class="form-control" placeholder="NIK" value="{{ $user->nik }}" readonly id="edit_nik">
+                            <input type="text" name="nik" class="form-control" placeholder="NIK" value="{{ $user->nik }}" id="edit_nik">
                         </div> 
                     </div>
                     <div class="mb-3">
                         <div class="form-group">
                             <label>Name</label>
                             <input type="text" name="name" class="form-control" placeholder="Name" value="{{ $user->name }}" id="edit_name">
+                        </div> 
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" placeholder="Email" value="{{ $user->email }}" id="edit_no_telp">
+                        </div> 
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label>No Telp</label>
+                            <input type="text" name="name" class="form-control" placeholder="No Telp" value="{{ $user->no_telp }}" id="edit_no_telp">
                         </div> 
                     </div>
                     <div class="mb-3">

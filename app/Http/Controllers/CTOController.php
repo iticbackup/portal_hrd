@@ -8,6 +8,7 @@ use App\Models\CarTravelOrder;
 use App\Models\BiodataKaryawan;
 use \Carbon\Carbon;
 
+use PDF;
 use Validator;
 use DataTables;
 
@@ -90,7 +91,7 @@ class CTOController extends Controller
                                         }
                                         break;
                                     case 'Verified':
-                                        $btn = $btn."<a class='btn btn-dark mb-2 me-2'>
+                                        $btn = $btn."<a class='btn btn-dark mb-2 me-2' href=".route('b_cto.cetak',['id' => $row->id])." target='_black'>
                                                 <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 512 512'>
                                                     <path fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' d='M384 368h24a40.12 40.12 0 0 0 40-40V168a40.12 40.12 0 0 0-40-40H104a40.12 40.12 0 0 0-40 40v160a40.12 40.12 0 0 0 40 40h24' />
                                                     <rect width='256' height='208' x='128' y='240' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' rx='24.32' ry='24.32' />
@@ -366,5 +367,19 @@ class CTOController extends Controller
         //     $input['security_ttd_keluar'] = auth()->user()->nik.'_'.auth()->user()->name.'_'.auth()->user()->departemen.'_'.$data_car_travel_order->id.'_Tolak';
         //     $input['status'] = 'Rejected';
         // }
+    }
+
+    public function cetak($id)
+    {
+        $data['cto'] = $this->car_travel_order->find($id);
+        if (empty($data['cto'])) {
+            return redirect()->back()->with('error','Data Tidak Ditemukan');
+        }
+
+        $customPaper = array(0,0,812.5,580);
+        $pdf = PDF::loadView('backend.cto.cetak',$data);
+        $pdf->setPaper($customPaper);
+
+        return $pdf->stream();
     }
 }

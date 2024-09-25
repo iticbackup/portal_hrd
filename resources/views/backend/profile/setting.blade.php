@@ -35,6 +35,14 @@
                                 <h4>Profile</h4>
                                 <hr>
                                 <div class="row">
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label>NIK</label>
+                                            <input type="text" class="form-control mb-3" placeholder="Nama"
+                                                value="{{ $user->nik }}" readonly style="color: black">
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="fullName">Nama</label>
@@ -43,7 +51,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label for="profession">Departemen</label>
                                             <input type="text" class="form-control mb-3" placeholder="Departemen"
@@ -51,7 +59,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-md-3">
+                                    <div class="col-md-2">
                                         {{-- <div class="form-group">
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control mb-3" name="email" placeholder="Email" style="color: black" value="{{ $user->email }}" {{ empty($user->email) ? null : 'readonly' }}>
@@ -69,7 +77,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="email">Email</label>
-                                            <input type="text" class="form-control mb-3" name="email" placeholder="Email" style="color: black" value="{{ $user->email }}" {{ empty($user->email) ? null : 'readonly' }}>
+                                            <input type="email" class="form-control mb-3" name="email" placeholder="Email" style="color: black" value="{{ $user->email }}" {{ empty($user->email) ? null : 'readonly' }}>
                                             <span>*Email ini untuk pemberitahuan notifikasi</span>
                                         </div>
                                     </div>
