@@ -5,7 +5,7 @@
     }
 </style>
 <title>
-    Surat Tulis {{ $ijin_absen->nik.' '.$ijin_absen->nama }}
+    Surat Tulis {{ $ijin_absen->no.' - '.$ijin_absen->nik.' '.$ijin_absen->nama }}
 </title>
 <p>Malang, {{ $ijin_absen->created_at->isoFormat('DD MMMM YYYY') }}</p>
 <p>
