@@ -72,6 +72,8 @@
                                     <th>NIK</th>
                                     <th>Name</th>
                                     <th>Departemen</th>
+                                    <th>Email</th>
+                                    <th>No Telp</th>
                                     <th>Roles</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -83,6 +85,8 @@
                                         <td>{{ $user->nik }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->departemen }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>{{ $user->no_telp }}</td>
                                         <td>
                                             @if (!empty($user->getRoleNames()))
                                                 @foreach ($user->getRoleNames() as $key => $roles_name)

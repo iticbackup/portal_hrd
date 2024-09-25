@@ -22,8 +22,9 @@
                         </div>
                         <div class="text-center user-info">
                             <p class="">{{ $user->name }}</p>
-                            <div>NIK : {{ $user->nik }}</div>
-                            <div>No.Telp : {{ $user->no_telp }}</div>
+                            <div class="mb-1">NIK : {{ $user->nik }}</div>
+                            <div class="mb-1">No.Telp : {{ $user->no_telp }}</div>
+                            <div class="mb-1">Email : {{ $user->email }}</div>
                         </div>
                         {{-- <div class="user-info-list">
                             <div class="">
