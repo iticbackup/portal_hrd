@@ -85,8 +85,8 @@
                                         <td>{{ $user->nik }}</td>
                                         <td>{{ $user->name }}</td>
                                         <td>{{ $user->departemen }}</td>
-                                        <td>{!! empty($user->email) ? '<span class="text-danger">Email Belum Diisi</span>' : $user->email !!}</td>
-                                        <td>{!! empty($user->no_telp) ? '<span class="text-danger">No.Telp Belum Diisi</span>' : $user->no_telp !!}</td>
+                                        <td>{!! !$user->email ? '<span class="text-danger">Email Belum Diisi</span>' : $user->email !!}</td>
+                                        <td>{!! !$user->no_telp ? '<span class="text-danger">No.Telp Belum Diisi</span>' : $user->no_telp !!}</td>
                                         <td>
                                             @if (!empty($user->getRoleNames()))
                                                 @foreach ($user->getRoleNames() as $key => $roles_name)
