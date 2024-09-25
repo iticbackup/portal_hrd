@@ -44,7 +44,7 @@
     <table style="margin-top: 3%">
         <tr>
             <td colspan="2" style="text-align: center">UMUM</td>
-            <td colspan="4" rowspan="3" style="text-align: center">CAR TRAVEL ORDER</td>
+            <td colspan="4" rowspan="3" style="text-align: center; font-weight: bolder; font-size: 21pt">CAR TRAVEL ORDER</td>
             <td colspan="2" style="text-align: center">PEMAKAI</td>
             {{-- <td>4</td>
             <td>5</td>

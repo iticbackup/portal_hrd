@@ -305,7 +305,10 @@ class CTOController extends Controller
         if (empty($data['cto'])) {
             return redirect()->back()->with('error','Data Tidak Ditemukan');
         }
-
+        $data['km_cars'] = $this->car_travel_order->where('no_polisi',$data['cto']['no_polisi'])
+                                                ->whereNotNull('security_km_masuk')
+                                                ->orderBy('created_at','desc')->limit(5)->get();
+        // dd($data);
         return view('backend.cto.validasi',$data);
     }
 

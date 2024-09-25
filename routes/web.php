@@ -25,87 +25,88 @@ Auth::routes([
 // Route::get('formulir_antrian', function () {
 //     return view('frontend.formulir_antrian');
 // });
-Route::get('/', [App\Http\Controllers\AntrianController::class, 'index'])->name('frontend');
-
-Route::get('coba', function(){
-    $fruits = ["apple", "banana", "cherry"];
-    // for ($i=0; $i < $fruits; $i++) { 
-    //     echo $i;
-    // }
-});
-
-Route::prefix('formulir_antrian')->group(function () {
-    Route::get('/', [App\Http\Controllers\AntrianController::class, 'formulir_antrian'])->name('antrian');
-    Route::get('search_nik/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik'])->name('antrian.search_nik');
-    Route::post('simpan', [App\Http\Controllers\AntrianController::class, 'simpan'])->name('antrian.simpan');
-});
-
-Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
-    Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_index'])->name('f.form_ijin_keluar_masuk');
-    Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
-});
-
-Route::prefix('formulir_ijin_absen')->group(function () {
-    Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'f_index'])->name('f.form_ijin_absen');
-    Route::post('simpan', [App\Http\Controllers\IjinAbsenController::class, 'f_simpan'])->name('f.form_ijin_absen.simpan');
-    Route::get('search_nik/saksi/{nik}', [App\Http\Controllers\IjinAbsenController::class, 'search_nik_saksi1']);
-});
-
-Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');
-Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
-Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
-Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::class, 'testing_mail_markdown']);
-
-Route::get('testing_wa', function(){
-    // $curl = curl_init();
-    // curl_setopt_array($curl, [
-    //     CURLOPT_FRESH_CONNECT  => true,
-    //     CURLOPT_URL            => env('WA_URL').'/send-message',
-    //     CURLOPT_RETURNTRANSFER => true,
-    //     CURLOPT_HEADER         => false,
-    //     // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-    //     CURLOPT_FAILONERROR    => false,
-    //     CURLOPT_POST           => true,
-    //     CURLOPT_POSTFIELDS     => http_build_query([
-    //         'api_key' => env('WA_API_KEY'),
-    //         'sender' => env('WA_SENDER'),
-    //         'number' => '6282233684670',
-    //         // 'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
-    //         //             'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih. Hormat Kami Team HRD'
-    //         'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
-    //                     'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
-    //                     'No ID : 001-20240801'."\n".
-    //                     'NIK : 2103484'."\n".
-    //                     'Nama : Rio Anugrah Adam Saputra'."\n".
-    //                     'Jabatan : Staff Junior'."\n".
-    //                     'Unit Kerja : IT'."\n".
-    //                     'Jenis Keperluan : Pribadi'."\n".
-    //                     'Keperluan : Tambal Ban'."\n".
-    //                     'Kendaraan : Pribadi'."\n".
-    //                     'Jenis Izin : Terlambat'."\n".
-    //                     'Jam Kerja : 08:00'."\n".
-    //                     'Jam Datang : 09:00'."\n".
-    //                     'Status : *Approved*'."\n\n".
-    //                     'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
-    //                     'Hormat Kami,'."\n".
-    //                     'Team HRD PT Indonesian Tobacco Tbk.'
-    //     ]),
-    //     CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
-    // ]);
-
-    // $response = curl_exec($curl);
-    // $error = curl_error($curl);
-
-    // curl_close($curl);
-
-    // return $response;
-
-    // return sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
-    // return explode('-',auth()->user()->no_telp)[0].explode('-',auth()->user()->no_telp)[1].explode('-',auth()->user()->no_telp)[2].explode('-',auth()->user()->no_telp)[3];
-
-});
 
 Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
+    Route::get('/', [App\Http\Controllers\AntrianController::class, 'index'])->name('frontend');
+
+    Route::get('coba', function(){
+        $fruits = ["apple", "banana", "cherry"];
+        // for ($i=0; $i < $fruits; $i++) { 
+        //     echo $i;
+        // }
+    });
+
+    Route::prefix('formulir_antrian')->group(function () {
+        Route::get('/', [App\Http\Controllers\AntrianController::class, 'formulir_antrian'])->name('antrian');
+        Route::get('search_nik/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik'])->name('antrian.search_nik');
+        Route::post('simpan', [App\Http\Controllers\AntrianController::class, 'simpan'])->name('antrian.simpan');
+    });
+
+    Route::prefix('formulir_ijin_keluar_masuk')->group(function () {
+        Route::get('/', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_index'])->name('f.form_ijin_keluar_masuk');
+        Route::post('simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'f_simpan'])->name('f.form_ijin_keluar_masuk.simpan');
+    });
+
+    Route::prefix('formulir_ijin_absen')->group(function () {
+        Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'f_index'])->name('f.form_ijin_absen');
+        Route::post('simpan', [App\Http\Controllers\IjinAbsenController::class, 'f_simpan'])->name('f.form_ijin_absen.simpan');
+        Route::get('search_nik/saksi/{nik}', [App\Http\Controllers\IjinAbsenController::class, 'search_nik_saksi1']);
+    });
+
+    Route::get('testing', [App\Http\Controllers\TestingController::class, 'testing'])->name('testing');
+    Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
+    Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
+    Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::class, 'testing_mail_markdown']);
+
+    Route::get('testing_wa', function(){
+        // $curl = curl_init();
+        // curl_setopt_array($curl, [
+        //     CURLOPT_FRESH_CONNECT  => true,
+        //     CURLOPT_URL            => env('WA_URL').'/send-message',
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_HEADER         => false,
+        //     // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+        //     CURLOPT_FAILONERROR    => false,
+        //     CURLOPT_POST           => true,
+        //     CURLOPT_POSTFIELDS     => http_build_query([
+        //         'api_key' => env('WA_API_KEY'),
+        //         'sender' => env('WA_SENDER'),
+        //         'number' => '6282233684670',
+        //         // 'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
+        //         //             'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih. Hormat Kami Team HRD'
+        //         'message' => 'Kepada Yth. *Rio Anugrah Adam Saputra*,'."\n".
+        //                     'Terimakasih telah melakukan pengisian Ijin Absen di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+        //                     'No ID : 001-20240801'."\n".
+        //                     'NIK : 2103484'."\n".
+        //                     'Nama : Rio Anugrah Adam Saputra'."\n".
+        //                     'Jabatan : Staff Junior'."\n".
+        //                     'Unit Kerja : IT'."\n".
+        //                     'Jenis Keperluan : Pribadi'."\n".
+        //                     'Keperluan : Tambal Ban'."\n".
+        //                     'Kendaraan : Pribadi'."\n".
+        //                     'Jenis Izin : Terlambat'."\n".
+        //                     'Jam Kerja : 08:00'."\n".
+        //                     'Jam Datang : 09:00'."\n".
+        //                     'Status : *Approved*'."\n\n".
+        //                     'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+        //                     'Hormat Kami,'."\n".
+        //                     'Team HRD PT Indonesian Tobacco Tbk.'
+        //     ]),
+        //     CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+        // ]);
+
+        // $response = curl_exec($curl);
+        // $error = curl_error($curl);
+
+        // curl_close($curl);
+
+        // return $response;
+
+        // return sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
+        // return explode('-',auth()->user()->no_telp)[0].explode('-',auth()->user()->no_telp)[1].explode('-',auth()->user()->no_telp)[2].explode('-',auth()->user()->no_telp)[3];
+
+    });
+
     Route::group(['middleware' => 'auth'], function () {
         Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
         Route::patch('fcm-token', [App\Http\Controllers\HomeController::class, 'updateToken'])->name('register-token');
@@ -189,5 +190,24 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
         });
         // Route::prefix('periode')->group(function () {
         // });
+
+        Route::prefix('it')->group(function(){
+            Route::prefix('maintenance_web')->group(function(){
+                Route::get('/', [App\Http\Controllers\MaintenanceWebController::class, 'index'])->name('b.it.maintenance');
+                Route::post('simpan', [App\Http\Controllers\MaintenanceWebController::class, 'simpan'])->name('b.it.maintenance.simpan');
+                Route::post('update', [App\Http\Controllers\MaintenanceWebController::class, 'update'])->name('b.it.maintenance.update');
+                Route::get('{id}', [App\Http\Controllers\MaintenanceWebController::class, 'detail'])->name('b.it.maintenance.detail');
+                Route::get('{id}/execute', [App\Http\Controllers\MaintenanceWebController::class, 'eksekusi'])->name('b.it.maintenance.eksekusi');
+            });
+        });
     });
 });
+
+// Route::domain('it.'.parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
+//     // Route::get('/', function(){
+//     //     return 'Testing';
+//     // });
+//     Route::group(['middleware' => 'auth'], function () {
+        
+//     });
+// });
