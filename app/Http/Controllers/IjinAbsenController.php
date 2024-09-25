@@ -1008,7 +1008,7 @@ class IjinAbsenController extends Controller
             return redirect()->back()->with('error','Ijin Absen Tidak Ditemukan');
         }
         $pdf = PDF::loadView('backend.ijin_absen.download_surat_tulis',$data);
-        return $pdf->stream('Surat Tulis '.$data['ijin_absen']['no'].'-('.$data['ijin_absen']['nik'].')-'.$data['ijin_absen']['nama'].',pdf');
+        return $pdf->stream('Surat Tulis '.$data['ijin_absen']['no'].'-('.$data['ijin_absen']['nik'].')-'.$data['ijin_absen']['nama'].'.pdf');
     }
 
     public function b_download_rekap(Request $request)
