@@ -36,6 +36,12 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
         // }
     });
 
+    Route::prefix('update_data_karyawan')->group(function () {
+        Route::get('/', [App\Http\Controllers\DatabaseKaryawanController::class, 'create'])->name('frontend.database_karyawan.create');
+        Route::post('update', [App\Http\Controllers\DatabaseKaryawanController::class, 'update'])->name('frontend.database_karyawan.update');
+        Route::get('search_nik/{nik}', [App\Http\Controllers\DatabaseKaryawanController::class, 'search_nik'])->name('frontend.database_karyawan.search_nik');
+    });
+
     Route::prefix('formulir_antrian')->group(function () {
         Route::get('/', [App\Http\Controllers\AntrianController::class, 'formulir_antrian'])->name('antrian');
         Route::get('search_nik/{nik}', [App\Http\Controllers\AntrianController::class, 'search_nik'])->name('antrian.search_nik');

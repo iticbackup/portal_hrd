@@ -67,6 +67,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 layout-spacing">
                     <div class="widget widget-t-sales-widget widget-m-orders">
                         <div class="media">
@@ -113,6 +114,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
                     <div class="widget widget-chart-three">
                         <div class="widget-heading">
