@@ -235,7 +235,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Jam Datang</div>
-                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_datang }}</div>
+                                        <div style="color: #000">{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -249,13 +249,13 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Jam Rencana Keluar</div>
-                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</div>
+                                        <div style="color: #000">{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Jam Datang</div>
-                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_datang }}</div>
+                                        <div style="color: #000">{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -269,7 +269,7 @@
                                 <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Jam Rencana Keluar</div>
-                                        <div style="color: #000">{{ $ijin_keluar_masuk->jam_rencana_keluar }}</div>
+                                        <div style="color: #000">{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -307,7 +307,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Pemohon</div>
                                         @php
@@ -321,7 +321,7 @@
                                         {!! DNS2D::getBarcodeHTML($detail['identifier'], 'QRCODE', 2, 2) !!}
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Mengetahui PIC/Manager Bagian</div>
                                         @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager))
@@ -348,7 +348,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="mb-3">
                                         <div style="color: #000">Mengetahui Personalia</div>
                                         @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia))
@@ -368,6 +368,33 @@
                                             @if ($explode_validasi_personalia[2] == 'Approved')
                                             {!! DNS2D::getBarcodeHTML($detail_personalia['identifier'], 'QRCODE', 2, 2) !!}
                                             @elseif ($explode_validasi_personalia[2] == 'Rejected')
+                                            <div class="badge bg-danger">REJECTED</div>
+                                            @else
+                                            <div>-</div>
+                                            @endif
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        <div style="color: #000">Mengetahui Satpam</div>
+                                        @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
+                                        <div>-</div>
+                                        @else
+                                            @php
+                                                $explode_validasi_kend_satpam = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam);
+                                                $detail_kend_satpam = [
+                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                    'Signature: ' . $explode_validasi_kend_satpam[0].' ('.$explode_validasi_kend_satpam[1].') '. "\n" . 
+                                                                    'Status Signature: ' . $explode_validasi_kend_satpam[2] . "\n" . 
+                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
+                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            @if ($explode_validasi_kend_satpam[2] == 'Approved')
+                                            {!! DNS2D::getBarcodeHTML($detail_kend_satpam['identifier'], 'QRCODE', 2, 2) !!}
+                                            @elseif ($explode_validasi_kend_satpam[2] == 'Rejected')
                                             <div class="badge bg-danger">REJECTED</div>
                                             @else
                                             <div>-</div>

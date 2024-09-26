@@ -366,9 +366,9 @@ class IjinKeluarMasukController extends Controller
                                     ->addColumn('no', function($row){
                                         return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
                                     })
-                                    ->addColumn('jabatan', function($row){
-                                        return explode(' ',$row->biodata_karyawan->posisi->nama_posisi)[0];
-                                    })
+                                    // ->addColumn('jabatan', function($row){
+                                    //     return explode(' ',$row->biodata_karyawan->posisi->nama_posisi)[0];
+                                    // })
                                     ->addColumn('created_at', function($row){
                                         return $row->created_at->format('Y-m-d H:i:s');
                                     })
