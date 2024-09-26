@@ -366,6 +366,9 @@ class IjinKeluarMasukController extends Controller
                                     ->addColumn('no', function($row){
                                         return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
                                     })
+                                    ->addColumn('jabatan', function($row){
+                                        return explode(' ',$row->biodata_karyawan->posisi->nama_posisi)[0];
+                                    })
                                     ->addColumn('created_at', function($row){
                                         return $row->created_at->format('Y-m-d H:i:s');
                                     })
@@ -392,76 +395,6 @@ class IjinKeluarMasukController extends Controller
                                         // return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at->isoFormat('LLL').'</span>';
                                     })
                                     ->addColumn('status', function($row){
-                                        // switch ($row->status) {
-                                        //     case 'Waiting':
-                                        //         return '<span class="badge badge-warning mb-2 me-4">Menunggu Verifikasi</span>';
-                                        //         break;
-                                        //     case 'Approved':
-                                        //         if ($row->jam_datang) {
-                                        //             return '<span class="badge badge-success mb-2 me-4">Approved</span>';
-                                        //         }else{
-                                        //             switch ($row->kategori_izin) {
-                                        //                 case 'TL':
-                                        //                     return '<span class="badge badge-success mb-2 me-2">
-                                        //                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                                     <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
-                                        //                                 </svg>
-                                        //                                 Approved
-                                        //                             </span>'.
-                                        //                             '<span class="badge badge-danger mb-2 me-2">
-                                        //                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                                     <path fill="currentColor" d="M12 16.5q.262 0 .439-.177q.176-.177.176-.438q0-.262-.177-.439T12 15.27t-.438.177t-.177.439t.177.438t.438.177m-.5-2.961h1V7.461h-1zM5.616 20q-.667 0-1.141-.475T4 18.386V5.615q0-.666.475-1.14T5.615 4h4.7q-.136-.766.367-1.383Q11.184 2 12.01 2t1.328.617T13.685 4h4.7q.666 0 1.14.475T20 5.615v12.77q0 .666-.475 1.14t-1.14.475zm0-1h12.769q.23 0 .423-.192t.192-.424V5.616q0-.231-.192-.424T18.384 5H5.616q-.231 0-.424.192T5 5.616v12.769q0 .23.192.423t.423.192M12 4.442q.325 0 .538-.212t.212-.538t-.213-.537T12 2.942t-.537.213t-.213.537t.213.538t.537.212M5 19V5z" />
-                                        //                                 </svg> Terlambat'. Carbon::create($row->jam_datang)->diffInDays($row->jam_kerja).'
-                                        //                             </span>';
-                                        //                     break;
-                                        //                 case 'KL':
-                                        //                     return '<span class="badge badge-success mb-2 me-2">
-                                        //                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                                     <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
-                                        //                                 </svg>
-                                        //                                 Approved
-                                        //                             </span>'.
-                                        //                             '<span class="badge badge-success mb-2 me-2">
-                                        //                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                                     <path fill="currentColor" d="M12 16.5q.262 0 .439-.177q.176-.177.176-.438q0-.262-.177-.439T12 15.27t-.438.177t-.177.439t.177.438t.438.177m-.5-2.961h1V7.461h-1zM5.616 20q-.667 0-1.141-.475T4 18.386V5.615q0-.666.475-1.14T5.615 4h4.7q-.136-.766.367-1.383Q11.184 2 12.01 2t1.328.617T13.685 4h4.7q.666 0 1.14.475T20 5.615v12.77q0 .666-.475 1.14t-1.14.475zm0-1h12.769q.23 0 .423-.192t.192-.424V5.616q0-.231-.192-.424T18.384 5H5.616q-.231 0-.424.192T5 5.616v12.769q0 .23.192.423t.423.192M12 4.442q.325 0 .538-.212t.212-.538t-.213-.537T12 2.942t-.537.213t-.213.537t.213.538t.537.212M5 19V5z" />
-                                        //                                 </svg>'. Carbon::create($row->jam_datang)->diffInDays($row->jam_kerja).'
-                                        //                             </span>';
-                                        //                     break;
-                                        //                 case 'PA':
-
-                                        //                     break;
-                                        //                 default:
-
-                                        //                     break;
-                                        //             }
-                                        //             return '<span class="badge badge-success mb-2 me-2">
-                                        //                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                         <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
-                                        //                     </svg>
-                                        //                     Approved
-                                        //                     </span>'.
-                                        //                     '<span class="badge badge-warning mb-2 me-2">
-                                        //                     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                        //                         <path fill="currentColor" d="m13.761 12.01l-10.76-1.084L3 4.074a1.074 1.074 0 0 1 1.554-.96l15.852 7.926a1.074 1.074 0 0 1 0 1.92l-15.85 7.926a1.074 1.074 0 0 1-1.554-.96v-6.852z" />
-                                        //                     </svg>
-                                        //                     On Going
-                                        //                     </span>';
-                                        //         }
-                                        //         break;
-                                        //     case 'Rejected':
-                                        //         return '<span class="badge badge-danger mb-2 me-4">'.'<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                        //                     <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-                                        //                         <circle cx="12" cy="12" r="10" />
-                                        //                         <path d="m15 9l-6 6m0-6l6 6" />
-                                        //                     </g>
-                                        //                 </svg>'.
-                                        //                 'Rejected</span>';
-                                        //         break;
-                                        //     default:
-
-                                        //         break;
-                                        // }
-
                                         switch ($row->status) {
                                             case 'Waiting':
                                                 return '<span class="badge badge-warning mb-2 me-4">Menunggu Verifikasi</span>';

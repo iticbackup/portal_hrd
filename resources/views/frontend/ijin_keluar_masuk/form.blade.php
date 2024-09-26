@@ -47,7 +47,7 @@
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}"
+                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : explode(' ',auth()->user()->biodata_karyawan->posisi->nama_posisi)[0] }}"
                                             readonly id="jabatan" style="color: #000">
                                     </div>
                                 </div>
