@@ -516,6 +516,18 @@ class IjinKeluarMasukController extends Controller
                                                                         $color_notif='success';
                                                                         $notif_message='Durasi';
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> '.$notif_message.' '.$lama.'
+                                                                                </span>';
                                                                     }
                                                                     if(($data_hasil>60) and ($data_hasil<3600)){
                                                                         $detik=fmod($data_hasil,60);
@@ -526,6 +538,18 @@ class IjinKeluarMasukController extends Controller
                                                                         $color_notif='danger';
                                                                         $notif_message='Over Durasi';
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-danger mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> '.$notif_message.' '.$lama.'
+                                                                                </span>';
                                                                     }
                                                                     elseif($data_hasil >3600){
                                                                         $detik=fmod($data_hasil,60);
@@ -533,24 +557,23 @@ class IjinKeluarMasukController extends Controller
                                                                         $menit=fmod($tempmenit,60);
                                                                         $jam=($tempmenit-$menit)/60;    
                                                                         $lama=$jam." jam ".$menit." menit ";
-                                                                        $color_notif='danger';
                                                                         $notif_message='Over Durasi';
                                                                         // $lama=$jam." Jam ".$menit." Menit ".number_format($detik,0)." detik";
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-danger mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> '.$notif_message.' '.$lama.'
+                                                                                </span>';   
                                                                     }
     
-                                                                    return '<span class="badge badge-success mb-2 me-2">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                                                                    <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
-                                                                                </svg>
-                                                                                Approved
-                                                                            </span>'.
-                                                                            '<span class="badge badge-'.$color_notif.' mb-2 me-2">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
-                                                                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
-                                                                                    <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
-                                                                                </svg> '.$notif_message.' '.$lama.'
-                                                                            </span>';   
                                                                 }else{
 
                                                                     $hasil_perhitungan = strtotime($jd)-strtotime($jrk);
@@ -559,6 +582,18 @@ class IjinKeluarMasukController extends Controller
                                                                     if(($data_hasil>0) and ($data_hasil<60)){
                                                                         $lama=number_format($data_hasil,2)." detik";
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-danger mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> Durasi '.$lama.'
+                                                                                </span>'; 
                                                                     }
                                                                     if(($data_hasil>60) and ($data_hasil<3600)){
                                                                         $detik=fmod($data_hasil,60);
@@ -567,6 +602,18 @@ class IjinKeluarMasukController extends Controller
                                                                         // $lama=$menit." menit ".number_format($detik,0)." detik";
                                                                         $lama=$menit." menit ";
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-danger mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> Durasi '.$lama.'
+                                                                                </span>'; 
                                                                     }
                                                                     elseif($data_hasil >3600){
                                                                         $detik=fmod($data_hasil,60);
@@ -576,20 +623,20 @@ class IjinKeluarMasukController extends Controller
                                                                         $lama=$jam." jam ".$menit." menit ";
                                                                         // $lama=$jam." Jam ".$menit." Menit ".number_format($detik,0)." detik";
                                                                         // return $lama;
+                                                                        return '<span class="badge badge-success mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                                                    </svg>
+                                                                                    Approved
+                                                                                </span>'.
+                                                                                '<span class="badge badge-danger mb-2 me-2">
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
+                                                                                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
+                                                                                        <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
+                                                                                    </svg> Durasi '.$lama.'
+                                                                                </span>'; 
                                                                     }
 
-                                                                    return '<span class="badge badge-success mb-2 me-2">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
-                                                                                    <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
-                                                                                </svg>
-                                                                                Approved
-                                                                            </span>'.
-                                                                            '<span class="badge badge-danger mb-2 me-2">
-                                                                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
-                                                                                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M112.91 128A191.85 191.85 0 0 0 64 254c-1.18 106.35 85.65 193.8 192 194c106.2.2 192-85.83 192-192c0-104.54-83.55-189.61-187.5-192a4.36 4.36 0 0 0-4.5 4.37V152" />
-                                                                                    <path fill="currentColor" d="m233.38 278.63l-79-113a8.13 8.13 0 0 1 11.32-11.32l113 79a32.5 32.5 0 0 1-37.25 53.26a33.2 33.2 0 0 1-8.07-7.94" />
-                                                                                </svg> Durasi '.$lama.'
-                                                                            </span>'; 
                                                                 }
 
                                                             }
