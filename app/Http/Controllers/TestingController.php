@@ -41,24 +41,47 @@ class TestingController extends Controller
 
     public function testing_mail_ijin_keluar_masuk()
     {
-        Mail::to('rioanugrah999@gmail.com')
-            ->send(new IjinKeluarMasukNotif(
-                'Konfirmasi Ijin Keluar Masuk',
-                'Rio',
-                '001-32421',
-                'Rio Anugrah A.S (2103484)',
-                'Staff',
-                'IT',
-                'Pribadi',
-                'Ijin Ke Bank',
-                'Pribadi',
-                'KL',
-                '08:00:00',
-                '11:50:00',
-                null,
-                'Approved',
-                'HRD'
-        ));
+        // Mail::to('rioanugrah999@gmail.com')
+        //     ->send(new IjinKeluarMasukNotif(
+        //         'Konfirmasi Ijin Keluar Masuk',
+        //         'Rio',
+        //         '001-32421',
+        //         'Rio Anugrah A.S (2103484)',
+        //         'Staff',
+        //         'IT',
+        //         'Pribadi',
+        //         'Ijin Ke Bank',
+        //         'Pribadi',
+        //         'KL',
+        //         '08:00:00',
+        //         '11:50:00',
+        //         null,
+        //         'Approved',
+        //         'HRD'
+        // ));
+
+        $jrk = '2024-09-27 11:00:00';
+        $jia = '2024-09-27 12:00:00';
+        $jim = '2024-09-27 13:00:00';
+        $jd = '2024-09-27 12:30:00';
+
+        $hasil = ((strtotime($jia)-strtotime($jrk)) + (strtotime($jd)-strtotime($jim)))/60;
+        if ($hasil < 60) {
+            $data_hasil = 0;
+        }else{
+            $data_hasil = $hasil;
+        }
+
+        return $data_hasil;
+
+        // $hasil = ((strtotime('2024-09-27 12:00:00')-strtotime('2024-09-27 11:00:00')) + (strtotime('2024-09-27 13:30:00')-strtotime('2024-09-27 13:00:00')))/60;
+        // if ($hasil < 60) {
+        //     $data_hasil = 0;
+        // }else{
+        //     $data_hasil = $hasil;
+        // }
+
+        // return $data_hasil;
     }
 
     public function testing_mail_markdown()

@@ -29,6 +29,9 @@ class IjinKeluarMasuk extends Model
         'jam_kerja',
         'jam_rencana_keluar',
         'jam_datang',
+        'status_jam_istirahat',
+        'jam_istirahat_awal',
+        'jam_istirahat_selesai',
         'kategori_keperluan',
         'status',
     ];

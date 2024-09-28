@@ -211,36 +211,154 @@
                             </tr>
                         </table>
                     </div> --}}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tr>
+                                <td>Nama</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' }}</td>
+                            </tr>
+                            <tr>
+                                <td>Jabatan</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->jabatan }}</td>
+                            </tr>
+                            <tr>
+                                <td>Unit Kerja</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->unit_kerja }}</td>
+                            </tr>
+                            <tr>
+                                <td>Keperluan</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->keperluan }}</td>
+                            </tr>
+                            <tr>
+                                <td>Kendaraan</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->kendaraan }}</td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Keperluan</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->kategori_keperluan }}</td>
+                            </tr>
+                            @switch($ijin_keluar_masuk->kategori_izin)
+                                @case('TL')
+                                    <tr>
+                                        <td>Jam Datang</td>
+                                        <td>:</td>
+                                        <td>{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jenis Izin</td>
+                                        <td>:</td>
+                                        <td>Terlambat</td>
+                                    </tr>
+                                    @break
+                                @case('KL')
+                                    <tr>
+                                        <td>Jam Rencana Keluar</td>
+                                        <td>:</td>
+                                        <td>{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jam Datang</td>
+                                        <td>:</td>
+                                        <td>{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jenis Izin</td>
+                                        <td>:</td>
+                                        <td>Keluar Masuk</td>
+                                    </tr>
+                                    @break
+                                @case('PA')
+                                    <tr>
+                                        <td>Jam Rencana Keluar</td>
+                                        <td>:</td>
+                                        <td>{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jenis Izin</td>
+                                        <td>:</td>
+                                        <td>Pulang Awal</td>
+                                    </tr>
+                                    @break
+                                @default
+                            @endswitch
+                            <tr>
+                                <td>Jam Masuk Kerja</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->jam_kerja }}</td>
+                            </tr>
+                            <tr>
+                                <td>Apakah Ijin Keluar Masuk <br> Sudah Termasuk Jam Istirahat ?</td>
+                                <td>:</td>
+                                <td>{{ $ijin_keluar_masuk->status_jam_istirahat }}</td>
+                            </tr>
+                            @if ($ijin_keluar_masuk->status_jam_istirahat == 'Ya')
+                                <tr>
+                                    <td>Jam Istirahat Mulai</td>
+                                    <td>:</td>
+                                    <td>{{ $ijin_keluar_masuk->jam_istirahat_awal }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Jam Istirahat Selesai</td>
+                                    <td>:</td>
+                                    <td>{{ $ijin_keluar_masuk->jam_istirahat_selesai }}</td>
+                                </tr>
+                            @endif
+                        </table>
+                    </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-2">
                             <div class="mb-3">
-                                <div style="color: #000">Nama</div>
+                                <div style="color: #000; font-weight: bold">Nama</div>
                                 <div style="color: #000">{{ $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' }}</div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-3">
-                                <div style="color: #000">Jabatan</div>
+                                <div style="color: #000; font-weight: bold">Jabatan</div>
                                 <div style="color: #000">{{ $ijin_keluar_masuk->jabatan }}</div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="mb-3">
-                                <div style="color: #000">Unit Kerja</div>
+                                <div style="color: #000; font-weight: bold">Unit Kerja</div>
                                 <div style="color: #000">{{ $ijin_keluar_masuk->unit_kerja }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <div style="color: #000; font-weight: bold">Keperluan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->keperluan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <div style="color: #000; font-weight: bold">Kendaraan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->kendaraan }}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <div style="color: #000; font-weight: bold">Jenis Keperluan</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->kategori_keperluan }}</div>
                             </div>
                         </div>
                         @switch($ijin_keluar_masuk->kategori_izin)
                             @case('TL')
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jam Datang</div>
+                                        <div style="color: #000; font-weight: bold">Jam Datang</div>
                                         <div style="color: #000">{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000; font-weight: bold">Jenis Izin</div>
                                         <div style="color: #000">Terlambat</div>
                                     </div>
                                 </div>
@@ -248,19 +366,19 @@
                             @case('KL')
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jam Rencana Keluar</div>
+                                        <div style="color: #000; font-weight: bold">Jam Rencana Keluar</div>
                                         <div style="color: #000">{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jam Datang</div>
+                                        <div style="color: #000; font-weight: bold">Jam Datang</div>
                                         <div style="color: #000">{!! !$ijin_keluar_masuk->jam_datang ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_datang !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000; font-weight: bold">Jenis Izin</div>
                                         <div style="color: #000">Keluar Masuk</div>
                                     </div>
                                 </div>
@@ -268,13 +386,13 @@
                             @case('PA')
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jam Rencana Keluar</div>
+                                        <div style="color: #000; font-weight: bold">Jam Rencana Keluar</div>
                                         <div style="color: #000">{!! !$ijin_keluar_masuk->jam_rencana_keluar ? '<span class="text-danger">Belum Diinput</span>' : $ijin_keluar_masuk->jam_rencana_keluar !!}</div>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Jenis Izin</div>
+                                        <div style="color: #000; font-weight: bold">Jenis Izin</div>
                                         <div style="color: #000">Pulang Awal</div>
                                     </div>
                                 </div>
@@ -283,122 +401,119 @@
                         @endswitch
                         <div class="col-md-3">
                             <div class="mb-3">
-                                <div style="color: #000">Jenis Keperluan</div>
-                                <div style="color: #000">{{ $ijin_keluar_masuk->kategori_keperluan }}</div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <div style="color: #000">Keperluan</div>
-                                <div style="color: #000">{{ $ijin_keluar_masuk->keperluan }}</div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <div style="color: #000">Kendaraan</div>
-                                <div style="color: #000">{{ $ijin_keluar_masuk->kendaraan }}</div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="mb-3">
-                                <div style="color: #000">Jam Kerja</div>
+                                <div style="color: #000; font-weight: bold">Jam Masuk Kerja</div>
                                 <div style="color: #000">{{ $ijin_keluar_masuk->jam_kerja }}</div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="mb-3">
+                                <div style="color: #000; font-weight: bold">Apakah Ijin Keluar Masuk Sudah Termasuk Jam Istirahat?</div>
+                                <div style="color: #000">{{ $ijin_keluar_masuk->status_jam_istirahat }}</div>
+                            </div>
+                        </div> --}}
                         <div class="col-md-12">
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-6 col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Pemohon</div>
-                                        @php
-                                            $detail = [
-                                                'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
-                                                                'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
-                                                                'Signature: ' . $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' . "\n" . 
-                                                                'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
-                                            ];
-                                        @endphp
-                                        {!! DNS2D::getBarcodeHTML($detail['identifier'], 'QRCODE', 2, 2) !!}
+                                        <div class="text-center" style="color: #000; font-weight: bold">Pemohon</div>
+                                        <div style="display: flex; justify-content: center">
+                                            @php
+                                                $detail = [
+                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                    'Signature: ' . $ijin_keluar_masuk->nama.' ('.$ijin_keluar_masuk->nik.')' . "\n" . 
+                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                ];
+                                            @endphp
+                                            {!! DNS2D::getBarcodeHTML($detail['identifier'], 'QRCODE', 2.5, 2.5) !!}
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-6 col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Mengetahui PIC/Manager Bagian</div>
+                                        <div class="text-center" style="color: #000; font-weight: bold">Mengetahui PIC/Manager Bagian</div>
                                         @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager))
                                         <div>-</div>
                                         @else
-                                            @php
-                                                $explode_validasi_manager_bagian = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager);
-                                                $detail_manager_bagian = [
-                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
-                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
-                                                                    'Signature: ' . $explode_validasi_manager_bagian[0].' ('.$explode_validasi_manager_bagian[1].') '. "\n" . 
-                                                                    'Status Signature: ' . $explode_validasi_manager_bagian[2] . "\n" . 
-                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_manager . "\n" . 
-                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
-                                                ];
-                                            @endphp
-                                            @if ($explode_validasi_manager_bagian[2] == 'Approved')
-                                            {!! DNS2D::getBarcodeHTML($detail_manager_bagian['identifier'], 'QRCODE', 2, 2) !!}
-                                            @elseif ($explode_validasi_manager_bagian[2] == 'Rejected')
-                                            <div class="badge bg-danger">REJECTED</div>
-                                            @else
-                                            <div>-</div>
-                                            @endif
+                                            <div style="display: flex; justify-content: center">
+                                                @php
+                                                    $explode_validasi_manager_bagian = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_manager);
+                                                    $detail_manager_bagian = [
+                                                        'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                        'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                        'Signature: ' . $explode_validasi_manager_bagian[0].' ('.$explode_validasi_manager_bagian[1].') '. "\n" . 
+                                                                        'Status Signature: ' . $explode_validasi_manager_bagian[2] . "\n" . 
+                                                                        'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_manager . "\n" . 
+                                                                        'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                    ];
+                                                @endphp
+                                                @if ($explode_validasi_manager_bagian[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail_manager_bagian['identifier'], 'QRCODE', 2, 2) !!}
+                                                @elseif ($explode_validasi_manager_bagian[2] == 'Rejected')
+                                                <div class="badge bg-danger">REJECTED</div>
+                                                @else
+                                                <div>-</div>
+                                                @endif
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-6 col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Mengetahui Personalia</div>
+                                        <div class="text-center" style="color: #000; font-weight: bold">Mengetahui Personalia</div>
                                         @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia))
                                         <div>-</div>
                                         @else
-                                            @php
-                                                $explode_validasi_personalia = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia);
-                                                $detail_personalia = [
-                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
-                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
-                                                                    'Signature: ' . $explode_validasi_personalia[0].' ('.$explode_validasi_personalia[1].') '. "\n" . 
-                                                                    'Status Signature: ' . $explode_validasi_personalia[2] . "\n" . 
-                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
-                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
-                                                ];
-                                            @endphp
-                                            @if ($explode_validasi_personalia[2] == 'Approved')
-                                            {!! DNS2D::getBarcodeHTML($detail_personalia['identifier'], 'QRCODE', 2, 2) !!}
-                                            @elseif ($explode_validasi_personalia[2] == 'Rejected')
-                                            <div class="badge bg-danger">REJECTED</div>
-                                            @else
-                                            <div>-</div>
-                                            @endif
+                                            <div style="display: flex; justify-content: center">
+                                                @php
+                                                    $explode_validasi_personalia = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_personalia);
+                                                    $detail_personalia = [
+                                                        'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                        'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                        'Signature: ' . $explode_validasi_personalia[0].' ('.$explode_validasi_personalia[1].') '. "\n" . 
+                                                                        'Status Signature: ' . $explode_validasi_personalia[2] . "\n" . 
+                                                                        'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
+                                                                        'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                    ];
+                                                @endphp
+                                                @if ($explode_validasi_personalia[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail_personalia['identifier'], 'QRCODE', 2, 2) !!}
+                                                @elseif ($explode_validasi_personalia[2] == 'Rejected')
+                                                <div class="badge bg-danger">REJECTED</div>
+                                                @else
+                                                <div>-</div>
+                                                @endif
+                                            </div>
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-6 col-md-3">
                                     <div class="mb-3">
-                                        <div style="color: #000">Mengetahui Satpam</div>
+                                        <div class="text-center" style="color: #000; font-weight: bold">Mengetahui Satpam</div>
                                         @if (empty($ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam))
                                         <div>-</div>
                                         @else
-                                            @php
-                                                $explode_validasi_kend_satpam = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam);
-                                                $detail_kend_satpam = [
-                                                    'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
-                                                                    'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
-                                                                    'Signature: ' . $explode_validasi_kend_satpam[0].' ('.$explode_validasi_kend_satpam[1].') '. "\n" . 
-                                                                    'Status Signature: ' . $explode_validasi_kend_satpam[2] . "\n" . 
-                                                                    'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
-                                                                    'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
-                                                ];
-                                            @endphp
-                                            @if ($explode_validasi_kend_satpam[2] == 'Approved')
-                                            {!! DNS2D::getBarcodeHTML($detail_kend_satpam['identifier'], 'QRCODE', 2, 2) !!}
-                                            @elseif ($explode_validasi_kend_satpam[2] == 'Rejected')
-                                            <div class="badge bg-danger">REJECTED</div>
-                                            @else
-                                            <div>-</div>
-                                            @endif
+                                            <div style="display: flex; justify-content: center">
+                                                @php
+                                                    $explode_validasi_kend_satpam = explode('|',$ijin_keluar_masuk->ijin_keluar_masuk_ttd->signature_kend_satpam);
+                                                    $detail_kend_satpam = [
+                                                        'identifier' => 'ID: ' . $ijin_keluar_masuk->id . "\n" . 
+                                                                        'Kode Formulir: ' . $ijin_keluar_masuk->no.'-'.$ijin_keluar_masuk->created_at->format('Ymd') . "\n" . 
+                                                                        'Signature: ' . $explode_validasi_kend_satpam[0].' ('.$explode_validasi_kend_satpam[1].') '. "\n" . 
+                                                                        'Status Signature: ' . $explode_validasi_kend_satpam[2] . "\n" . 
+                                                                        'Signature Date: ' . $ijin_keluar_masuk->ijin_keluar_masuk_ttd->tgl_signature_personalia . "\n" . 
+                                                                        'Tanggal Formulir: ' . $ijin_keluar_masuk->created_at->isoFormat('LL'),
+                                                    ];
+                                                @endphp
+                                                @if ($explode_validasi_kend_satpam[2] == 'Approved')
+                                                {!! DNS2D::getBarcodeHTML($detail_kend_satpam['identifier'], 'QRCODE', 2, 2) !!}
+                                                {{-- <img src="data:image/png;base64,' . {!! DNS2D::getBarcodePNG('12345678', 'QRCODE', 2, 2) !!} . '"/> --}}
+                                                @elseif ($explode_validasi_kend_satpam[2] == 'Rejected')
+                                                <div class="badge bg-danger">REJECTED</div>
+                                                @else
+                                                <div>-</div>
+                                                @endif
+                                            </div>
                                         @endif
                                     </div>
                                 </div>

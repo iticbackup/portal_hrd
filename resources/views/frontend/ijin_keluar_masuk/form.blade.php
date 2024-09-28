@@ -15,7 +15,7 @@
         <div class="middle-content container-xxl p-0">
             <p><b>Note: </b>Formulir ini digunakan untuk keperluan Ijin Keluar Masuk yang bersangkutan.</p>
             <div class="row layout-top-spacing">
-                <div class="col-xl-8">
+                <div class="col-xl-12">
                     <div class="widget-content widget-content-area">
                         <div style="font-weight: bold; text-transform: uppercase; text-align: center">Formulir Ijin Keluar
                             Masuk</div>
@@ -23,28 +23,28 @@
                         <form method="post" id="form-simpan" enctype="multipart/form-data">
                             @csrf
                             <div class="row">
-                                <div class="col-xl-3">
+                                <div class="col-xl-2">
                                     <div class="mb-3">
                                         <label>NIK</label>
                                         <input type="text" name="nik" value="{{ auth()->user()->nik }}" readonly class="form-control" style="color: #000" placeholder="NIK"
                                             id="nik">
                                     </div>
                                 </div>
-                                <div class="col-xl-4">
+                                <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Nama</label>
                                         <input type="text" name="nama" value="{{ auth()->user()->name }}" class="form-control" placeholder="Nama"
                                             readonly id="name" style="color: #000">
                                     </div>
                                 </div>
-                                <div class="col-xl-3">
+                                <div class="col-xl-2">
                                     <div class="mb-3">
                                         <label>Departemen</label>
                                         <input type="text" name="departemen" class="form-control" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
                                             placeholder="Departemen" readonly id="departemen" style="color: #000">
                                     </div>
                                 </div>
-                                <div class="col-xl-3">
+                                <div class="col-xl-2">
                                     <div class="mb-3">
                                         <label>Jabatan</label>
                                         <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : explode(' ',auth()->user()->biodata_karyawan->posisi->nama_posisi)[0] }}"
@@ -72,7 +72,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-xl-12">
+                                <div class="col-xl-8">
                                     <div class="mb-3">
                                         <label>Keperluan</label>
                                         <textarea name="keperluan" class="form-control" id="" cols="30" rows="5"></textarea>
@@ -98,7 +98,17 @@
                                 </div>
                                 <div class="col-xl-3">
                                     <div class="mb-3">
-                                        <label>Jam Kerja</label>
+                                        <label>Apakah Ijin Keluar Masuk Sudah Termasuk Jam Istirahat ?</label>
+                                        <select name="status_jam_istirahat" class="form-control" id="status_jam_istirahat">
+                                            <option value="">-- Pilih --</option>
+                                            <option value="Ya">Ya</option>
+                                            <option value="Tidak">Tidak</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3">
+                                    <div class="mb-3">
+                                        <label>Jam Masuk Kerja</label>
                                         <input type="time" name="jam_kerja" class="form-control" placeholder="Jam Kerja"
                                             id="jam_kerja">
                                         <div>AM : Pukul 00.00 - 12.00</div>
@@ -106,6 +116,7 @@
                                     </div>
                                 </div>
                                 <div class="col-xl-3" id="kategori_all_date"></div>
+                                <div class="col-xl-9" id="kategori_istirahat"></div>
                                 {{-- <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Jam Kerja</label>
@@ -130,14 +141,14 @@
                         </form>
                     </div>
                 </div>
-                <div class="col-xl-4">
+                {{-- <div class="col-xl-4">
                     <div class="widget-content widget-content-area">
                         <div style="font-weight: bold; text-transform: uppercase; text-align: center">Detail Ijin Keluar
                             Masuk</div>
                         <hr>
                         <div id="detail_ijin_keluar_masuk"></div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -237,6 +248,30 @@
                                                                         "</div>";
             }else{
                 document.getElementById('kategori_all_date').innerHTML = null;
+            }
+        });
+
+        $('#status_jam_istirahat').on('change', function(){
+            if ($('#status_jam_istirahat').val() == 'Ya') {
+                document.getElementById('kategori_istirahat').innerHTML = "<div class='row'>"+
+                                                                                "<div class='col-md-6'>"+
+                                                                                    "<div class='mb-3'>"+
+                                                                                        "<label>Jam Istirahat Mulai</label>"+
+                                                                                        "<input type='time' name='jam_istirahat_awal' class='form-control'>"+
+                                                                                        "<div>AM : Pukul 00.00 - 12.00</div>"+
+                                                                                        "<div>PM : Pukul 12.00 - 23.59</div>"+
+                                                                                    "</div>"+
+                                                                                "</div>"+
+                                                                                "<div class='col-md-6'>"+
+                                                                                    "<div class='mb-3'>"+
+                                                                                        "<label>Jam Istirahat Selesai</label>"+
+                                                                                        "<input type='time' name='jam_istirahat_selesai' class='form-control'>"+
+                                                                                        "<div>AM : Pukul 00.00 - 12.00</div>"+
+                                                                                        "<div>PM : Pukul 12.00 - 23.59</div>"+
+                                                                                    "</div>"+
+                                                                                "</div>"+
+                                                                            "</div>"
+                                                                        ;
             }
         });
 

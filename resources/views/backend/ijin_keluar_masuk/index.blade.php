@@ -72,6 +72,7 @@
                                     <th>Nama</th>
                                     <th>Jabatan</th>
                                     <th>Unit Kerja</th>
+                                    <th>Kategori Izin</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
@@ -125,6 +126,10 @@
                 {
                     data: 'unit_kerja',
                     name: 'unit_kerja'
+                },
+                {
+                    data: 'kategori_izin',
+                    name: 'kategori_izin'
                 },
                 {
                     data: 'status',

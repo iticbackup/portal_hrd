@@ -27,6 +27,9 @@ class CreateIjinKeluarMasukTable extends Migration
             $table->time('jam_kerja');
             $table->time('jam_rencana_keluar')->nullable();
             $table->time('jam_datang')->nullable();
+            $table->string('status_jam_istirahat',50);
+            $table->time('jam_istirahat_awal')->nullable();
+            $table->time('jam_istirahat_selesai')->nullable();
             $table->string('kategori_keperluan');
             $table->string('status');
             $table->timestamps();
