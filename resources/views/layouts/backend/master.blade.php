@@ -21,6 +21,13 @@
     <link rel="stylesheet" type="text/css" href="{{ url('/') }}/assets/css/dark/elements/alert.css">
     <!-- END PAGE LEVEL PLUGINS/CUSTOM STYLES -->
 
+    <link href="{{ url('/') }}/plugins/src/notification/snackbar/snackbar.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('/') }}/plugins/css/light/notification/snackbar/custom-snackbar.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('/') }}/plugins/css/dark/notification/snackbar/custom-snackbar.css" rel="stylesheet" type="text/css" />
+
+    <link href="{{ asset('assets/css/iziToast.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('assets/css/iziToast.min.css') }}" rel="stylesheet" type="text/css">
+
     <style>
         body.dark .layout-px-spacing, .layout-px-spacing {
             min-height: calc(100vh - 155px) !important;
@@ -216,9 +223,10 @@
         <!--  BEGIN SIDEBAR  -->
         @include('layouts.backend.sidebar')
         <!--  END SIDEBAR  -->
-        
+
         <!--  BEGIN CONTENT AREA  -->
         <div id="content" class="main-content">
+            
             @yield('content')
 
             <div class="footer-wrapper">
@@ -242,49 +250,26 @@
     <script src="{{ url('/') }}/plugins/src/mousetrap/mousetrap.min.js"></script>
     <script src="{{ url('/') }}/plugins/src/waves/waves.min.js"></script>
     <script src="{{ url('/') }}/layouts/vertical-light-menu/app.js"></script>
+    <script src="{{ url('/') }}/plugins/src/notification/snackbar/snackbar.min.js"></script>
+    <script src="{{ url('/') }}/assets/js/components/notification/custom-snackbar.js"></script>
+    <script src="{{ url('/') }}/assets/js/iziToast.js"></script>
+    <script src="{{ url('/') }}/assets/js/iziToast.min.js"></script>
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     @yield('script')
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js";
-        const firebaseConfig = {
-            apiKey: "{{ env('FIREBASE_APIKEY') }}",
-            authDomain: "{{ env('FIREBASE_AUTHDOMAIN') }}",
-            projectId: "{{ env('FIREBASE_PROJECTID') }}",
-            storageBucket: "{{ env('FIREBASE_STORAGEBUCKET') }}",
-            messagingSenderId: "{{ env('FIREBASE_MESSAGINGSENDERID') }}",
-            appId: "{{ env('FIREBASE_APPID') }}"
-        };
-      
-        // Initialize Firebase
-        // const app = initializeApp(firebaseConfig);
-        // console.table(app);
+    <script>
+        // Enable pusher logging - don't include this in production
+        Pusher.logToConsole = true;
 
-        firebase.initializeApp(firebaseConfig);
+        var pusher = new Pusher('{{ env("PUSHER_APP_KEY") }}', {
+            cluster: '{{ env("PUSHER_APP_CLUSTER") }}'
+        });
 
-        const messaging = firebase.messaging();
-
-        function initFirebaseMessagingRegistration() {
-            messaging.requestPermission().then(function () {
-                return messaging.getToken()
-            }).then(function(token) {
-                
-                axios.post("{{ route('register-token') }}",{
-                    _method:"PATCH",
-                    token
-                }).then(({data})=>{
-                    console.log(data)
-                }).catch(({response:{data}})=>{
-                    console.error(data)
-                })
-
-            }).catch(function (err) {
-                console.log(`Token Error :: ${err}`);
+        var channel = pusher.subscribe('notification');
+        channel.bind('App\\Events\\BackendNotification', function(data) {
+            iziToast.info({
+                title: data.title,
+                message: data.message,
             });
-        }
-
-        initFirebaseMessagingRegistration();
-    
-        messaging.onMessage(function({data:{body,title}}){
-            new Notification(title, {body});
         });
     </script>
 </body>

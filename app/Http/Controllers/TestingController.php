@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Mail\IjinAbsenNotif;
 use App\Mail\IjinKeluarMasukNotif;
 use App\Mail\TestingMarkdown;
+
+// use App\Events\BackendNotification;
+
 use \Carbon\Carbon;
 use Mail;
 use PDF;
@@ -90,5 +93,20 @@ class TestingController extends Controller
         //     ->send(new TestingMarkdown());
         // Mail::mailer('mailtrap')->to('rioanugrah999@gmail.com')
         //                         ->send(new TestingMarkdown());
+    }
+
+    public function testing_notif()
+    {
+        event(new \App\Events\BackendNotification(
+            'Pesan Baru','Siip'
+        ));
+
+        // event(new \App\Events\FrontendNotification(
+        //     'OK1',
+        //     'OK2',
+        //     'OK3',
+        // ));
+
+        // return event(new \App\Events\BackendNotification('OK','Siip'));
     }
 }

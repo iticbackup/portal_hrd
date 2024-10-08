@@ -63,6 +63,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
     Route::get('testing/ijin_absen', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_absen'])->name('testing_mail_ijin_absen');
     Route::get('testing/ijin_keluar_masuk', [App\Http\Controllers\TestingController::class, 'testing_mail_ijin_keluar_masuk'])->name('testing_mail_ijin_keluar_masuk');
     Route::get('testing/test_markdown', [App\Http\Controllers\TestingController::class, 'testing_mail_markdown']);
+    Route::get('testing/test_notif', [App\Http\Controllers\TestingController::class, 'testing_notif']);
 
     Route::get('testing_wa', function(){
         // $curl = curl_init();

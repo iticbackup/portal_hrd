@@ -93,20 +93,27 @@
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                     <div class="row row-cols-2 layout-top-spacing">
                         <div class="col layout-spacing">
-                            <a class="card bg-secondary" onclick="window.location.href='{{ !\Auth::check() ? route('login') : route('f.form_ijin_keluar_masuk') }}'">
+                            <a class="card bg-secondary"
+                                onclick="window.location.href='{{ !\Auth::check() ? route('login') : route('f.form_ijin_keluar_masuk') }}'">
                                 <div class="card-body text-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M7 2a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h4.174A6.5 6.5 0 0 1 11 17.5H7a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h5.5v3.25c0 .966.784 1.75 1.75 1.75h3.25V11q.776.002 1.5.174V7.768a2 2 0 0 0-.586-1.414l-3.768-3.768A2 2 0 0 0 13.232 2zm7 4.75V4.06L16.94 7h-2.69a.25.25 0 0 1-.25-.25M6.5 20.5h5.232A6.5 6.5 0 0 0 12.81 22H6.5A4.5 4.5 0 0 1 2 17.5v-1.75a.75.75 0 0 1 1.5 0v1.75a3 3 0 0 0 3 3M8 5.75A.75.75 0 0 1 8.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 8 5.75M8.75 8a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zm0 3a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zM23 17.5a5.5 5.5 0 1 0-11 0a5.5 5.5 0 0 0 11 0m-5 .5l.001 2.503a.5.5 0 1 1-1 0V18h-2.505a.5.5 0 0 1 0-1H17v-2.5a.5.5 0 1 1 1 0V17h2.497a.5.5 0 0 1 0 1z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em"
+                                        viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M7 2a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h4.174A6.5 6.5 0 0 1 11 17.5H7a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h5.5v3.25c0 .966.784 1.75 1.75 1.75h3.25V11q.776.002 1.5.174V7.768a2 2 0 0 0-.586-1.414l-3.768-3.768A2 2 0 0 0 13.232 2zm7 4.75V4.06L16.94 7h-2.69a.25.25 0 0 1-.25-.25M6.5 20.5h5.232A6.5 6.5 0 0 0 12.81 22H6.5A4.5 4.5 0 0 1 2 17.5v-1.75a.75.75 0 0 1 1.5 0v1.75a3 3 0 0 0 3 3M8 5.75A.75.75 0 0 1 8.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 8 5.75M8.75 8a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zm0 3a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zM23 17.5a5.5 5.5 0 1 0-11 0a5.5 5.5 0 0 0 11 0m-5 .5l.001 2.503a.5.5 0 1 1-1 0V18h-2.505a.5.5 0 0 1 0-1H17v-2.5a.5.5 0 1 1 1 0V17h2.497a.5.5 0 0 1 0 1z" />
                                     </svg>
-                                    <h5 class="card-title text-center" style="font-weight: bold">SURAT IJIN KELUAR MASUK</h5>
+                                    <h5 class="card-title text-center" style="font-weight: bold">SURAT IJIN KELUAR MASUK
+                                    </h5>
                                 </div>
                             </a>
                         </div>
                         <div class="col layout-spacing">
-                            <a class="card bg-danger" onclick="window.location.href='{{ !\Auth::check() ? route('login') : route('f.form_ijin_absen') }}'">
+                            <a class="card bg-danger"
+                                onclick="window.location.href='{{ !\Auth::check() ? route('login') : route('f.form_ijin_absen') }}'">
                                 <div class="card-body text-center">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M7 2a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h4.174A6.5 6.5 0 0 1 11 17.5H7a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h5.5v3.25c0 .966.784 1.75 1.75 1.75h3.25V11q.776.002 1.5.174V7.768a2 2 0 0 0-.586-1.414l-3.768-3.768A2 2 0 0 0 13.232 2zm7 4.75V4.06L16.94 7h-2.69a.25.25 0 0 1-.25-.25M6.5 20.5h5.232A6.5 6.5 0 0 0 12.81 22H6.5A4.5 4.5 0 0 1 2 17.5v-1.75a.75.75 0 0 1 1.5 0v1.75a3 3 0 0 0 3 3M8 5.75A.75.75 0 0 1 8.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 8 5.75M8.75 8a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zm0 3a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zM23 17.5a5.5 5.5 0 1 0-11 0a5.5 5.5 0 0 0 11 0m-5 .5l.001 2.503a.5.5 0 1 1-1 0V18h-2.505a.5.5 0 0 1 0-1H17v-2.5a.5.5 0 1 1 1 0V17h2.497a.5.5 0 0 1 0 1z" />
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="4em" height="4em"
+                                        viewBox="0 0 24 24">
+                                        <path fill="currentColor"
+                                            d="M7 2a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h4.174A6.5 6.5 0 0 1 11 17.5H7a.5.5 0 0 1-.5-.5V4a.5.5 0 0 1 .5-.5h5.5v3.25c0 .966.784 1.75 1.75 1.75h3.25V11q.776.002 1.5.174V7.768a2 2 0 0 0-.586-1.414l-3.768-3.768A2 2 0 0 0 13.232 2zm7 4.75V4.06L16.94 7h-2.69a.25.25 0 0 1-.25-.25M6.5 20.5h5.232A6.5 6.5 0 0 0 12.81 22H6.5A4.5 4.5 0 0 1 2 17.5v-1.75a.75.75 0 0 1 1.5 0v1.75a3 3 0 0 0 3 3M8 5.75A.75.75 0 0 1 8.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 8 5.75M8.75 8a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zm0 3a.75.75 0 0 0 0 1.5h1.5a.75.75 0 0 0 0-1.5zM23 17.5a5.5 5.5 0 1 0-11 0a5.5 5.5 0 0 0 11 0m-5 .5l.001 2.503a.5.5 0 1 1-1 0V18h-2.505a.5.5 0 0 1 0-1H17v-2.5a.5.5 0 1 1 1 0V17h2.497a.5.5 0 0 1 0 1z" />
                                     </svg>
                                     <h5 class="card-title text-center" style="font-weight: bold">SURAT IJIN ABSEN</h5>
                                 </div>
@@ -114,7 +121,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 layout-spacing">
                     <div class="widget widget-chart-three">
                         <div class="widget-heading">
@@ -264,24 +271,7 @@
 @section('script')
     {{-- <script src="{{ $asset }}/js/dashboard/dash_1.js"></script> --}}
     <script src="{{ asset('plugins/src/apex/apexcharts.min.js') }}"></script>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
     {{-- <script src="{{ $asset }}/js/apps/notes.js"></script> --}}
-    <script>
-        // Enable pusher logging - don't include this in production
-        Pusher.logToConsole = true;
-
-        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
-            cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
-        });
-
-        var channel = pusher.subscribe('notification');
-        channel.bind('App\\Events\\FrontendNotification', function(data) {
-            // alert(JSON.stringify(data));
-            // alert('OK');
-            document.getElementById('no_antrian').innerHTML = data.antrian;
-            document.getElementById('sisa_antrian_hari_ini').innerHTML = data.sisa_antrian_hari_ini;
-        });
-    </script>
     <script>
         window.addEventListener("load", function() {
             try {
@@ -546,21 +536,19 @@
                             width: 2,
                             colors: ['transparent']
                         },
-                        series: [
-                            {
-                                name: 'Ijin Terlambat',
-                                data: @json($total_ijin_terlambat)
-                            }, {
-                                name: 'Ijin Keluar Masuk',
-                                data: @json($total_ijin_keluar_masuk)
-                            }, {
-                                name: 'Ijin Pribadi',
-                                data: @json($total_ijin_pulang_awal)
-                            }, {
-                                name: 'Ijin Absen',
-                                data: @json($total_ijin_absen)
-                            }
-                        ],
+                        series: [{
+                            name: 'Ijin Terlambat',
+                            data: @json($total_ijin_terlambat)
+                        }, {
+                            name: 'Ijin Keluar Masuk',
+                            data: @json($total_ijin_keluar_masuk)
+                        }, {
+                            name: 'Ijin Pribadi',
+                            data: @json($total_ijin_pulang_awal)
+                        }, {
+                            name: 'Ijin Absen',
+                            data: @json($total_ijin_absen)
+                        }],
                         xaxis: {
                             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
                                 'Nov', 'Dec'
@@ -1025,8 +1013,7 @@
                             width: 2,
                             colors: ['transparent']
                         },
-                        series: [
-                        {
+                        series: [{
                             name: 'Ijin Terlambat',
                             data: @json($total_ijin_terlambat)
                         }, {
@@ -1038,8 +1025,7 @@
                         }, {
                             name: 'Ijin Absen',
                             data: @json($total_ijin_absen)
-                        }
-                        ],
+                        }],
                         xaxis: {
                             // categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct',
                             //     'Nov', 'Dec'

@@ -33,7 +33,7 @@ class DatabaseKaryawanController extends Controller
                 'nik' => $data->nik,
                 'name' => $data->name,
                 'email' => $data->email,
-                'departemen' => $data->biodata_karyawan->departemen->nama_departemen,
+                'departemen' => $data->biodata_karyawan->departemen->nama_departemen >= 2 ? $data->biodata_karyawan->departemen->nama_unit : $data->biodata_karyawan->departemen->nama_departemen,
                 'bagian' => explode(' ',$data->biodata_karyawan->posisi->nama_posisi)[0],
             ]
         ]);
