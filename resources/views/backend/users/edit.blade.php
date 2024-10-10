@@ -54,7 +54,7 @@
                     <div class="mb-3">
                         <div class="form-group">
                             <label>No Telp</label>
-                            <input type="text" name="name" class="form-control" placeholder="No Telp" value="{{ $user->no_telp }}" id="edit_no_telp">
+                            <input type="text" name="no_telp" class="form-control" placeholder="No Telp" value="{{ $user->no_telp }}" id="edit_no_telp">
                         </div> 
                     </div>
                     <div class="mb-3">
