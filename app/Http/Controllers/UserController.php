@@ -12,11 +12,14 @@ use Spatie\Permission\Models\Role;
 use \Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
+use App\Mail\ResetPasswordMail;
+
 use DB;
 use Hash;
 use Cache;
 use DataTables;
 use Validator;
+use Mail;
 
 class UserController extends Controller
 {
@@ -113,7 +116,7 @@ class UserController extends Controller
             $input['id_generate'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
             // $input['username'] = $request->username;
-            $input['password'] = Hash::make('default123');
+            $input['password'] = Hash::make($input['nik']);
     
             $user = $this->user->create($input);
             $user->assignRole($request->input('roles'));
@@ -243,5 +246,48 @@ class UserController extends Controller
             //redirect
             return redirect()->route('user')->with(['error' => 'Data Gagal Diimport!']);
         }
+    }
+
+    public function reset_password($generate)
+    {
+        $user = $this->user->where('id_generate',$generate)->first();
+        
+        if (empty($user)) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal!',
+                'error' => 'User Tidak Ditemukan'
+            ]);
+        }
+
+        Mail::to($user->email)
+                ->send(new ResetPasswordMail($user->name,$kode_reset));
+        
+        if (Mail::failures()) {
+            return response()->json([
+                'success' => false,
+                'message_title' => 'Gagal Terkirim',
+                'error' => Mail::failures()
+            ]);
+        }
+
+        $kode_reset = rand(10000000,99999999);
+        $input['password'] = Hash::make($kode_reset);
+        $user->update($input);
+        
+        if ($user) {
+            $message_title="Berhasil !";
+            $message_content="User ".$user->name." Berhasil Direset. Silahkan Cek Notifikasi Melalui Email.";
+            $message_type="success";
+            $message_succes = true;
+        }
+
+        $array_message = array(
+            'success' => $message_succes,
+            'message_title' => $message_title,
+            'message_content' => $message_content,
+            'message_type' => $message_type,
+        );
+        return response()->json($array_message);
     }
 }
