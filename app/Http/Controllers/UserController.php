@@ -260,7 +260,10 @@ class UserController extends Controller
             ]);
         }
 
-        Mail::to($user->email)
+        $kode_reset = rand(10000000,99999999);
+        $input['password'] = Hash::make($kode_reset);
+       
+        Mail::to(strtolower($user->email))
                 ->send(new ResetPasswordMail($user->name,$kode_reset));
         
         if (Mail::failures()) {
@@ -270,9 +273,7 @@ class UserController extends Controller
                 'error' => Mail::failures()
             ]);
         }
-
-        $kode_reset = rand(10000000,99999999);
-        $input['password'] = Hash::make($kode_reset);
+        
         $user->update($input);
         
         if ($user) {

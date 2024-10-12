@@ -35,7 +35,7 @@ class ResetPasswordMail extends Mailable
                     ->subject('Reset Password')
                     ->with(
                         [
-                            'name' => $this->user->name,
+                            'name' => $this->user,
                             'kode_reset' => $this->kode_reset
                         ]
                     );

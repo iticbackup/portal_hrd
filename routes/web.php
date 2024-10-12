@@ -181,6 +181,7 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::get('{generate}/edit', [App\Http\Controllers\UserController::class, 'edit'])->name('user.edit');
             Route::post('{generate}/update', [App\Http\Controllers\UserController::class, 'update'])->name('user.update');
             Route::get('{generate}/delete', [App\Http\Controllers\UserController::class, 'delete'])->name('user.delete');
+            Route::get('{generate}/reset_password', [App\Http\Controllers\UserController::class, 'reset_password'])->name('user.reset_password');
         });
         Route::prefix('roles')->group(function () {
             Route::get('/', [App\Http\Controllers\RoleController::class, 'index'])->name('roles.index');

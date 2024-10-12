@@ -102,7 +102,7 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <button onclick="reset_password({{ $user->id }})" class="btn btn-primary mb-2 me-2">
+                                            <button onclick="reset_password(`{{ $user->id_generate }}`)" class="btn btn-primary mb-2 me-2">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512">
                                                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M320 146s24.36-12-64-12a160 160 0 1 0 160 160" />
                                                     <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="m256 58l80 80l-80 80" />
@@ -282,6 +282,45 @@
                     } else {
 
                     }
+                },
+                error: function(request, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: error
+                    });
+                }
+            });
+        }
+
+        function reset_password(generate) {
+            $.ajax({
+                type: 'GET',
+                url: "{{ url('users/') }}" + '/' + generate + '/reset_password',
+                contentType: "application/json;  charset=utf-8",
+                cache: false,
+                beforeSend: () => {
+                    let timerInterval;
+                    Swal.fire({
+                        title: "Proses",
+                        html: "Password sedang diproses, silahkan ditunggu",
+                        // timer: 2000,
+                        timerProgressBar: true,
+                        didOpen: () => {
+                            Swal.showLoading();
+                            const timer = Swal.getPopup().querySelector("b");
+                            timerInterval = setInterval(() => {
+                            timer.textContent = `${Swal.getTimerLeft()}`;
+                            }, 100);
+                        },
+                    });
+                },
+                success: (result) => {
+                    Swal.fire({
+                        icon: result.message_type,
+                        title: result.message_title,
+                        text: result.message_content
+                    });
                 },
                 error: function(request, status, error) {
                     Swal.fire({
