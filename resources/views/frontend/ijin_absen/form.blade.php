@@ -103,7 +103,8 @@
                                             <label>Departemen</label>
                                             <input type="text" name="departemen" class="form-control"
                                                 placeholder="Departemen"
-                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen <= 11 ? auth()->user()->biodata_karyawan->departemen->nama_unit : '-' }}"
+                                                {{-- value="{{ auth()->user()->biodata_karyawan->departemen }}" --}}
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen >= 2 ? auth()->user()->biodata_karyawan->departemen->nama_unit : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
                                                 readonly id="departemen" style="color: black">
                                         </div>
                                     </div>
