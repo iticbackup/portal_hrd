@@ -354,17 +354,14 @@ class IjinAbsenController extends Controller
         
         if ($request->ajax()) {
             // if (auth()->user()->departemen == 'Administrator' || auth()->user()->departemen == 'HRD') {
-            if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin') {
-                $data = $this->ijin_absen->all();
-            }else{
-                $data = $this->ijin_absen->whereHas('ijin_absen_ttd', function($iat){
-                                            $iat->where('signature_bersangkutan','like','%'.auth()->user()->nik.'%')
-                                                ->orWhere('signature_saksi_1','like','%'.auth()->user()->nik.'%')
-                                                ->orWhere('signature_saksi_2','like','%'.auth()->user()->nik.'%');
-                                        })
-                                        ->orWhere('nik',auth()->user()->nik)
-                                        ->get();
-            }
+            // if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin') {
+            //     $data = $this->ijin_absen->all();
+            // }else{
+            //     $data = $this->ijin_absen->where('nik',auth()->user()->nik)
+            //                             ->get();
+            // }
+            $data = $this->ijin_absen->where('nik',auth()->user()->nik)
+                                    ->get();
             return DataTables::of($data)
                             ->addIndexColumn()
                             ->addColumn('no', function($row){
@@ -453,6 +450,107 @@ class IjinAbsenController extends Controller
                             ->make(true);
         }
         return view('backend.ijin_absen.index');
+    }
+
+    public function b_index_karyawan_lain(Request $request)
+    {
+        if (auth()->user()->getRoleNames()[0] == 'Administrator' || auth()->user()->getRoleNames()[0] == 'HRGA Admin') {
+            $data = $this->ijin_absen->all();
+        }else{
+            $data = $this->ijin_absen->whereHas('ijin_absen_ttd', function($iat){
+                                        $iat->where('signature_bersangkutan','like','%'.auth()->user()->nik.'%')
+                                            ->orWhere('signature_saksi_1','like','%'.auth()->user()->nik.'%')
+                                            ->orWhere('signature_saksi_2','like','%'.auth()->user()->nik.'%');
+                                    })
+                                    ->get();
+        }
+
+        return DataTables::of($data)
+                            ->addIndexColumn()
+                            ->addColumn('no', function($row){
+                                return '<span class="badge badge-primary">'.$row->no.'-'.$row->created_at->format('Ymd').'</span>';
+                            })
+                            ->addColumn('created_at', function($row){
+                                return $row->created_at->format('Y-m-d H:i:s');
+                            })
+                            ->addColumn('nama', function($row){
+                                return $row->nama;
+                                // return '<span style="font-weight: bold">'.$row->nama.'</span></br><span style="font-size: 9pt"> Tgl Dibuat : '.$row->created_at.'</span>';
+                            })
+                            ->addColumn('status', function($row){
+                                switch ($row->status) {
+                                    case 'Waiting':
+                                        return '<span class="badge badge-warning mb-2 me-4">Menunggu Verifikasi</span>';
+                                        break;
+                                    case 'Approved':
+                                        return '<span class="badge badge-success mb-2 me-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 20 20">
+                                                        <path fill="currentColor" fill-rule="evenodd" d="m6 10l-2 2l6 6L20 8l-2-2l-8 8z" />
+                                                    </svg>
+                                                    Approved
+                                                </span>';
+                                        break;
+                                    case 'Rejected':
+                                        return '<span class="badge badge-danger mb-2 me-4">'.'<svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
+                                                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                                        <circle cx="12" cy="12" r="10" />
+                                                        <path d="m15 9l-6 6m0-6l6 6" />
+                                                    </g>
+                                                </svg>'.
+                                                'Rejected</span>';
+                                        break;
+                                    default:
+                                        # code...
+                                        break;
+                                }
+                            })
+                            ->addColumn('action', function($row){
+                                $btn = "<div>";
+                                $btn = $btn."<a class='btn btn-primary mb-2 me-2' href=".route('b_ijin_absen.detail',['id' => $row->id]).">
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                <path fill='currentColor' fill-rule='evenodd' d='M2 12c.945-4.564 5.063-8 10-8s9.055 3.436 10 8c-.945 4.564-5.063 8-10 8s-9.055-3.436-10-8m10 5a5 5 0 1 0 0-10a5 5 0 0 0 0 10m0-2a3 3 0 1 0 0-6a3 3 0 0 0 0 6' />
+                                            </svg> Detail</a>";
+                                if ($row->status == 'Approved') {
+                                    // if ($row->jam_datang == null) {
+                                    //     $btn = $btn."<button class='btn btn-info mb-2 me-2' onclick='input_jam_datang(`".$row->id."`)'>
+                                    //                     <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                    //                         <path fill='currentColor' fill-rule='evenodd' d='M5 20h14a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2m-1-5L14 5l3 3L7 18H4zM15 4l2-2l3 3l-2.001 2.001z' />
+                                    //                     </svg> Input Jam Datang</button>";
+                                    // }
+                                    $btn = $btn."<a class='btn btn-dark mb-2 me-2' href=".route('b_ijin_absen.cetak_surat',['id' => $row->id])." target='_blank'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <g fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2'>
+                                                        <path d='M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2' />
+                                                        <path d='M6 14h12v8H6z' />
+                                                    </g>
+                                                </svg>
+                                            </svg> Cetak Surat</a>";
+                                }
+                                if (env('WA_STATUS') == true) {
+                                    $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                </svg> Kirim Whatsapp</a>";
+                                }else{
+                                    $btn = $btn."<a class='btn btn-success mb-2 me-2' href='javascript:void(0)' onclick='resend_mail(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M13 19c0-.34.04-.67.09-1H4V8l8 5l8-5v5.09c.72.12 1.39.37 2 .72V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h9.09c-.05-.33-.09-.66-.09-1m7-13l-8 5l-8-5zm0 16v-2h-4v-2h4v-2l3 3z' />
+                                                </svg> Kirim Email</a>";
+                                }
+
+                                if (auth()->user()->getRoleNames()[0] == 'Administrator') {
+                                    $btn = $btn."<a class='btn btn-danger mb-2 me-2' href='javascript:void(0)' onclick='hapus(`".$row->id."`)'>
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='1em' height='1em' viewBox='0 0 24 24'>
+                                                    <path fill='currentColor' d='M9 3v1H4v2h1v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6h1V4h-5V3zM7 6h10v13H7zm2 2v9h2V8zm4 0v9h2V8z' />
+                                                </svg> Delete</a>";
+                                }
+                                
+                                $btn = $btn."</div>";
+    
+                                return $btn;
+                            })
+                            ->rawColumns(['no','nama','status','action'])
+                            ->make(true);
     }
 
     public function b_detail($id)

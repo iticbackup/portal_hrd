@@ -142,6 +142,10 @@ Route::domain(parse_url(env('APP_URL'), PHP_URL_HOST))->group(function () {
             Route::post('{id}/validasi/simpan', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_validasi_simpan'])->name('b_ijin_keluar_masuk.b_validasi_simpan');
             Route::get('{id}/cetak_surat', [App\Http\Controllers\IjinKeluarMasukController::class, 'cetak_surat'])->name('b_ijin_keluar_masuk.cetak_surat');
         });
+        Route::prefix('karyawan_lain')->group(function () {
+            Route::get('ijin_keluar_masuk', [App\Http\Controllers\IjinKeluarMasukController::class, 'b_index_karyawan_lain'])->name('b_ijin_keluar_masuk.karyawan_lain');
+            Route::get('ijin_absen', [App\Http\Controllers\IjinAbsenController::class, 'b_index_karyawan_lain'])->name('b_ijin_absen.karyawan_lain');
+        });
         Route::prefix('ijin_absen')->group(function () {
             Route::get('/', [App\Http\Controllers\IjinAbsenController::class, 'b_index'])->name('b_ijin_absen');
             Route::get('download_rekap', [App\Http\Controllers\IjinAbsenController::class, 'b_download_rekap'])->name('b_ijin_absen.b_download_rekap');
