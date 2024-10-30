@@ -103,8 +103,8 @@
                                             <label>Departemen</label>
                                             <input type="text" name="departemen" class="form-control"
                                                 placeholder="Departemen"
-                                                {{-- value="{{ auth()->user()->biodata_karyawan->departemen }}" --}}
-                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen >= 2 ? auth()->user()->biodata_karyawan->departemen->nama_unit : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->relasi_departemen->nama_departemen }}"
+                                                {{-- value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen >= 2 ? auth()->user()->biodata_karyawan->departemen->nama_unit : auth()->user()->biodata_karyawan->departemen->nama_departemen }}" --}}
                                                 readonly id="departemen" style="color: black">
                                         </div>
                                     </div>
@@ -112,7 +112,8 @@
                                         <div class="mb-3">
                                             <label>Jabatan</label>
                                             <input type="text" name="jabatan" class="form-control" placeholder="Jabatan"
-                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}"
+                                                {{-- value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}" --}}
+                                                value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->id_departemen_bagian == 0 ? 'Staff' : auth()->user()->biodata_karyawan->relasi_departemen_bagian->nama_bagian }}"
                                                 readonly id="jabatan" style="color: black">
                                         </div>
                                     </div>
@@ -398,14 +399,16 @@
                                         <td style="color: black">Jabatan</td>
                                         <td style="color: black">:</td>
                                         <td style="color: black">
-                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }}
+                                            {{-- {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->posisi->nama_posisi }} --}}
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->id_departemen_bagian == 0 ? 'Staff' : auth()->user()->biodata_karyawan->relasi_departemen_bagian->nama_bagian }}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td style="color: black">Dept.</td>
                                         <td style="color: black">:</td>
                                         <td style="color: black">
-                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}
+                                            {{-- {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }} --}}
+                                            {{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->relasi_departemen->nama_departemen }}
                                         </td>
                                     </tr>
                                 </table>
@@ -873,9 +876,9 @@
                 },
                 success: (result) => {
                     if (result.success == true) {
-                        $('#saksi1_unit_kerja').val(result.data.bagian);
+                        $('#saksi1_unit_kerja').val(result.data.jabatan);
                     } else {
-
+                        $('#saksi1_unit_kerja').val('-');
                     }
                 },
                 error: function(request, status, error) {
@@ -899,9 +902,9 @@
                 },
                 success: (result) => {
                     if (result.success == true) {
-                        $('#saksi2_unit_kerja').val(result.data.bagian);
+                        $('#saksi2_unit_kerja').val(result.data.jabatan);
                     } else {
-
+                        $('#saksi2_unit_kerja').val('-');
                     }
                 },
                 error: function(request, status, error) {

@@ -40,14 +40,14 @@
                                 <div class="col-xl-2">
                                     <div class="mb-3">
                                         <label>Departemen</label>
-                                        <input type="text" name="departemen" class="form-control" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->departemen->nama_departemen }}"
+                                        <input type="text" name="departemen" class="form-control" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->relasi_departemen->nama_departemen }}"
                                             placeholder="Departemen" readonly id="departemen" style="color: #000">
                                     </div>
                                 </div>
                                 <div class="col-xl-2">
                                     <div class="mb-3">
                                         <label>Jabatan</label>
-                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : explode(' ',auth()->user()->biodata_karyawan->posisi->nama_posisi)[0] }}"
+                                        <input type="text" name="jabatan" class="form-control" placeholder="Bagian" value="{{ !auth()->user()->biodata_karyawan ? null : auth()->user()->biodata_karyawan->id_departemen_bagian == 0 ? 'Staff' : auth()->user()->biodata_karyawan->relasi_departemen_bagian->nama_bagian }}"
                                             readonly id="jabatan" style="color: #000">
                                     </div>
                                 </div>
@@ -81,8 +81,13 @@
                                 <div class="col-xl-3">
                                     <div class="mb-3">
                                         <label>Kendaraan</label>
-                                        <input type="text" name="kendaraan" class="form-control" placeholder="Kendaraan"
-                                            id="kendaraan">
+                                        {{-- <input type="text" name="kendaraan" class="form-control" placeholder="Kendaraan"
+                                            id="kendaraan"> --}}
+                                        <select name="kendaraan" class="form-control" id="kendaraan">
+                                            <option value="">-- Pilih Kendaraan --</option>
+                                            <option value="Pribadi">Pribadi</option>
+                                            <option value="Perusahaan">Perusahaan</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-xl-3">

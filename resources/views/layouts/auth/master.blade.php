@@ -21,6 +21,8 @@
     
     <link href="{{ $layout }}/vertical-light-menu/css/dark/plugins.css" rel="stylesheet" type="text/css">
     <link href="{{ $asset }}/css/dark/authentication/auth-boxed.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{ $asset }}/css/light/elements/alert.css">
+    <link rel="stylesheet" type="text/css" href="{{ $asset }}/css/dark/elements/alert.css">
     <title>@yield('title')</title>
 </head>
 <body class="form">

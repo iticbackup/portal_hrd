@@ -1223,10 +1223,8 @@ class IjinAbsenController extends Controller
 
     public function search_nik_saksi1(Request $request,$nik)
     {
-        // dd($nik);
         $search_nik = $this->biodata_karyawan->where('nik',explode('|',$nik)[1])->first();
-        // dd($search_nik->posisi);
-        // dd($search_nik);
+        // dd($search_nik->relasi_jabatan->nama_jabatan);
         if (empty($search_nik)) {
             return response()->json([
                 'success' => false,
@@ -1240,9 +1238,12 @@ class IjinAbsenController extends Controller
             'data' => [
                 'nik' => $search_nik->nik,
                 'nama' => $search_nik->nama,
-                'satuan_kerja' => $search_nik->satuan_kerja,
-                'departemen' => $search_nik->departemen->nama_departemen >= 2 ? $search_nik->departemen->nama_unit : $search_nik->departemen->nama_departemen,
-                'bagian' => explode(" ",$search_nik->posisi->nama_posisi)[0],
+                'departemen' => $search_nik->relasi_departemen->nama_departemen,
+                // 'bagian' => $search_nik->posisi->nama_posisi,
+                'jabatan' => $search_nik->relasi_jabatan->nama_jabatan,
+                // 'satuan_kerja' => $search_nik->satuan_kerja,
+                // 'departemen' => $search_nik->departemen->nama_departemen >= 2 ? $search_nik->departemen->nama_unit : $search_nik->departemen->nama_departemen,
+                // 'bagian' => explode(" ",$search_nik->posisi->nama_posisi)[0],
                 // 'bagian' => $search_nik->posisi->nama_posisi,
             ]
         ]);

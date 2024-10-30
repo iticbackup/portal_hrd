@@ -316,7 +316,7 @@ class IjinKeluarMasukController extends Controller
                         $input['kategori_izin'],
                         $input['jam_kerja'],
                         $input['jam_rencana_keluar'],
-                        '-',
+                        $request->jam_datang,
                         $input['status'],
                         'HRD'
                 ));

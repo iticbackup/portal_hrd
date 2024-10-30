@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Auth;
 
 class LoginController extends Controller
@@ -28,6 +29,8 @@ class LoginController extends Controller
      *
      * @var string
      */
+    protected $maxAttempts = 3;
+    protected $decayMinutes = 2;
     protected $redirectTo = RouteServiceProvider::HOME;
 
     /**
@@ -64,6 +67,7 @@ class LoginController extends Controller
         // if(auth()->attempt(array($input['username'])))
         // $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
         $fieldType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'nik';
+        RateLimiter::clear('login.'.$request->ip());
         if(auth()->attempt(array($fieldType => $input['nik'], 'password' => $input['password'])))
         {
             auth()->logoutOtherDevices(request()->password);
