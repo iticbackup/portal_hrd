@@ -82,7 +82,7 @@ class IjinKeluarMasukController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
-
+        dd($input);
         if ($validator->passes()) {
             // if (!Auth::check()) {
             //     return response()->json([
@@ -463,7 +463,6 @@ class IjinKeluarMasukController extends Controller
                         'HRD'
                 ));
 
-                dd($input);
                 $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
                 if ($save_ijin_keluar_masuk) {
                     $this->ijin_keluar_masuk_ttd->create([
