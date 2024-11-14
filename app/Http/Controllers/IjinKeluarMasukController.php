@@ -224,105 +224,205 @@ class IjinKeluarMasukController extends Controller
             // dd($input['no']);
             $input['status'] = 'Waiting';
 
-            if (env('NOTIF') == true) {
-                // dd(env('NOTIF'));
-                if (env('WA_STATUS') == true) {
-                    switch ($input['status']) {
-                        case 'Waiting':
-                            $status_keluar_masuk = 'Menunggu Verifikasi';
-                            break;
+            // if (env('NOTIF') == true) {
+            //     // dd(env('NOTIF'));
+            //     if (env('WA_STATUS') == true) {
+            //         switch ($input['status']) {
+            //             case 'Waiting':
+            //                 $status_keluar_masuk = 'Menunggu Verifikasi';
+            //                 break;
             
-                        case 'Rejected':
-                            $status_keluar_masuk = 'Ditolak';
-                            break;
+            //             case 'Rejected':
+            //                 $status_keluar_masuk = 'Ditolak';
+            //                 break;
             
-                        case 'Approved':
-                            $status_keluar_masuk = 'Disetujui';
-                            break;
+            //             case 'Approved':
+            //                 $status_keluar_masuk = 'Disetujui';
+            //                 break;
                         
-                        default:
-                            # code...
-                            break;
-                    }
+            //             default:
+            //                 # code...
+            //                 break;
+            //         }
         
-                    $no_telp_user = sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
+            //         $no_telp_user = sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
         
-                    $curl = curl_init();
-                    curl_setopt_array($curl, [
-                        CURLOPT_FRESH_CONNECT  => true,
-                        CURLOPT_URL            => env('WA_URL').'/send-message',
-                        CURLOPT_RETURNTRANSFER => true,
-                        CURLOPT_HEADER         => false,
-                        // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
-                        CURLOPT_FAILONERROR    => false,
-                        CURLOPT_POST           => true,
-                        CURLOPT_POSTFIELDS     => http_build_query([
-                            'api_key' => env('WA_API_KEY'),
-                            'sender' => env('WA_SENDER'),
-                            'number' => $no_telp_user,
-                            'message' => 'Kepada Yth. *'.$input['nama'].'*,'."\n".
-                                        'Terimakasih telah melakukan pengisian Ijin Keluar Masuk di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
-                                        'ID : '.$input['no'].'-'.Carbon::now()->format('Ymd')."\n".
-                                        'NIK : '.$input['nik']."\n".
-                                        'Nama : '.$input['nama']."\n".
-                                        'Jabatan : '.$input['jabatan']."\n".
-                                        'Unit Kerja : '.$input['unit_kerja']."\n".
-                                        'Keperluan : '.$input['keperluan']."\n".
-                                        'Jenis Izin : '.$kategori_izin."\n".
-                                        'Status : *'.$status_keluar_masuk.'*'."\n\n".
-                                        'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
-                                        'Hormat Kami,'."\n".
-                                        'Team HRD PT Indonesian Tobacco Tbk.',
-                        ]),
-                        CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
-                    ]);
+            //         $curl = curl_init();
+            //         curl_setopt_array($curl, [
+            //             CURLOPT_FRESH_CONNECT  => true,
+            //             CURLOPT_URL            => env('WA_URL').'/send-message',
+            //             CURLOPT_RETURNTRANSFER => true,
+            //             CURLOPT_HEADER         => false,
+            //             // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+            //             CURLOPT_FAILONERROR    => false,
+            //             CURLOPT_POST           => true,
+            //             CURLOPT_POSTFIELDS     => http_build_query([
+            //                 'api_key' => env('WA_API_KEY'),
+            //                 'sender' => env('WA_SENDER'),
+            //                 'number' => $no_telp_user,
+            //                 'message' => 'Kepada Yth. *'.$input['nama'].'*,'."\n".
+            //                             'Terimakasih telah melakukan pengisian Ijin Keluar Masuk di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+            //                             'ID : '.$input['no'].'-'.Carbon::now()->format('Ymd')."\n".
+            //                             'NIK : '.$input['nik']."\n".
+            //                             'Nama : '.$input['nama']."\n".
+            //                             'Jabatan : '.$input['jabatan']."\n".
+            //                             'Unit Kerja : '.$input['unit_kerja']."\n".
+            //                             'Keperluan : '.$input['keperluan']."\n".
+            //                             'Jenis Izin : '.$kategori_izin."\n".
+            //                             'Status : *'.$status_keluar_masuk.'*'."\n\n".
+            //                             'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+            //                             'Hormat Kami,'."\n".
+            //                             'Team HRD PT Indonesian Tobacco Tbk.',
+            //             ]),
+            //             CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+            //         ]);
         
-                    $response = curl_exec($curl);
-                    $error = curl_error($curl);
+            //         $response = curl_exec($curl);
+            //         $error = curl_error($curl);
         
-                    curl_close($curl);
+            //         curl_close($curl);
         
-                    if (json_decode($response)->status == true) {
-                        $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
-                        if ($save_ijin_keluar_masuk) {
-                            $this->ijin_keluar_masuk_ttd->create([
-                                'id' => Str::uuid()->toString(),
-                                'ijin_keluar_masuk_id' => $input['id'],
-                                'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
-                            ]);
-                            $message_title="Berhasil !";
-                            $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
-                            $message_type="success";
-                            $message_succes = true;
-                        }
-                        $array_message = array(
-                            'success' => $message_succes,
-                            'message_title' => $message_title,
-                            'message_content' => $message_content,
-                            'message_type' => $message_type,
-                        );
-                        return response()->json($array_message);
-                    }
-                }else{
-                    Mail::to($input['email'])
-                        ->send(new IjinKeluarMasukNotifV1(
-                            'Konfirmasi Ijin Keluar Masuk',
-                            $input['nama'],
-                            $input['no'].'-'.$live_date->format('Ymd'),
-                            $input['nama'].' ('.$input['nik'].')',
-                            $input['jabatan'],
-                            $input['unit_kerja'],
-                            $input['kategori_keperluan'],
-                            $input['keperluan'],
-                            $input['kendaraan'],
-                            $input['kategori_izin'],
-                            $input['jam_kerja'],
-                            $input['jam_rencana_keluar'],
-                            $request->jam_datang,
-                            $input['status'],
-                            'HRD'
-                    ));
+            //         if (json_decode($response)->status == true) {
+            //             $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+            //             if ($save_ijin_keluar_masuk) {
+            //                 $this->ijin_keluar_masuk_ttd->create([
+            //                     'id' => Str::uuid()->toString(),
+            //                     'ijin_keluar_masuk_id' => $input['id'],
+            //                     'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+            //                 ]);
+            //                 $message_title="Berhasil !";
+            //                 $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+            //                 $message_type="success";
+            //                 $message_succes = true;
+            //             }
+            //             $array_message = array(
+            //                 'success' => $message_succes,
+            //                 'message_title' => $message_title,
+            //                 'message_content' => $message_content,
+            //                 'message_type' => $message_type,
+            //             );
+            //             return response()->json($array_message);
+            //         }
+            //     }else{
+            //         Mail::to($input['email'])
+            //             ->send(new IjinKeluarMasukNotifV1(
+            //                 'Konfirmasi Ijin Keluar Masuk',
+            //                 $input['nama'],
+            //                 $input['no'].'-'.$live_date->format('Ymd'),
+            //                 $input['nama'].' ('.$input['nik'].')',
+            //                 $input['jabatan'],
+            //                 $input['unit_kerja'],
+            //                 $input['kategori_keperluan'],
+            //                 $input['keperluan'],
+            //                 $input['kendaraan'],
+            //                 $input['kategori_izin'],
+            //                 $input['jam_kerja'],
+            //                 $input['jam_rencana_keluar'],
+            //                 $request->jam_datang,
+            //                 $input['status'],
+            //                 'HRD'
+            //         ));
     
+            //         $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+            //         if ($save_ijin_keluar_masuk) {
+            //             $this->ijin_keluar_masuk_ttd->create([
+            //                 'id' => Str::uuid()->toString(),
+            //                 'ijin_keluar_masuk_id' => $input['id'],
+            //                 'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+            //             ]);
+            //             $message_title="Berhasil !";
+            //             $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+            //             $message_type="success";
+            //             $message_succes = true;
+            //         }
+            //         $array_message = array(
+            //             'success' => $message_succes,
+            //             'message_title' => $message_title,
+            //             'message_content' => $message_content,
+            //             'message_type' => $message_type,
+            //         );
+            //         return response()->json($array_message);
+    
+            //     }   
+            // }else{
+            //     $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+            //     if ($save_ijin_keluar_masuk) {
+            //         $this->ijin_keluar_masuk_ttd->create([
+            //             'id' => Str::uuid()->toString(),
+            //             'ijin_keluar_masuk_id' => $input['id'],
+            //             'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+            //         ]);
+            //         $message_title="Berhasil !";
+            //         $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+            //         $message_type="success";
+            //         $message_succes = true;
+            //     }
+            //     $array_message = array(
+            //         'success' => $message_succes,
+            //         'message_title' => $message_title,
+            //         'message_content' => $message_content,
+            //         'message_type' => $message_type,
+            //     );
+            //     return response()->json($array_message);
+            // }
+
+            if (env('WA_STATUS') == true) {
+                switch ($input['status']) {
+                    case 'Waiting':
+                        $status_keluar_masuk = 'Menunggu Verifikasi';
+                        break;
+        
+                    case 'Rejected':
+                        $status_keluar_masuk = 'Ditolak';
+                        break;
+        
+                    case 'Approved':
+                        $status_keluar_masuk = 'Disetujui';
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+    
+                $no_telp_user = sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
+    
+                $curl = curl_init();
+                curl_setopt_array($curl, [
+                    CURLOPT_FRESH_CONNECT  => true,
+                    CURLOPT_URL            => env('WA_URL').'/send-message',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_HEADER         => false,
+                    // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                    CURLOPT_FAILONERROR    => false,
+                    CURLOPT_POST           => true,
+                    CURLOPT_POSTFIELDS     => http_build_query([
+                        'api_key' => env('WA_API_KEY'),
+                        'sender' => env('WA_SENDER'),
+                        'number' => $no_telp_user,
+                        'message' => 'Kepada Yth. *'.$input['nama'].'*,'."\n".
+                                    'Terimakasih telah melakukan pengisian Ijin Keluar Masuk di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+                                    'ID : '.$input['no'].'-'.Carbon::now()->format('Ymd')."\n".
+                                    'NIK : '.$input['nik']."\n".
+                                    'Nama : '.$input['nama']."\n".
+                                    'Jabatan : '.$input['jabatan']."\n".
+                                    'Unit Kerja : '.$input['unit_kerja']."\n".
+                                    'Keperluan : '.$input['keperluan']."\n".
+                                    'Jenis Izin : '.$kategori_izin."\n".
+                                    'Status : *'.$status_keluar_masuk.'*'."\n\n".
+                                    'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+                                    'Hormat Kami,'."\n".
+                                    'Team HRD PT Indonesian Tobacco Tbk.',
+                    ]),
+                    CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+                ]);
+    
+                $response = curl_exec($curl);
+                $error = curl_error($curl);
+    
+                curl_close($curl);
+    
+                if (json_decode($response)->status == true) {
                     $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
                     if ($save_ijin_keluar_masuk) {
                         $this->ijin_keluar_masuk_ttd->create([
@@ -342,9 +442,27 @@ class IjinKeluarMasukController extends Controller
                         'message_type' => $message_type,
                     );
                     return response()->json($array_message);
-    
-                }   
+                }
             }else{
+                Mail::to($input['email'])
+                    ->send(new IjinKeluarMasukNotifV1(
+                        'Konfirmasi Ijin Keluar Masuk',
+                        $input['nama'],
+                        $input['no'].'-'.$live_date->format('Ymd'),
+                        $input['nama'].' ('.$input['nik'].')',
+                        $input['jabatan'],
+                        $input['unit_kerja'],
+                        $input['kategori_keperluan'],
+                        $input['keperluan'],
+                        $input['kendaraan'],
+                        $input['kategori_izin'],
+                        $input['jam_kerja'],
+                        $input['jam_rencana_keluar'],
+                        $request->jam_datang,
+                        $input['status'],
+                        'HRD'
+                ));
+
                 $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
                 if ($save_ijin_keluar_masuk) {
                     $this->ijin_keluar_masuk_ttd->create([
@@ -364,6 +482,7 @@ class IjinKeluarMasukController extends Controller
                     'message_type' => $message_type,
                 );
                 return response()->json($array_message);
+
             }
 
         }
