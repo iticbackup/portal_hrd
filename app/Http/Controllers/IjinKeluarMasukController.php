@@ -366,6 +366,8 @@ class IjinKeluarMasukController extends Controller
             //     return response()->json($array_message);
             // }
 
+            dd('test');
+
             if (env('WA_STATUS') == true) {
                 switch ($input['status']) {
                     case 'Waiting':
