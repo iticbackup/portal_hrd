@@ -463,6 +463,7 @@ class IjinKeluarMasukController extends Controller
                         'HRD'
                 ));
 
+                dd($input);
                 $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
                 if ($save_ijin_keluar_masuk) {
                     $this->ijin_keluar_masuk_ttd->create([
