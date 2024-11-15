@@ -53,7 +53,7 @@ class IjinKeluarMasukController extends Controller
         return view('frontend.ijin_keluar_masuk.form',$data);
     }
 
-    public function f_simpan2(Request $request)
+    public function f_simpan(Request $request)
     {
         $rules = [
             'nik' => 'required',
@@ -493,7 +493,7 @@ class IjinKeluarMasukController extends Controller
         );
     }
 
-    public function f_simpan(Request $request)
+    public function f_simpan2(Request $request)
     {
         $input['id'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
