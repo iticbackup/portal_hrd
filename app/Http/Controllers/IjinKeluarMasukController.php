@@ -495,8 +495,7 @@ class IjinKeluarMasukController extends Controller
 
     public function f_simpan(Request $request)
     {
-        try {
-            $input['id'] = Str::uuid()->toString();
+        $input['id'] = Str::uuid()->toString();
             $input['nik'] = $request->nik;
             $input['nama'] = $request->nama;
             $input['email'] = auth()->user()->email;
@@ -687,12 +686,6 @@ class IjinKeluarMasukController extends Controller
                 );
                 return response()->json($array_message);
             }
-        } catch (\Throwable $th) {
-            return response()->json([
-                'success' => false,
-                'message_content' => $th
-            ]);
-        }
     }
 
     public function b_index(Request $request)
