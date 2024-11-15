@@ -53,7 +53,7 @@ class IjinKeluarMasukController extends Controller
         return view('frontend.ijin_keluar_masuk.form',$data);
     }
 
-    public function f_simpan(Request $request)
+    public function f_simpan2(Request $request)
     {
         $rules = [
             'nik' => 'required',
@@ -491,6 +491,208 @@ class IjinKeluarMasukController extends Controller
                 'message_content' => $validator->errors()->all()
             ]
         );
+    }
+
+    public function f_simpan(Request $request)
+    {
+        try {
+            $input['id'] = Str::uuid()->toString();
+            $input['nik'] = $request->nik;
+            $input['nama'] = $request->nama;
+            $input['email'] = auth()->user()->email;
+            $input['jabatan'] = $request->jabatan;
+            $input['unit_kerja'] = $request->departemen;
+            $input['kategori_keperluan'] = $request->kategori_keperluan;
+            $input['keperluan'] = $request->keperluan;
+            $input['kendaraan'] = $request->kendaraan;
+            $input['kategori_izin'] = $request->kategori_izin;
+            $input['jam_kerja'] = $request->jam_kerja;
+            $input['status_jam_istirahat'] = $request->status_jam_istirahat;
+            
+            if ($request->status_jam_istirahat == 'Ya') {
+                $input['jam_istirahat_awal'] = $request->jam_istirahat_awal;
+                $input['jam_istirahat_selesai'] = $request->jam_istirahat_selesai;
+            }
+
+            switch ($request->kategori_izin) {
+                case 'TL':
+                    $input['jam_datang'] = $request->jam_datang;
+                    $input['jam_rencana_keluar'] = null;
+                    $kategori_izin = 'Terlambat';
+                    break;
+                case 'KL':
+                    $input['jam_rencana_keluar'] = $request->jam_rencana_keluar;
+                    $kategori_izin = 'Keluar Masuk';
+                    break;
+                case 'PA':
+                    $input['jam_rencana_keluar'] = $request->jam_rencana_keluar;
+                    $kategori_izin = 'Pulang Awal';
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+
+            $live_date = Carbon::now()->addDay($this->addDay);
+            $no_urut = $this->ijin_keluar_masuk->where('created_at','like','%'.$live_date->format('Y-m').'%')
+                                                    ->orderBy('created_at','desc')
+                                                    ->max('no');
+            
+                                                    if (!$no_urut) {
+                $input['no'] = sprintf("%03s",(int)substr('001', 0, 3));
+            }else{
+                $input['no'] = sprintf("%03s",(int)substr($no_urut+1, 0, 3));
+            }
+            
+            $input['status'] = 'Waiting';
+
+            if (env('NOTIF') == true) {
+                // dd(env('NOTIF'));
+                if (env('WA_STATUS') == true) {
+                    switch ($input['status']) {
+                        case 'Waiting':
+                            $status_keluar_masuk = 'Menunggu Verifikasi';
+                            break;
+            
+                        case 'Rejected':
+                            $status_keluar_masuk = 'Ditolak';
+                            break;
+            
+                        case 'Approved':
+                            $status_keluar_masuk = 'Disetujui';
+                            break;
+                        
+                        default:
+                            # code...
+                            break;
+                    }
+        
+                    $no_telp_user = sprintf((int)substr('628', 0, 3)).sprintf((int)substr(auth()->user()->no_telp, 2, 13));
+        
+                    $curl = curl_init();
+                    curl_setopt_array($curl, [
+                        CURLOPT_FRESH_CONNECT  => true,
+                        CURLOPT_URL            => env('WA_URL').'/send-message',
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_HEADER         => false,
+                        // CURLOPT_HTTPHEADER     => ['Authorization: Bearer '.$apiKey],
+                        CURLOPT_FAILONERROR    => false,
+                        CURLOPT_POST           => true,
+                        CURLOPT_POSTFIELDS     => http_build_query([
+                            'api_key' => env('WA_API_KEY'),
+                            'sender' => env('WA_SENDER'),
+                            'number' => $no_telp_user,
+                            'message' => 'Kepada Yth. *'.$input['nama'].'*,'."\n".
+                                        'Terimakasih telah melakukan pengisian Ijin Keluar Masuk di *Portal HRD*. Berikut detail pengajuan Ijin Absen :'."\n\n".
+                                        'ID : '.$input['no'].'-'.Carbon::now()->format('Ymd')."\n".
+                                        'NIK : '.$input['nik']."\n".
+                                        'Nama : '.$input['nama']."\n".
+                                        'Jabatan : '.$input['jabatan']."\n".
+                                        'Unit Kerja : '.$input['unit_kerja']."\n".
+                                        'Keperluan : '.$input['keperluan']."\n".
+                                        'Jenis Izin : '.$kategori_izin."\n".
+                                        'Status : *'.$status_keluar_masuk.'*'."\n\n".
+                                        'Silahkan cek secara berkala di aplikasi Portal HRD untuk mendapatkan informasi lanjut. Terimakasih'."\n\n".
+                                        'Hormat Kami,'."\n".
+                                        'Team HRD PT Indonesian Tobacco Tbk.',
+                        ]),
+                        CURLOPT_IPRESOLVE      => CURL_IPRESOLVE_V4
+                    ]);
+        
+                    $response = curl_exec($curl);
+                    $error = curl_error($curl);
+        
+                    curl_close($curl);
+        
+                    if (json_decode($response)->status == true) {
+                        $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+                        if ($save_ijin_keluar_masuk) {
+                            $this->ijin_keluar_masuk_ttd->create([
+                                'id' => Str::uuid()->toString(),
+                                'ijin_keluar_masuk_id' => $input['id'],
+                                'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+                            ]);
+                            $message_title="Berhasil !";
+                            $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+                            $message_type="success";
+                            $message_succes = true;
+                        }
+                        $array_message = array(
+                            'success' => $message_succes,
+                            'message_title' => $message_title,
+                            'message_content' => $message_content,
+                            'message_type' => $message_type,
+                        );
+                        return response()->json($array_message);
+                    }
+                }else{
+                    Mail::to($input['email'])
+                        ->send(new IjinKeluarMasukNotifV1(
+                            'Konfirmasi Ijin Keluar Masuk',
+                            $input['nama'],
+                            $input['no'].'-'.$live_date->format('Ymd'),
+                            $input['nama'].' ('.$input['nik'].')',
+                            $input['jabatan'],
+                            $input['unit_kerja'],
+                            $input['kategori_keperluan'],
+                            $input['keperluan'],
+                            $input['kendaraan'],
+                            $input['kategori_izin'],
+                            $input['jam_kerja'],
+                            $input['jam_rencana_keluar'],
+                            $request->jam_datang,
+                            $input['status'],
+                            'HRD'
+                    ));
+    
+                    $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+                    if ($save_ijin_keluar_masuk) {
+                        $this->ijin_keluar_masuk_ttd->create([
+                            'id' => Str::uuid()->toString(),
+                            'ijin_keluar_masuk_id' => $input['id'],
+                            'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+                        ]);
+                        $message_title="Berhasil !";
+                        $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+                        $message_type="success";
+                        $message_succes = true;
+                    }
+                    $array_message = array(
+                        'success' => $message_succes,
+                        'message_title' => $message_title,
+                        'message_content' => $message_content,
+                        'message_type' => $message_type,
+                    );
+                    return response()->json($array_message);
+    
+                }   
+            }else{
+                $save_ijin_keluar_masuk = $this->ijin_keluar_masuk->create($input);
+                if ($save_ijin_keluar_masuk) {
+                    $this->ijin_keluar_masuk_ttd->create([
+                        'id' => Str::uuid()->toString(),
+                        'ijin_keluar_masuk_id' => $input['id'],
+                        'signature_manager' => $request->mengetahui_manager_bagian.'|Waiting'
+                    ]);
+                    $message_title="Berhasil !";
+                    $message_content="Formulir Ijin Keluar Masuk Berhasil Dibuat, Silahkan cek notifikasi Anda secara berkala.";
+                    $message_type="success";
+                    $message_succes = true;
+                }
+                $array_message = array(
+                    'success' => $message_succes,
+                    'message_title' => $message_title,
+                    'message_content' => $message_content,
+                    'message_type' => $message_type,
+                );
+                return response()->json($array_message);
+            }
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message_content' => $th
+            ]);
+        }
     }
 
     public function b_index(Request $request)
