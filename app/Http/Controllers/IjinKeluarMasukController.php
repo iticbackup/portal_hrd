@@ -82,7 +82,7 @@ class IjinKeluarMasukController extends Controller
         ];
 
         $validator = Validator::make($request->all(), $rules, $messages);
-        dd($input);
+        dd($request->all());
         if ($validator->passes()) {
             // if (!Auth::check()) {
             //     return response()->json([
