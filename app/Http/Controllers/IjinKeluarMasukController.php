@@ -545,6 +545,7 @@ class IjinKeluarMasukController extends Controller
             
             $input['status'] = 'Waiting';
 
+            dd($input);
             if (env('NOTIF') == true) {
                 // dd(env('NOTIF'));
                 if (env('WA_STATUS') == true) {
